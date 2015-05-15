@@ -1,0 +1,14 @@
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\LightingModels.exe.config
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.Form1.resources
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.Properties.Resources.resources
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.csproj.GenerateResource.Cache
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\LightingModels.exe
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\LightingModels.pdb
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.dll
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.GLControl.dll
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.pdb
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.xml
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.GLControl.xml
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.exe
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.pdb
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.csprojResolveAssemblyReference.cache

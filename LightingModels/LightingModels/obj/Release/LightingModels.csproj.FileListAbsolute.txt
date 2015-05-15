@@ -1,0 +1,13 @@
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\LightingModels.exe.config
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\LightingModels.exe
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\LightingModels.pdb
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\OpenTK.dll
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\OpenTK.GLControl.dll
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\OpenTK.pdb
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\OpenTK.xml
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Release\OpenTK.GLControl.xml
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Release\LightingModels.Form1.resources
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Release\LightingModels.Properties.Resources.resources
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Release\LightingModels.csproj.GenerateResource.Cache
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Release\LightingModels.exe
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Release\LightingModels.pdb
