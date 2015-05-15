@@ -21,11 +21,10 @@ namespace LightingModels
         int[] indicedata;
         int ibo_elements;
        
-
         List<Volume> objects = new List<Volume>(); 
-        Dictionary<string, int> textures = new Dictionary<string, int>();
-        Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
-        string activeShader = "default";
+        public Dictionary<string, int> textures = new Dictionary<string, int>();
+        public Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
+        public string activeShader = "default";
 
         public int Height;
         public int Width;
@@ -44,15 +43,22 @@ namespace LightingModels
 
             // Load shaders from files
             // Default
-            string vertShadersPath = @"shaders/vs.glsl";
-            string fragShaderPath = @"shaders/fs.glsl";
+            shaders.Add("default", new ShaderProgram("glsl/vs.glsl", "glsl/fs.glsl"));
 
-            shaders.Add("default", new ShaderProgram(vertShadersPath, fragShaderPath));
-        
+            // With Texture
+            shaders.Add("textured", new ShaderProgram("glsl/vs_text.glsl", "glsl/fs_text.glsl"));
+
+            activeShader = "default";
+            // Load textures from files
+            string texturePath = "textures/text_orange.png";
+            string textureName = "text_orange.png";
+            textures.Add(textureName, loadImage(texturePath));
+         
             // Create object
-            TestCube tc = new TestCube();
-            objects.Add(tc);
-
+            TestTexturedCube ttc = new TestTexturedCube();
+            ttc.TextureID = textures[textureName];
+            objects.Add(ttc);
+            
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);
         }
@@ -169,5 +175,39 @@ namespace LightingModels
 
             objects[objectIndex].RotateObject(x, y, z);
         }
+
+        //         
+        #region files functions
+        int loadImage(Bitmap image)
+        {
+            int texID = GL.GenTexture();
+
+            GL.BindTexture(TextureTarget.Texture2D, texID);
+            BitmapData data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height),
+                ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+
+            image.UnlockBits(data);
+
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            return texID;
+        }
+
+        int loadImage(string filename)
+        {
+            try
+            {
+                Bitmap file = new Bitmap(filename);
+                return loadImage(file);
+            }
+            catch (FileNotFoundException e)
+            {
+                return -1;
+            }
+        }
+        #endregion
     }
 }

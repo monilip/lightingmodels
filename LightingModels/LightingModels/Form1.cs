@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using OpenTK;
@@ -10,15 +11,17 @@ namespace LightingModels
     public partial class Form1 : Form
     {
         Scene scene;
-
+        int currentObjectIndex; // objects that answers to buttons control
         // 
-        private bool openGLLoaded = false; // just in case?
+        private bool openGLLoaded = false; // checking if openGL is already loaded
 
         //
         public Form1()
         {
             InitializeComponent();
             scene = new Scene(glControlMain.Width, glControlMain.Height);
+
+            currentObjectIndex = 0;
         }
 
         //
@@ -27,6 +30,15 @@ namespace LightingModels
             openGLLoaded = true;
 
             scene.OnLoad();
+
+            // add shaders from scene to droplist
+            foreach(KeyValuePair<string, ShaderProgram> entry in scene.shaders)
+            {
+               shadersList.Items.Add(entry.Key);
+            }
+
+            shadersList.SelectedIndex = 0;
+
             scene.OnUpdateFrame();
         }
        
@@ -50,6 +62,7 @@ namespace LightingModels
         }
 
         // GUI functions
+        # region Camera GUI
         //
         private void camMoveLeft_Click(object sender, EventArgs e)
         {
@@ -92,32 +105,46 @@ namespace LightingModels
             OnSceneUpdate();
         }     
 
+        #endregion
+
+        #region Object GUI
         //
         private void objRotateLeft_Click(object sender, EventArgs e)
         {
-            scene.RotateObject(0, 0, -10, 0);
+            scene.RotateObject(currentObjectIndex, 0, -10, 0);
             OnSceneUpdate();
         }
 
         //
         private void objRotateRight_Click(object sender, EventArgs e)
         {
-            scene.RotateObject(0, 0, 10, 0);
+            scene.RotateObject(currentObjectIndex, 0, 10, 0);
             OnSceneUpdate();
         }
 
         //
         private void objRotateUp_Click(object sender, EventArgs e)
         {
-            scene.RotateObject(0, -10, 0, 0);
+            scene.RotateObject(currentObjectIndex, -10, 0, 0);
             OnSceneUpdate();
         }
 
         //
         private void objRotateDown_Click(object sender, EventArgs e)
         {
-            scene.RotateObject(0, 10, 0, 0);
+            scene.RotateObject(currentObjectIndex, 10, 0, 0);
             OnSceneUpdate();
         }
+
+        private void shadersList_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            scene.activeShader = shadersList.SelectedItem.ToString();
+            if (openGLLoaded)
+                OnSceneUpdate();
+        }
+        
+        # endregion
+
+
     }
 }

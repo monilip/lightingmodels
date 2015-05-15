@@ -80,7 +80,7 @@ namespace LightingModels
 
         public override Vector2[] GetTextureCoords()
         {
-            return new Vector2[]{};
+            return new Vector2[] { };
         }
     }
 }

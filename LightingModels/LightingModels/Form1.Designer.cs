@@ -41,6 +41,8 @@
             this.objRotateLeft = new System.Windows.Forms.Button();
             this.camMoveFurther = new System.Windows.Forms.Button();
             this.camMoveCloser = new System.Windows.Forms.Button();
+            this.shadersList = new System.Windows.Forms.ComboBox();
+            this.chooseShaderLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // glControlMain
@@ -99,22 +101,22 @@
             this.cameraLabel.AutoSize = true;
             this.cameraLabel.Location = new System.Drawing.Point(516, 9);
             this.cameraLabel.Name = "cameraLabel";
-            this.cameraLabel.Size = new System.Drawing.Size(100, 13);
+            this.cameraLabel.Size = new System.Drawing.Size(43, 13);
             this.cameraLabel.TabIndex = 5;
-            this.cameraLabel.Text = "Camera movements";
+            this.cameraLabel.Text = "Camera";
             // 
             // ObjectLabel
             // 
             this.ObjectLabel.AutoSize = true;
-            this.ObjectLabel.Location = new System.Drawing.Point(516, 123);
+            this.ObjectLabel.Location = new System.Drawing.Point(521, 116);
             this.ObjectLabel.Name = "ObjectLabel";
-            this.ObjectLabel.Size = new System.Drawing.Size(95, 13);
+            this.ObjectLabel.Size = new System.Drawing.Size(38, 13);
             this.ObjectLabel.TabIndex = 10;
-            this.ObjectLabel.Text = "Object movements";
+            this.ObjectLabel.Text = "Object";
             // 
             // objRotateDown
             // 
-            this.objRotateDown.Location = new System.Drawing.Point(572, 171);
+            this.objRotateDown.Location = new System.Drawing.Point(570, 213);
             this.objRotateDown.Name = "objRotateDown";
             this.objRotateDown.Size = new System.Drawing.Size(81, 23);
             this.objRotateDown.TabIndex = 9;
@@ -124,7 +126,7 @@
             // 
             // objRotateUp
             // 
-            this.objRotateUp.Location = new System.Drawing.Point(485, 171);
+            this.objRotateUp.Location = new System.Drawing.Point(483, 213);
             this.objRotateUp.Name = "objRotateUp";
             this.objRotateUp.Size = new System.Drawing.Size(81, 23);
             this.objRotateUp.TabIndex = 8;
@@ -134,7 +136,7 @@
             // 
             // objRotateRight
             // 
-            this.objRotateRight.Location = new System.Drawing.Point(572, 142);
+            this.objRotateRight.Location = new System.Drawing.Point(570, 184);
             this.objRotateRight.Name = "objRotateRight";
             this.objRotateRight.Size = new System.Drawing.Size(81, 23);
             this.objRotateRight.TabIndex = 7;
@@ -145,7 +147,7 @@
             // objRotateLeft
             // 
             this.objRotateLeft.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.objRotateLeft.Location = new System.Drawing.Point(486, 142);
+            this.objRotateLeft.Location = new System.Drawing.Point(483, 184);
             this.objRotateLeft.Name = "objRotateLeft";
             this.objRotateLeft.Size = new System.Drawing.Size(80, 23);
             this.objRotateLeft.TabIndex = 6;
@@ -173,11 +175,32 @@
             this.camMoveCloser.UseVisualStyleBackColor = true;
             this.camMoveCloser.Click += new System.EventHandler(this.camMoveCloser_Click);
             // 
+            // shadersList
+            // 
+            this.shadersList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.shadersList.FormattingEnabled = true;
+            this.shadersList.Location = new System.Drawing.Point(485, 157);
+            this.shadersList.Name = "shadersList";
+            this.shadersList.Size = new System.Drawing.Size(168, 21);
+            this.shadersList.TabIndex = 18;
+            this.shadersList.SelectedIndexChanged += new System.EventHandler(this.shadersList_SelectedIndexChanged);
+            // 
+            // chooseShaderLabel
+            // 
+            this.chooseShaderLabel.AutoSize = true;
+            this.chooseShaderLabel.Location = new System.Drawing.Point(485, 141);
+            this.chooseShaderLabel.Name = "chooseShaderLabel";
+            this.chooseShaderLabel.Size = new System.Drawing.Size(81, 13);
+            this.chooseShaderLabel.TabIndex = 17;
+            this.chooseShaderLabel.Text = "Choose shader:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 435);
+            this.Controls.Add(this.shadersList);
+            this.Controls.Add(this.chooseShaderLabel);
             this.Controls.Add(this.camMoveFurther);
             this.Controls.Add(this.camMoveCloser);
             this.Controls.Add(this.ObjectLabel);
@@ -213,6 +236,8 @@
         private System.Windows.Forms.Button objRotateLeft;
         private System.Windows.Forms.Button camMoveFurther;
         private System.Windows.Forms.Button camMoveCloser;
+        private System.Windows.Forms.ComboBox shadersList;
+        private System.Windows.Forms.Label chooseShaderLabel;
     }
 }
 

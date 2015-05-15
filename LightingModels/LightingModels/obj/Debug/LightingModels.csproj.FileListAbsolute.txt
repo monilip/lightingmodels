@@ -12,3 +12,8 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\Open
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.exe
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.pdb
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\obj\Debug\LightingModels.csprojResolveAssemblyReference.cache
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\textures\text_orange.png
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_text.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_text.glsl
