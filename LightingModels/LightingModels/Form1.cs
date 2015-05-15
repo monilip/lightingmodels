@@ -36,11 +36,11 @@ namespace LightingModels
             if (!openGLLoaded) 
                 return;
 
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
-        private void OnUpdate()
+        private void OnSceneUpdate()
         {
 
             scene.OnUpdateFrame();
@@ -49,60 +49,75 @@ namespace LightingModels
             glControlMain.SwapBuffers();
         }
 
+        // GUI functions
         //
         private void camMoveLeft_Click(object sender, EventArgs e)
         {
             scene.Camera.Move(-10, 0, 0);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void camMoveRight_Click(object sender, EventArgs e)
         {
             scene.Camera.Move(10, 0, 0);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void camMoveUp_Click(object sender, EventArgs e)
         {
             scene.Camera.Move(0, 0, 10);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void camMoveDown_Click(object sender, EventArgs e)
         {
             scene.Camera.Move(0, 0, -10);
-            OnUpdate();
+            OnSceneUpdate();
         }
+
+        //
+        private void camMoveCloser_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(0, 10, 0);
+            OnSceneUpdate();
+        }
+
+        //
+        private void camMoveFurther_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(0, -10, 0);
+            OnSceneUpdate();
+        }     
 
         //
         private void objRotateLeft_Click(object sender, EventArgs e)
         {
             scene.RotateObject(0, 0, -10, 0);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void objRotateRight_Click(object sender, EventArgs e)
         {
             scene.RotateObject(0, 0, 10, 0);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void objRotateUp_Click(object sender, EventArgs e)
         {
             scene.RotateObject(0, -10, 0, 0);
-            OnUpdate();
+            OnSceneUpdate();
         }
 
         //
         private void objRotateDown_Click(object sender, EventArgs e)
         {
             scene.RotateObject(0, 10, 0, 0);
-            OnUpdate();
-        }     
+            OnSceneUpdate();
+        }
     }
 }

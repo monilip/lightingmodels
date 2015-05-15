@@ -39,6 +39,8 @@
             this.objRotateUp = new System.Windows.Forms.Button();
             this.objRotateRight = new System.Windows.Forms.Button();
             this.objRotateLeft = new System.Windows.Forms.Button();
+            this.camMoveFurther = new System.Windows.Forms.Button();
+            this.camMoveCloser = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // glControlMain
@@ -56,7 +58,7 @@
             // 
             this.camMoveLeft.Location = new System.Drawing.Point(486, 29);
             this.camMoveLeft.Name = "camMoveLeft";
-            this.camMoveLeft.Size = new System.Drawing.Size(75, 23);
+            this.camMoveLeft.Size = new System.Drawing.Size(80, 23);
             this.camMoveLeft.TabIndex = 1;
             this.camMoveLeft.Text = "move Left";
             this.camMoveLeft.UseVisualStyleBackColor = true;
@@ -64,9 +66,9 @@
             // 
             // camMoveRight
             // 
-            this.camMoveRight.Location = new System.Drawing.Point(567, 29);
+            this.camMoveRight.Location = new System.Drawing.Point(572, 29);
             this.camMoveRight.Name = "camMoveRight";
-            this.camMoveRight.Size = new System.Drawing.Size(75, 23);
+            this.camMoveRight.Size = new System.Drawing.Size(81, 23);
             this.camMoveRight.TabIndex = 2;
             this.camMoveRight.Text = "move Right";
             this.camMoveRight.UseVisualStyleBackColor = true;
@@ -74,9 +76,9 @@
             // 
             // camMoveUp
             // 
-            this.camMoveUp.Location = new System.Drawing.Point(485, 58);
+            this.camMoveUp.Location = new System.Drawing.Point(486, 58);
             this.camMoveUp.Name = "camMoveUp";
-            this.camMoveUp.Size = new System.Drawing.Size(75, 23);
+            this.camMoveUp.Size = new System.Drawing.Size(80, 23);
             this.camMoveUp.TabIndex = 3;
             this.camMoveUp.Text = "move Up";
             this.camMoveUp.UseVisualStyleBackColor = true;
@@ -84,9 +86,9 @@
             // 
             // camMoveDown
             // 
-            this.camMoveDown.Location = new System.Drawing.Point(567, 58);
+            this.camMoveDown.Location = new System.Drawing.Point(572, 58);
             this.camMoveDown.Name = "camMoveDown";
-            this.camMoveDown.Size = new System.Drawing.Size(75, 23);
+            this.camMoveDown.Size = new System.Drawing.Size(81, 23);
             this.camMoveDown.TabIndex = 4;
             this.camMoveDown.Text = "move Down";
             this.camMoveDown.UseVisualStyleBackColor = true;
@@ -104,7 +106,7 @@
             // ObjectLabel
             // 
             this.ObjectLabel.AutoSize = true;
-            this.ObjectLabel.Location = new System.Drawing.Point(516, 84);
+            this.ObjectLabel.Location = new System.Drawing.Point(516, 123);
             this.ObjectLabel.Name = "ObjectLabel";
             this.ObjectLabel.Size = new System.Drawing.Size(95, 13);
             this.ObjectLabel.TabIndex = 10;
@@ -112,9 +114,9 @@
             // 
             // objRotateDown
             // 
-            this.objRotateDown.Location = new System.Drawing.Point(567, 132);
+            this.objRotateDown.Location = new System.Drawing.Point(572, 171);
             this.objRotateDown.Name = "objRotateDown";
-            this.objRotateDown.Size = new System.Drawing.Size(75, 23);
+            this.objRotateDown.Size = new System.Drawing.Size(81, 23);
             this.objRotateDown.TabIndex = 9;
             this.objRotateDown.Text = "rotate Down";
             this.objRotateDown.UseVisualStyleBackColor = true;
@@ -122,9 +124,9 @@
             // 
             // objRotateUp
             // 
-            this.objRotateUp.Location = new System.Drawing.Point(485, 132);
+            this.objRotateUp.Location = new System.Drawing.Point(485, 171);
             this.objRotateUp.Name = "objRotateUp";
-            this.objRotateUp.Size = new System.Drawing.Size(75, 23);
+            this.objRotateUp.Size = new System.Drawing.Size(81, 23);
             this.objRotateUp.TabIndex = 8;
             this.objRotateUp.Text = "rotate Up";
             this.objRotateUp.UseVisualStyleBackColor = true;
@@ -132,9 +134,9 @@
             // 
             // objRotateRight
             // 
-            this.objRotateRight.Location = new System.Drawing.Point(567, 103);
+            this.objRotateRight.Location = new System.Drawing.Point(572, 142);
             this.objRotateRight.Name = "objRotateRight";
-            this.objRotateRight.Size = new System.Drawing.Size(75, 23);
+            this.objRotateRight.Size = new System.Drawing.Size(81, 23);
             this.objRotateRight.TabIndex = 7;
             this.objRotateRight.Text = "rotate Right";
             this.objRotateRight.UseVisualStyleBackColor = true;
@@ -142,19 +144,42 @@
             // 
             // objRotateLeft
             // 
-            this.objRotateLeft.Location = new System.Drawing.Point(486, 103);
+            this.objRotateLeft.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.objRotateLeft.Location = new System.Drawing.Point(486, 142);
             this.objRotateLeft.Name = "objRotateLeft";
-            this.objRotateLeft.Size = new System.Drawing.Size(75, 23);
+            this.objRotateLeft.Size = new System.Drawing.Size(80, 23);
             this.objRotateLeft.TabIndex = 6;
             this.objRotateLeft.Text = "rotate Left";
-            this.objRotateLeft.UseVisualStyleBackColor = true;
+            this.objRotateLeft.UseVisualStyleBackColor = false;
             this.objRotateLeft.Click += new System.EventHandler(this.objRotateLeft_Click);
+            // 
+            // camMoveFurther
+            // 
+            this.camMoveFurther.Location = new System.Drawing.Point(572, 87);
+            this.camMoveFurther.Name = "camMoveFurther";
+            this.camMoveFurther.Size = new System.Drawing.Size(81, 23);
+            this.camMoveFurther.TabIndex = 12;
+            this.camMoveFurther.Text = "move Further";
+            this.camMoveFurther.UseVisualStyleBackColor = true;
+            this.camMoveFurther.Click += new System.EventHandler(this.camMoveFurther_Click);
+            // 
+            // camMoveCloser
+            // 
+            this.camMoveCloser.Location = new System.Drawing.Point(485, 87);
+            this.camMoveCloser.Name = "camMoveCloser";
+            this.camMoveCloser.Size = new System.Drawing.Size(81, 23);
+            this.camMoveCloser.TabIndex = 11;
+            this.camMoveCloser.Text = "move Closer";
+            this.camMoveCloser.UseVisualStyleBackColor = true;
+            this.camMoveCloser.Click += new System.EventHandler(this.camMoveCloser_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 435);
+            this.ClientSize = new System.Drawing.Size(665, 435);
+            this.Controls.Add(this.camMoveFurther);
+            this.Controls.Add(this.camMoveCloser);
             this.Controls.Add(this.ObjectLabel);
             this.Controls.Add(this.objRotateDown);
             this.Controls.Add(this.objRotateUp);
@@ -186,6 +211,8 @@
         private System.Windows.Forms.Button objRotateUp;
         private System.Windows.Forms.Button objRotateRight;
         private System.Windows.Forms.Button objRotateLeft;
+        private System.Windows.Forms.Button camMoveFurther;
+        private System.Windows.Forms.Button camMoveCloser;
     }
 }
 
