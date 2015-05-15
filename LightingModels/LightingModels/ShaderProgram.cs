@@ -1,70 +1,198 @@
 ﻿using System;
 using System.Collections.Generic;
-using OpenTK;
+using System.Linq;
+using System.Text;
 using OpenTK.Graphics.OpenGL;
+using System.IO;
 
-// 07.05.15
-// Shader stuff
 namespace LightingModels
 {
-    public class ShaderProgram
+    class ShaderProgram
     {
-        public int Program = -1;
-        public int VertShader = -1;
-        public int FragShader = -1;
+        public int ProgramID = -1;
+        public int VShaderID = -1;
+        public int FShaderID = -1;
+        public int AttributeCount = 0;
+        public int UniformCount = 0;
 
-        // Address of the color parameter
-        private int _attributeVCol;
-        public int AttributeVCol { get { return _attributeVCol; } }
-  
-        // Address of the position parameter
-        private int _attributeVPos;
-        public int AttributeVPos { get { return _attributeVPos; } }
-  
-        // Address of the modelview matrix uniform
-        private int _uniformModelView;
-        public int UniformModelView { get { return _uniformModelView; } }
-                 
-        // Address of the Vertex Buffer Object for our position paramete
-        private int _vboPosition;
-        public int VBOPosition { get { return _vboPosition; } }
-  
-        // Address of the Vertex Buffer Object for our color parameter
-        private int _vboColor;
-        public int VBOColor { get { return _vboColor; } }
-  
-        // Address of the Vertex Buffer Object for our modelview matrix
-        private int _vboModelView;
-        public int VBOModelView { get { return _vboModelView; } }
-
+        public Dictionary<String, AttributeInfo> Attributes = new Dictionary<string, AttributeInfo>();
+        public Dictionary<String, UniformInfo> Uniforms = new Dictionary<string, UniformInfo>();
+        public Dictionary<String, uint> Buffers = new Dictionary<string, uint>();
+        
+        //
+        public class UniformInfo
+        {
+            public String name = "";
+            public int address = -1;
+            public int size = 0;
+            public ActiveUniformType type;
+        }
 
         //
-        public void InitProgram()
+        public class AttributeInfo
         {
-            Program = GL.CreateProgram();
+            public String name = "";
+            public int address = -1;
+            public int size = 0;
+            public ActiveAttribType type;
+        }
 
-            // Load shaders from file
-            string vertShadersPath = @"shaders/vs.glsl";
-            string fragShaderPath = @"shaders/fs.glsl";
+        // 
+        public ShaderProgram()
+        {
+            ProgramID = GL.CreateProgram();
+        }
 
-            Usefull.LoadShader(vertShadersPath, ShaderType.VertexShader, Program, out VertShader);
-            Usefull.LoadShader(fragShaderPath, ShaderType.FragmentShader, Program, out FragShader);
+        //
+        public ShaderProgram(String vshader, String fshader)
+        {
+            ProgramID = GL.CreateProgram();
 
-            // Linking to shaders to program
-            GL.LinkProgram(Program);
+            LoadShaderFromFile(vshader, ShaderType.VertexShader);
+            LoadShaderFromFile(fshader, ShaderType.FragmentShader);
+            
+            Link();
+            GenBuffers();
+        }
 
-            // Add to log if there are probles
-            Usefull.Log(GL.GetProgramInfoLog(Program));
+        //
+        public void LoadShaderFromFile(String filename, ShaderType type)
+        {
+            using (StreamReader sr = new StreamReader(filename))
+            {
+                if (type == ShaderType.VertexShader)
+                {
+                    loadShader(sr.ReadToEnd(), type, out VShaderID);
+                }
+                else if (type == ShaderType.FragmentShader)
+                {
+                    loadShader(sr.ReadToEnd(), type, out FShaderID);
+                }
+            }
+        }
 
-            _attributeVPos = GL.GetAttribLocation(Program, "vPosition");
-            _attributeVCol = GL.GetAttribLocation(Program, "vColor");
-            _uniformModelView = GL.GetUniformLocation(Program, "modelview");
+        //
+        private void loadShader(String code, ShaderType type, out int address)
+        {
+            address = GL.CreateShader(type);
+            GL.ShaderSource(address, code);
+            GL.CompileShader(address);
+            GL.AttachShader(ProgramID, address);
+            Console.WriteLine(GL.GetShaderInfoLog(address));
+        }
 
-            // Vertex Buffer Object (VBO)
-            GL.GenBuffers(1, out _vboPosition);
-            GL.GenBuffers(1, out _vboColor);
-            GL.GenBuffers(1, out _vboModelView);
-        } 
-       
+        //
+        public void Link()
+        {
+            GL.LinkProgram(ProgramID);
+
+            Console.WriteLine(GL.GetProgramInfoLog(ProgramID));
+
+            GL.GetProgram(ProgramID, ProgramParameter.ActiveAttributes, out AttributeCount);
+            GL.GetProgram(ProgramID, ProgramParameter.ActiveUniforms, out UniformCount);
+
+            for (int i = 0; i < AttributeCount; i++)
+            {
+                AttributeInfo info = new AttributeInfo();
+                int length = 0;
+
+                StringBuilder name = new StringBuilder();
+
+                GL.GetActiveAttrib(ProgramID, i, 256, out length, out info.size, out info.type, name);
+
+                info.name = name.ToString();
+                info.address = GL.GetAttribLocation(ProgramID, info.name);
+                Attributes.Add(name.ToString(), info);
+            }
+
+            for (int i = 0; i < UniformCount; i++)
+            {
+                UniformInfo info = new UniformInfo();
+                int length = 0;
+
+                StringBuilder name = new StringBuilder();
+
+                GL.GetActiveUniform(ProgramID, i, 256, out length, out info.size, out info.type, name);
+
+                info.name = name.ToString();
+                Uniforms.Add(name.ToString(), info);
+                info.address = GL.GetUniformLocation(ProgramID, info.name);
+            }
+        }
+
+        //
+        public void GenBuffers()
+        {
+            for (int i = 0; i < Attributes.Count; i++)
+            {
+                uint buffer = 0;
+                GL.GenBuffers(1, out buffer);
+
+                Buffers.Add(Attributes.Values.ElementAt(i).name, buffer);
+            }
+
+            for (int i = 0; i < Uniforms.Count; i++)
+            {
+                uint buffer = 0;
+                GL.GenBuffers(1, out buffer);
+
+                Buffers.Add(Uniforms.Values.ElementAt(i).name, buffer);
+            }
+        }
+
+        //
+        public void EnableVertexAttribArrays()
+        {
+            for (int i = 0; i < Attributes.Count; i++)
+            {
+                GL.EnableVertexAttribArray(Attributes.Values.ElementAt(i).address);
+            }
+        }
+
+        public void DisableVertexAttribArrays()
+        {
+            for (int i = 0; i < Attributes.Count; i++)
+            {
+                GL.DisableVertexAttribArray(Attributes.Values.ElementAt(i).address);
+            }
+        }
+
+        public int GetAttribute(string name)
+        {
+            if (Attributes.ContainsKey(name))
+            {
+                return Attributes[name].address;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public int GetUniform(string name)
+        {
+            if (Uniforms.ContainsKey(name))
+            {
+                return Uniforms[name].address;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public uint GetBuffer(string name)
+        {
+            if (Buffers.ContainsKey(name))
+            {
+                return Buffers[name];
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+
     }
 }

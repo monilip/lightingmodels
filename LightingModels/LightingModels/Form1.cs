@@ -9,14 +9,16 @@ namespace LightingModels
 {
     public partial class Form1 : Form
     {
-        
+        Scene scene;
+
         // 
         private bool openGLLoaded = false; // just in case?
 
         //
         public Form1()
         {
-            InitializeComponent();         
+            InitializeComponent();
+            scene = new Scene(glControlMain.Width, glControlMain.Height);
         }
 
         //
@@ -24,11 +26,8 @@ namespace LightingModels
         {
             openGLLoaded = true;
 
-            Singleton.OpenTKManager.SetupViewport(glControlMain.Width, glControlMain.Height);
-            Singleton.OpenTKManager.Clear();
-
-            Singleton.ShaderProgram.InitProgram();
-            Singleton.Scene1.UpdateScene();
+            scene.OnLoad();
+            scene.OnUpdateFrame();
         }
        
         //
@@ -37,12 +36,73 @@ namespace LightingModels
             if (!openGLLoaded) 
                 return;
 
-            Singleton.Scene1.UpdateScene();
-            Singleton.Scene1.RenderScene();
-          
+            OnUpdate();
+        }
+
+        //
+        private void OnUpdate()
+        {
+
+            scene.OnUpdateFrame();
+            scene.OnRenderFrame();
+
             glControlMain.SwapBuffers();
         }
 
-        
+        //
+        private void camMoveLeft_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(-10, 0, 0);
+            OnUpdate();
+        }
+
+        //
+        private void camMoveRight_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(10, 0, 0);
+            OnUpdate();
+        }
+
+        //
+        private void camMoveUp_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(0, 0, 10);
+            OnUpdate();
+        }
+
+        //
+        private void camMoveDown_Click(object sender, EventArgs e)
+        {
+            scene.Camera.Move(0, 0, -10);
+            OnUpdate();
+        }
+
+        //
+        private void objRotateLeft_Click(object sender, EventArgs e)
+        {
+            scene.RotateObject(0, 0, -10, 0);
+            OnUpdate();
+        }
+
+        //
+        private void objRotateRight_Click(object sender, EventArgs e)
+        {
+            scene.RotateObject(0, 0, 10, 0);
+            OnUpdate();
+        }
+
+        //
+        private void objRotateUp_Click(object sender, EventArgs e)
+        {
+            scene.RotateObject(0, -10, 0, 0);
+            OnUpdate();
+        }
+
+        //
+        private void objRotateDown_Click(object sender, EventArgs e)
+        {
+            scene.RotateObject(0, 10, 0, 0);
+            OnUpdate();
+        }     
     }
 }
