@@ -20,8 +20,8 @@ namespace LightingModels
         Vector2[] texcoorddata;
         int[] indicedata;
         int ibo_elements;
-       
-        List<Volume> objects = new List<Volume>(); 
+
+        public List<Volume> objects = new List<Volume>(); 
         public Dictionary<string, int> textures = new Dictionary<string, int>();
         public Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
         public string activeShader = "default";
@@ -54,10 +54,19 @@ namespace LightingModels
             string textureName = "text_orange.png";
             textures.Add(textureName, loadImage(texturePath));
          
-            // Create object
+            // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
+            ttc.Name = "Cube";
             ttc.TextureID = textures[textureName];
             objects.Add(ttc);
+
+            ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
+            objFromFile.Name = "Teapot";
+            objFromFile.Position += new Vector3(1, 0, 0);
+            objFromFile.Scale = new Vector3( 0.2f, 0.2f, 0.2f);
+            objFromFile.TextureID = textures[textureName];
+            objects.Add(objFromFile);
+
             
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);
@@ -174,6 +183,12 @@ namespace LightingModels
             z = (float)((double)z * Math.PI / 180);
 
             objects[objectIndex].RotateObject(x, y, z);
+        }
+
+        // Move object
+        public void MoveObject(int objectIndex, float x, float y, float z)
+        {
+            objects[objectIndex].MoveObject(x, y, z);
         }
 
         //         

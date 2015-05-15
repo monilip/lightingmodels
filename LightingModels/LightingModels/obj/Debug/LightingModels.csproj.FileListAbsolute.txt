@@ -17,3 +17,4 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\textures\text_orange.png
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_text.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\teapot.obj

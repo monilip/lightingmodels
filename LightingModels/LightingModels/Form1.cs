@@ -39,6 +39,14 @@ namespace LightingModels
 
             shadersList.SelectedIndex = 0;
 
+            // add obejcts from scene to droplist
+            foreach (Volume entry in scene.objects)
+            {
+                objectsList.Items.Add(entry.Name);
+            }
+
+            objectsList.SelectedIndex = 0;
+
             scene.OnUpdateFrame();
         }
        
@@ -136,14 +144,59 @@ namespace LightingModels
             OnSceneUpdate();
         }
 
+        private void objMoveLeft_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex , -1, 0, 0);
+            OnSceneUpdate();
+        }
+
+        private void objMoveRight_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex, 1, 0, 0);
+            OnSceneUpdate();
+        }
+
+        private void objMoveUp_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex, 0, 1, 0);
+            OnSceneUpdate();
+        }
+
+        private void objMoveDown_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex, 0, -1, 0);
+            OnSceneUpdate();
+        }
+
+        private void objMoveCloser_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex, 0, 0, 1);
+            OnSceneUpdate();
+        }
+
+        private void objMoveFurther_Click(object sender, EventArgs e)
+        {
+            scene.MoveObject(currentObjectIndex, 0, 0, -1);
+            OnSceneUpdate();
+        }
+
         private void shadersList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             scene.activeShader = shadersList.SelectedItem.ToString();
             if (openGLLoaded)
                 OnSceneUpdate();
         }
+
+        private void objectsList_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            currentObjectIndex = objectsList.SelectedIndex;
+            if (openGLLoaded)
+                OnSceneUpdate();
+        }
         
         # endregion
+
+        
 
 
     }
