@@ -13,6 +13,7 @@ namespace LightingModels
         public Vector3 Scale = Vector3.One;
 
         public virtual int VertCount { get; set; }
+        public virtual int NormalsCount { get; set; }
         public virtual int IndiceCount { get; set; }
         public virtual int ColorDataCount { get; set; }
         public virtual int FacesCount { get; set; }
@@ -42,5 +43,8 @@ namespace LightingModels
         {
             Position = new Vector3(Position.X + x, Position.Y + y, Position.Z + z);
         }
+
+      
+
     }
 }

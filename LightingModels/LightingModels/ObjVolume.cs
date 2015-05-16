@@ -8,12 +8,14 @@ namespace LightingModels
     class ObjVolume : Volume
     {
         Vector3[] vertices;
+        Vector3[] normals;
         Vector3[] colors;
         Vector2[] texturecoords;
 
         List<Tuple<int, int, int>> faces = new List<Tuple<int, int, int>>();
 
         public override int VertCount { get { return vertices.Length; } }
+        public override int NormalsCount { get { return normals.Length; } }
         public override int IndiceCount { get { return faces.Count * 3; } }
         public override int ColorDataCount { get { return colors.Length; } }
 
@@ -26,7 +28,7 @@ namespace LightingModels
         // todo
         public override Vector3[] GetNormals()
         {
-            return null;
+            return normals;
         }
 
 
@@ -95,6 +97,7 @@ namespace LightingModels
 
             // Lists to hold model data
             List<Vector3> vertices = new List<Vector3>();
+            List<Vector3> normals= new List<Vector3>();
             List<Vector3> colors = new List<Vector3>();
             List<Vector2> textures = new List<Vector2>();
             List<Tuple<int, int, int>> faces = new List<Tuple<int, int, int>>();
@@ -125,7 +128,6 @@ namespace LightingModels
                     }
                     catch (Exception e)
                     {
-
                         Console.WriteLine("Error parsing face: {0}", line);
                     }
                    
@@ -150,6 +152,7 @@ namespace LightingModels
                         face = new Tuple<int, int, int>(i1 - 1, i2 - 1, i3 - 1);
                         faces.Add(face);
 
+                       
                     }
                     catch (Exception e)
                     {
@@ -158,15 +161,27 @@ namespace LightingModels
                 }
             }
 
+            // create normals
+            foreach ( Tuple<int, int, int> face in faces)
+            {
+                 // add normal to this face
+                normals.Add(Scene.CalculateFaceNormal(vertices[face.Item1], vertices[face.Item2], vertices[face.Item3]));
+             }
+
+            
+
             // Create the ObjVolume
             ObjVolume objVolume = new ObjVolume();
             objVolume.vertices = vertices.ToArray();
+            objVolume.normals = normals.ToArray();
             objVolume.faces = new List<Tuple<int, int, int>>(faces);
             objVolume.colors = colors.ToArray();
             objVolume.texturecoords = textures.ToArray();
-
+  
             return objVolume;
         }
+
+
         # endregion
     }
  

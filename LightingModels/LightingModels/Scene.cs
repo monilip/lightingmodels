@@ -60,19 +60,18 @@ namespace LightingModels
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
             ttc.Name = "Cube";
-            ttc.Position = new Vector3(0,0,-2);
-            ttc.Scale = new Vector3(2, 2, 2);
+            ttc.Position = new Vector3(-1,0,0);
             ttc.TextureID = textures[textureName];
             objects.Add(ttc);
 
 
-           /* ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
+            ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
             objFromFile.Name = "Teapot";
             objFromFile.Position += new Vector3(1, 0, 0);
             objFromFile.Scale = new Vector3( 0.2f, 0.2f, 0.2f);
             objFromFile.TextureID = textures[textureName];
             objects.Add(objFromFile);
-            */
+            
             
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);

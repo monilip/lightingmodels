@@ -13,12 +13,6 @@ namespace LightingModels
             FacesCount = 6;
         }
 
-        private Vector3 GetVert(int index)
-        {
-            Vector3[] verts = GetVerts();
-            return verts[index];
-        }
-        
         public override Vector3[] GetVerts()
         {
             return new Vector3[] {
@@ -45,13 +39,7 @@ namespace LightingModels
             return normals;
         }
 
-        private int GetIndice(int index)
-        {
-            int[] indices = GetIndices();
-            return indices[index];
-        }
-
-        public override int[] GetIndices(int offset = 0)
+         public override int[] GetIndices(int offset = 0)
         {
             int[] inds = new int[] {
                 //left
@@ -108,5 +96,18 @@ namespace LightingModels
         {
             return new Vector2[] { };
         }
+
+        public int GetIndice(int index)
+        {
+            int[] indices = GetIndices();
+            return indices[index];
+        }
+
+        public Vector3 GetVert(int index)
+        {
+            Vector3[] verts = GetVerts();
+            return verts[index];
+        }
+        
     }
 }
