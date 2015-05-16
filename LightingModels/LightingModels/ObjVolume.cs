@@ -23,6 +23,13 @@ namespace LightingModels
             return vertices;
         }
 
+        // todo
+        public override Vector3[] GetNormals()
+        {
+            return null;
+        }
+
+
         //
         public override int[] GetIndices(int offset = 0)
         {

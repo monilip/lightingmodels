@@ -16,6 +16,7 @@ namespace LightingModels
     class Scene
     {
         Vector3[] vertdata;
+        Vector3[] normalsdata;
         Vector3[] coldata;
         Vector2[] texcoorddata;
         int[] indicedata;
@@ -48,6 +49,10 @@ namespace LightingModels
             // With Texture
             shaders.Add("textured", new ShaderProgram("glsl/vs_text.glsl", "glsl/fs_text.glsl"));
 
+            // Phong Lighting
+            shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
+
+
             activeShader = "default";
             // Load textures from files
             string texturePath = "textures/text_orange.png";
@@ -60,13 +65,13 @@ namespace LightingModels
             ttc.TextureID = textures[textureName];
             objects.Add(ttc);
 
-            ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
+           /* ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
             objFromFile.Name = "Teapot";
             objFromFile.Position += new Vector3(1, 0, 0);
             objFromFile.Scale = new Vector3( 0.2f, 0.2f, 0.2f);
             objFromFile.TextureID = textures[textureName];
             objects.Add(objFromFile);
-
+            */
             
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);
@@ -94,7 +99,9 @@ namespace LightingModels
             foreach (Volume v in objects)
             {
                 GL.BindTexture(TextureTarget.Texture2D, v.TextureID);
-                GL.UniformMatrix4(shaders[activeShader].GetUniform("modelview"), false, ref v.ModelViewProjectionMatrix);
+                GL.UniformMatrix4(shaders[activeShader].GetUniform("modelView"), false, ref v.ModelViewProjectionMatrix);
+                GL.UniformMatrix4(shaders[activeShader].GetUniform("modelViewMatrix"), false, ref v.ModelMatrix);
+                GL.UniformMatrix4(shaders[activeShader].GetUniform("projectionMatrix"), false, ref v.ViewProjectionMatrix);
 
                 if (shaders[activeShader].GetAttribute("maintexture") != -1)
                 {
@@ -115,6 +122,7 @@ namespace LightingModels
         public void OnUpdateFrame()
         {
             List<Vector3> verts = new List<Vector3>();
+            List<Vector3> normals = new List<Vector3>();
             List<int> inds = new List<int>();
             List<Vector3> colors = new List<Vector3>();
             List<Vector2> texcoords = new List<Vector2>();
@@ -124,6 +132,7 @@ namespace LightingModels
             foreach (Volume v in objects)
             {
                 verts.AddRange(v.GetVerts().ToList());
+                normals.AddRange(v.GetNormals().ToList());
                 inds.AddRange(v.GetIndices(vertcount).ToList());
                 colors.AddRange(v.GetColorData().ToList());
                 texcoords.AddRange(v.GetTextureCoords());
@@ -131,6 +140,7 @@ namespace LightingModels
             }
 
             vertdata = verts.ToArray();
+            normalsdata = verts.ToArray();
             indicedata = inds.ToArray();
             coldata = colors.ToArray();
             texcoorddata = texcoords.ToArray();
@@ -148,6 +158,16 @@ namespace LightingModels
                 GL.VertexAttribPointer(shaders[activeShader].GetAttribute("vColor"), 3, VertexAttribPointerType.Float, true, 0, 0);
             }
 
+
+            // Buffer normal color if shader supports it
+            if (shaders[activeShader].GetAttribute("vNormal") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[activeShader].GetBuffer("vNormal"));
+
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(normalsdata.Length * Vector3.SizeInBytes), normalsdata, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(shaders[activeShader].GetAttribute("vNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            }
 
             // Buffer texture coordinates if shader supports it
             if (shaders[activeShader].GetAttribute("texcoord") != -1)
@@ -223,6 +243,52 @@ namespace LightingModels
                 return -1;
             }
         }
+        #endregion
+
+        # region static normals
+        // Surface normals
+        public static Vector3 CalculateFaceNormal(Vector3 a, Vector3 b, Vector3 c)
+        {
+            Vector3 A, B;
+
+            // A
+            A.X = a.X - b.X;
+            A.Y = a.Y - b.Y;
+            A.Z = a.Z - b.Z;
+
+            // B
+            B.X = b.X - c.X;
+            B.Y = b.Y - c.Y;
+            B.Z = b.Z - c.Z;
+
+            // calculate the cross product and place the resulting vector
+            // into the normal
+            Vector3 faceNormal = new Vector3();
+            faceNormal.X = (A.Y * B.Z) - (A.Z * B.Y);
+            faceNormal.Y = (A.Z * B.X) - (A.X * B.Z);
+            faceNormal.Z = (A.X * B.Y) - (A.Y * B.X);
+
+            // normalize
+            return normalize(faceNormal);
+        }
+
+        // 
+        internal static Vector3 normalize(Vector3 normal)
+        {
+            // calculate the length of the vector
+            float len = (float)(Math.Sqrt((normal.X * normal.X) + (normal.Y * normal.Y) + (normal.Z * normal.Z)));
+
+            // avoid division by 0
+            if (len == 0.0f)
+                len = 1.0f;
+
+            // reduce to unit size
+            normal.X /= len;
+            normal.Y /= len;
+            normal.Z /= len;
+            return normal;
+        }
+
         #endregion
     }
 }

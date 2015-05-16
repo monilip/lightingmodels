@@ -10,11 +10,19 @@ namespace LightingModels
             VertCount = 8;
             IndiceCount = 36;
             ColorDataCount = 8;
+            FacesCount = 6;
+        }
+
+        private Vector3 GetVert(int index)
+        {
+            Vector3[] verts = GetVerts();
+            return verts[index];
         }
         
         public override Vector3[] GetVerts()
         {
-            return new Vector3[] {new Vector3(-0.5f, -0.5f,  -0.5f),
+            return new Vector3[] {
+                new Vector3(-0.5f, -0.5f,  -0.5f),
                 new Vector3(0.5f, -0.5f,  -0.5f),
                 new Vector3(0.5f, 0.5f,  -0.5f),
                 new Vector3(-0.5f, 0.5f,  -0.5f),
@@ -23,6 +31,24 @@ namespace LightingModels
                 new Vector3(0.5f, 0.5f,  0.5f),
                 new Vector3(-0.5f, 0.5f,  0.5f),
             };
+        }
+        // todo
+        public override Vector3[] GetNormals()
+        {
+            Vector3[] normals = new Vector3[FacesCount];
+
+            for (int i = 0; i < FacesCount-1; i++)
+            {
+                normals[i] = Scene.CalculateFaceNormal(GetVert(i * 3), GetVert(i * 3 + 1), GetVert(i * 3 + 2));
+            }
+
+            return normals;
+        }
+
+        private int GetIndice(int index)
+        {
+            int[] indices = GetIndices();
+            return indices[index];
         }
 
         public override int[] GetIndices(int offset = 0)

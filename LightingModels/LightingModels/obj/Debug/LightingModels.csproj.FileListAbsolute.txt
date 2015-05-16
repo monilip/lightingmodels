@@ -18,3 +18,5 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\text
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\teapot.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_lightPhong.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_lightPhong.glsl

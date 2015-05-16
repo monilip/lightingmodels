@@ -19,35 +19,39 @@ namespace LightingModels
         public Form1()
         {
             InitializeComponent();
-            scene = new Scene(glControlMain.Width, glControlMain.Height);
-
-            currentObjectIndex = 0;
+            
         }
 
         //
         private void OnLoad(object sender, EventArgs e)
         {
             openGLLoaded = true;
+            scene = new Scene(glControlMain.Width, glControlMain.Height);
 
+           
             scene.OnLoad();
-
-            // add shaders from scene to droplist
-            foreach(KeyValuePair<string, ShaderProgram> entry in scene.shaders)
-            {
-               shadersList.Items.Add(entry.Key);
-            }
-
-            shadersList.SelectedIndex = 0;
-
+                       
             // add obejcts from scene to droplist
             foreach (Volume entry in scene.objects)
             {
                 objectsList.Items.Add(entry.Name);
             }
-
             objectsList.SelectedIndex = 0;
+            currentObjectIndex = objectsList.SelectedIndex;
+
+            currentObjectIndex = 0;
+
+            // add shaders from scene to droplist
+            foreach (KeyValuePair<string, ShaderProgram> entry in scene.shaders)
+            {
+                shadersList.Items.Add(entry.Key);
+            }
+
+            shadersList.SelectedIndex = 0;
 
             scene.OnUpdateFrame();
+
+          
         }
        
         //

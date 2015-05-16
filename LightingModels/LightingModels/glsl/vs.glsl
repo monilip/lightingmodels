@@ -5,10 +5,10 @@ in  vec3 vColor;
 
 out vec4 color;
 
-uniform mat4 modelview;
+uniform mat4 modelView;
 
 void main()
 {
-	gl_Position = modelview * vec4(vPosition, 1.0);
+	gl_Position = modelView * vec4(vPosition, 1.0);
   	color = vec4( vColor, 1.0);
 }
