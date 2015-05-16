@@ -7,8 +7,6 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
-
 
 // 15.05.2015
 namespace LightingModels
@@ -62,8 +60,11 @@ namespace LightingModels
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
             ttc.Name = "Cube";
+            ttc.Position = new Vector3(0,0,-2);
+            ttc.Scale = new Vector3(2, 2, 2);
             ttc.TextureID = textures[textureName];
             objects.Add(ttc);
+
 
            /* ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
             objFromFile.Name = "Teapot";

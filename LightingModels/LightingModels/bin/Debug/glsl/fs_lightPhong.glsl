@@ -23,14 +23,17 @@ void main()
 	float diffuse = max(dot(lightDir,normal), 0.0);
 	float specular = 0.0;
 
-	//float specAngle = max(dot(reflectDir, viewDir), 0.0);
-	//specular = pow(specAngle, 5.0);
-	
+	if(diffuse > 0.0) {
+       float specAngle = max(dot(reflectDir, viewDir), 0.0);
+       specular = pow(specAngle, 4.0);
+    }
+
+
 	vec3 lighting;
 
 	lighting = ambientColor;
 	lighting += diffuse*diffuseColor;
-	//lighting += specular*specColor;
+	lighting += specular*specColor;
 
 	outputColor = vec4(lighting, 1.0);
 }

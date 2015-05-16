@@ -39,7 +39,6 @@ namespace LightingModels
             objectsList.SelectedIndex = 0;
             currentObjectIndex = objectsList.SelectedIndex;
 
-            currentObjectIndex = 0;
 
             // add shaders from scene to droplist
             foreach (KeyValuePair<string, ShaderProgram> entry in scene.shaders)
@@ -50,8 +49,12 @@ namespace LightingModels
             shadersList.SelectedIndex = 0;
 
             scene.OnUpdateFrame();
+        }
 
-          
+        private void OnResize(object sender, EventArgs e)
+        {
+            if (!openGLLoaded)
+                return;
         }
        
         //

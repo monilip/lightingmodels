@@ -62,7 +62,9 @@
             this.glControlMain.TabIndex = 0;
             this.glControlMain.VSync = false;
             this.glControlMain.Load += new System.EventHandler(this.OnLoad);
+            this.glControlMain.Resize += new System.EventHandler(this.OnResize);
             this.glControlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
+
             // 
             // camMoveLeft
             // 

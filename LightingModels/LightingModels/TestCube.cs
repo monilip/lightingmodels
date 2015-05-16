@@ -32,14 +32,14 @@ namespace LightingModels
                 new Vector3(-0.5f, 0.5f,  0.5f),
             };
         }
-        // todo
+
         public override Vector3[] GetNormals()
         {
             Vector3[] normals = new Vector3[FacesCount];
 
             for (int i = 0; i < FacesCount-1; i++)
             {
-                normals[i] = Scene.CalculateFaceNormal(GetVert(i * 3), GetVert(i * 3 + 1), GetVert(i * 3 + 2));
+                normals[i] = Scene.CalculateFaceNormal(GetVert(GetIndice(i * 3)), GetVert(GetIndice(i * 3 + 1)), GetVert(GetIndice(i * 3 + 2)));
             }
 
             return normals;
