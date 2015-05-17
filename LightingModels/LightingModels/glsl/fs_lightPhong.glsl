@@ -25,8 +25,11 @@ void main()
 	float specular = 0.0;
 
 	if(diffuse > 0.0) {
+		float nn = n;
+		if (nn < 1.0f)
+			nn = 1.0f;
        float specAngle = max(dot(reflectDir, viewDir), 0.0);
-       specular = pow(specAngle, n); 
+       specular = pow(specAngle, nn); 
     }
 	
 	vec3 lighting;

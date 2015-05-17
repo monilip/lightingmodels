@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using System.Globalization; // for parsing float from string with ".", not ","
 
 // 01.05.15
 namespace LightingModels
@@ -186,12 +187,6 @@ namespace LightingModels
             OnSceneUpdate();
         }
 
-        private void shadersList_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            scene.ActiveShader = shadersList.SelectedItem.ToString();
-            OnSceneUpdate();
-        }
-
         private void objectsList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             currentObjectIndex = objectsList.SelectedIndex;
@@ -200,7 +195,131 @@ namespace LightingModels
         
         # endregion
 
-        
+        # region Shader GUI
+
+        private void shadersList_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            scene.ActiveShader = shadersList.SelectedItem.ToString();
+            UpdateShadersPropertiesForms();
+            OnSceneUpdate();
+        }
+
+        private void UpdateShadersPropertiesForms()
+        {
+            // clear panel
+            shaderPanel.Controls.Clear();
+
+            // add data from ShadersProperties if exist
+            if (scene.ShadersProperties.ContainsKey(scene.ActiveShader))
+            {
+                int top = 0;
+                if (scene.ShadersProperties[scene.ActiveShader].Vector3PropertiesCount > 0)
+                {
+                    foreach (KeyValuePair<string, Vector3> property in scene.ShadersProperties[scene.ActiveShader].Vector3Properties)
+                    {
+                        // add main label
+                        Label label = new Label();
+                        label.Text = property.Key;
+                        label.Top = top;
+                        label.Left = 0;
+                        label.Width = 80;
+                        shaderPanel.Controls.Add(label);
+
+                        // add X textBox
+                        TextBox xTextBox = new TextBox();
+                        xTextBox.Text = (property.Value.X.ToString()).Replace(',','.');
+                        xTextBox.Top = top;
+                        xTextBox.Name = property.Key + "X";
+                        xTextBox.Location = new Point(label.Right + 5, top);
+                        xTextBox.Width = 30;
+                        shaderPanel.Controls.Add(xTextBox);
+
+                        // add Y textBox
+                        TextBox yTextBox = new TextBox();
+                        yTextBox.Text = (property.Value.Y.ToString()).Replace(',', '.');
+                        yTextBox.Top = top;
+                        yTextBox.Name = property.Key + "Y";
+                        yTextBox.Location = new Point(xTextBox.Right + 5, top);
+                        yTextBox.Width = 30;
+                        shaderPanel.Controls.Add(yTextBox);
+
+                        // add Z textBox
+                        TextBox zTextBox = new TextBox();
+                        zTextBox.Text = (property.Value.Z.ToString()).Replace(',', '.');
+                        zTextBox.Top = top;
+                        zTextBox.Name = property.Key + "Z";
+                        zTextBox.Location = new Point(yTextBox.Right + 5, top);
+                        zTextBox.Width = 30;
+                        shaderPanel.Controls.Add(zTextBox);
+
+                        top += label.Height;
+                    }
+                }
+                if (scene.ShadersProperties.ContainsKey(scene.ActiveShader) && scene.ShadersProperties[scene.ActiveShader].FloatPropertiesCount > 0)
+                {
+                    foreach (KeyValuePair<string, float> property in scene.ShadersProperties[scene.ActiveShader].FloatProperties)
+                    {
+                        // add label
+                        Label label = new Label();
+                        label.Text = property.Key;
+                        label.Top = top;
+                        label.Left = 0;
+                        label.Width = 80;
+                        shaderPanel.Controls.Add(label);
+
+                        // add textBox
+                        TextBox textBox = new TextBox();
+                        textBox.Text = property.Value.ToString();
+                        textBox.Top = top;
+                        textBox.Name = property.Key;
+                        textBox.Location = new Point(label.Right + 5, top);
+                        textBox.Width = 30;
+                        shaderPanel.Controls.Add(textBox);
+
+                        top += label.Height;
+                    }
+                }
+
+                // update button
+                Button updateButton = new Button();
+                updateButton.Text = "Update shader";
+                updateButton.Top = top;
+                updateButton.Width = 100;
+                updateButton.Click += UpdareShaderProperties;
+                shaderPanel.Controls.Add(updateButton);
+            }
+        }
+
+        private void UpdareShaderProperties(object sender, EventArgs e)
+        {
+            // update float properties
+            Dictionary<string, float> floatProperties = new Dictionary<string, float>();
+            foreach (KeyValuePair<string,float> property in scene.ShadersProperties[scene.ActiveShader].FloatProperties)
+            {
+                float val = float.Parse(shaderPanel.Controls.Find(property.Key, true)[0].Text, CultureInfo.InvariantCulture.NumberFormat);
+                floatProperties.Add(property.Key, val);
+            }
+            scene.ShadersProperties[scene.ActiveShader].FloatProperties = floatProperties;
+
+            // update vec3 properties
+            Dictionary<string, Vector3> vector3Properties = new Dictionary<string, Vector3>();
+            foreach (KeyValuePair<string, Vector3> property in scene.ShadersProperties[scene.ActiveShader].Vector3Properties)
+            {
+                float x = float.Parse(shaderPanel.Controls.Find(property.Key+"X", true)[0].Text, CultureInfo.InvariantCulture.NumberFormat);
+                float y = float.Parse(shaderPanel.Controls.Find(property.Key+"Y", true)[0].Text, CultureInfo.InvariantCulture.NumberFormat);
+                float z = float.Parse(shaderPanel.Controls.Find(property.Key+"Z", true)[0].Text, CultureInfo.InvariantCulture.NumberFormat);
+
+                vector3Properties.Add(property.Key, new Vector3(x, y, z));
+            }
+            scene.ShadersProperties[scene.ActiveShader].Vector3Properties = vector3Properties;
+
+
+            // update scene
+            OnSceneUpdate();
+        }
+
+
+        # endregion
 
 
     }

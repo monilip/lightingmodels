@@ -13,10 +13,10 @@ namespace LightingModels
         public string ShaderName { get; protected set; }
 
         public int Vector3PropertiesCount { get; protected set; }
-        public Dictionary<string,Vector3> Vector3Properties { get; protected set; }
+        public Dictionary<string,Vector3> Vector3Properties { get; set; }
 
         public int FloatPropertiesCount { get; protected set; }
-        public Dictionary<string,float> FloatProperties { get; protected set; }
+        public Dictionary<string,float> FloatProperties { get; set; }
 
         public ShadersProperty()
         {

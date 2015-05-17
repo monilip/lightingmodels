@@ -51,6 +51,8 @@
             this.objMoveUp = new System.Windows.Forms.Button();
             this.objMoveRight = new System.Windows.Forms.Button();
             this.objMoveLeft = new System.Windows.Forms.Button();
+            this.shaderLabel = new System.Windows.Forms.Label();
+            this.shaderPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // glControlMain
@@ -62,9 +64,8 @@
             this.glControlMain.TabIndex = 0;
             this.glControlMain.VSync = false;
             this.glControlMain.Load += new System.EventHandler(this.OnLoad);
-            this.glControlMain.Resize += new System.EventHandler(this.OnResize);
             this.glControlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
-
+            this.glControlMain.Resize += new System.EventHandler(this.OnResize);
             // 
             // camMoveLeft
             // 
@@ -109,7 +110,7 @@
             // cameraLabel
             // 
             this.cameraLabel.AutoSize = true;
-            this.cameraLabel.Location = new System.Drawing.Point(516, 9);
+            this.cameraLabel.Location = new System.Drawing.Point(548, 9);
             this.cameraLabel.Name = "cameraLabel";
             this.cameraLabel.Size = new System.Drawing.Size(43, 13);
             this.cameraLabel.TabIndex = 5;
@@ -118,7 +119,7 @@
             // ObjectLabel
             // 
             this.ObjectLabel.AutoSize = true;
-            this.ObjectLabel.Location = new System.Drawing.Point(521, 116);
+            this.ObjectLabel.Location = new System.Drawing.Point(548, 127);
             this.ObjectLabel.Name = "ObjectLabel";
             this.ObjectLabel.Size = new System.Drawing.Size(38, 13);
             this.ObjectLabel.TabIndex = 10;
@@ -126,7 +127,7 @@
             // 
             // objRotateDown
             // 
-            this.objRotateDown.Location = new System.Drawing.Point(570, 252);
+            this.objRotateDown.Location = new System.Drawing.Point(570, 220);
             this.objRotateDown.Name = "objRotateDown";
             this.objRotateDown.Size = new System.Drawing.Size(81, 23);
             this.objRotateDown.TabIndex = 9;
@@ -136,7 +137,7 @@
             // 
             // objRotateUp
             // 
-            this.objRotateUp.Location = new System.Drawing.Point(483, 252);
+            this.objRotateUp.Location = new System.Drawing.Point(483, 220);
             this.objRotateUp.Name = "objRotateUp";
             this.objRotateUp.Size = new System.Drawing.Size(81, 23);
             this.objRotateUp.TabIndex = 8;
@@ -146,7 +147,7 @@
             // 
             // objRotateRight
             // 
-            this.objRotateRight.Location = new System.Drawing.Point(570, 223);
+            this.objRotateRight.Location = new System.Drawing.Point(570, 191);
             this.objRotateRight.Name = "objRotateRight";
             this.objRotateRight.Size = new System.Drawing.Size(81, 23);
             this.objRotateRight.TabIndex = 7;
@@ -157,7 +158,7 @@
             // objRotateLeft
             // 
             this.objRotateLeft.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.objRotateLeft.Location = new System.Drawing.Point(483, 223);
+            this.objRotateLeft.Location = new System.Drawing.Point(483, 191);
             this.objRotateLeft.Name = "objRotateLeft";
             this.objRotateLeft.Size = new System.Drawing.Size(80, 23);
             this.objRotateLeft.TabIndex = 6;
@@ -189,16 +190,16 @@
             // 
             this.shadersList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.shadersList.FormattingEnabled = true;
-            this.shadersList.Location = new System.Drawing.Point(485, 196);
+            this.shadersList.Location = new System.Drawing.Point(671, 43);
             this.shadersList.Name = "shadersList";
-            this.shadersList.Size = new System.Drawing.Size(168, 21);
+            this.shadersList.Size = new System.Drawing.Size(189, 21);
             this.shadersList.TabIndex = 18;
             this.shadersList.SelectedIndexChanged += new System.EventHandler(this.shadersList_SelectedIndexChanged);
             // 
             // chooseShaderLabel
             // 
             this.chooseShaderLabel.AutoSize = true;
-            this.chooseShaderLabel.Location = new System.Drawing.Point(485, 180);
+            this.chooseShaderLabel.Location = new System.Drawing.Point(671, 27);
             this.chooseShaderLabel.Name = "chooseShaderLabel";
             this.chooseShaderLabel.Size = new System.Drawing.Size(81, 13);
             this.chooseShaderLabel.TabIndex = 17;
@@ -225,7 +226,7 @@
             // 
             // objMoveFurther
             // 
-            this.objMoveFurther.Location = new System.Drawing.Point(570, 340);
+            this.objMoveFurther.Location = new System.Drawing.Point(570, 308);
             this.objMoveFurther.Name = "objMoveFurther";
             this.objMoveFurther.Size = new System.Drawing.Size(81, 23);
             this.objMoveFurther.TabIndex = 26;
@@ -235,7 +236,7 @@
             // 
             // objMoveCloser
             // 
-            this.objMoveCloser.Location = new System.Drawing.Point(483, 340);
+            this.objMoveCloser.Location = new System.Drawing.Point(483, 308);
             this.objMoveCloser.Name = "objMoveCloser";
             this.objMoveCloser.Size = new System.Drawing.Size(81, 23);
             this.objMoveCloser.TabIndex = 25;
@@ -245,7 +246,7 @@
             // 
             // objMoveDown
             // 
-            this.objMoveDown.Location = new System.Drawing.Point(570, 311);
+            this.objMoveDown.Location = new System.Drawing.Point(570, 279);
             this.objMoveDown.Name = "objMoveDown";
             this.objMoveDown.Size = new System.Drawing.Size(81, 23);
             this.objMoveDown.TabIndex = 24;
@@ -255,7 +256,7 @@
             // 
             // objMoveUp
             // 
-            this.objMoveUp.Location = new System.Drawing.Point(484, 311);
+            this.objMoveUp.Location = new System.Drawing.Point(484, 279);
             this.objMoveUp.Name = "objMoveUp";
             this.objMoveUp.Size = new System.Drawing.Size(80, 23);
             this.objMoveUp.TabIndex = 23;
@@ -265,7 +266,7 @@
             // 
             // objMoveRight
             // 
-            this.objMoveRight.Location = new System.Drawing.Point(570, 282);
+            this.objMoveRight.Location = new System.Drawing.Point(570, 250);
             this.objMoveRight.Name = "objMoveRight";
             this.objMoveRight.Size = new System.Drawing.Size(81, 23);
             this.objMoveRight.TabIndex = 22;
@@ -275,7 +276,7 @@
             // 
             // objMoveLeft
             // 
-            this.objMoveLeft.Location = new System.Drawing.Point(484, 282);
+            this.objMoveLeft.Location = new System.Drawing.Point(484, 250);
             this.objMoveLeft.Name = "objMoveLeft";
             this.objMoveLeft.Size = new System.Drawing.Size(80, 23);
             this.objMoveLeft.TabIndex = 21;
@@ -283,11 +284,29 @@
             this.objMoveLeft.UseVisualStyleBackColor = true;
             this.objMoveLeft.Click += new System.EventHandler(this.objMoveLeft_Click);
             // 
+            // shaderLabel
+            // 
+            this.shaderLabel.AutoSize = true;
+            this.shaderLabel.Location = new System.Drawing.Point(736, 7);
+            this.shaderLabel.Name = "shaderLabel";
+            this.shaderLabel.Size = new System.Drawing.Size(41, 13);
+            this.shaderLabel.TabIndex = 27;
+            this.shaderLabel.Text = "Shader";
+            // 
+            // shaderPanel
+            // 
+            this.shaderPanel.Location = new System.Drawing.Point(671, 71);
+            this.shaderPanel.Name = "shaderPanel";
+            this.shaderPanel.Size = new System.Drawing.Size(189, 258);
+            this.shaderPanel.TabIndex = 28;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(665, 435);
+            this.ClientSize = new System.Drawing.Size(872, 435);
+            this.Controls.Add(this.shaderPanel);
+            this.Controls.Add(this.shaderLabel);
             this.Controls.Add(this.objMoveFurther);
             this.Controls.Add(this.objMoveCloser);
             this.Controls.Add(this.objMoveDown);
@@ -343,6 +362,8 @@
         private System.Windows.Forms.Button objMoveUp;
         private System.Windows.Forms.Button objMoveRight;
         private System.Windows.Forms.Button objMoveLeft;
+        private System.Windows.Forms.Label shaderLabel;
+        private System.Windows.Forms.Panel shaderPanel;
     }
 }
 

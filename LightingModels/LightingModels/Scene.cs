@@ -21,7 +21,7 @@ namespace LightingModels
         int ibo_elements;
 
         public List<Volume> Objects = new List<Volume>();
-        public List<ShadersProperty> ShadersProperties = new List<ShadersProperty>();
+        public Dictionary<string, ShadersProperty> ShadersProperties = new Dictionary<string, ShadersProperty>();
         public Dictionary<string, int> Textures = new Dictionary<string, int>();
         public Dictionary<string, ShaderProgram> Shaders = new Dictionary<string, ShaderProgram>();
         public string ActiveShader = "default";
@@ -50,7 +50,7 @@ namespace LightingModels
 
             // Phong Lighting
             Shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
-            ShadersProperties.Add( new PhongProperty());
+            ShadersProperties["phongLight"] = new PhongProperty();
 
             ActiveShader = "phongLight";
             // Load textures from files
@@ -178,28 +178,23 @@ namespace LightingModels
                 GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("texcoord"), 2, VertexAttribPointerType.Float, true, 0, 0);
             }
 
-            // todo
-            // add data from ShadersProperties
-            foreach (ShadersProperty shaderProperty in ShadersProperties)
+            // add data from ShadersProperties         
+            if (ShadersProperties.ContainsKey(ActiveShader) && ShadersProperties[ActiveShader].Vector3PropertiesCount > 0)
             {
-                if (shaderProperty.ShaderName == ActiveShader){
-                    if (shaderProperty.Vector3PropertiesCount > 0)
-                    {
-                        foreach (KeyValuePair<string,Vector3> property in shaderProperty.Vector3Properties)
-                        {
-                            GL.Uniform3(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key),property.Value);
-                        }
-                    }
-                    if (shaderProperty.FloatPropertiesCount > 0)
-                    {
-                        foreach (KeyValuePair<string,float> property in shaderProperty.FloatProperties)
-                        {
-                            float f = property.Value;
-                            GL.Uniform1(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key), 1, ref f);
-                        }
-                    }
+                foreach (KeyValuePair<string,Vector3> property in ShadersProperties[ActiveShader].Vector3Properties)
+                {
+                    GL.Uniform3(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key),property.Value);
                 }
             }
+            if (ShadersProperties.ContainsKey(ActiveShader) && ShadersProperties[ActiveShader].FloatPropertiesCount > 0)
+            {
+                foreach (KeyValuePair<string, float> property in ShadersProperties[ActiveShader].FloatProperties)
+                {
+                    float f = property.Value;
+                    GL.Uniform1(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key), 1, ref f);
+                }
+            }
+             
             // Update model view matrices
             foreach (Volume v in Objects)
             {
