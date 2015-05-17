@@ -20,10 +20,11 @@ namespace LightingModels
         int[] indicedata;
         int ibo_elements;
 
-        public List<Volume> objects = new List<Volume>(); 
-        public Dictionary<string, int> textures = new Dictionary<string, int>();
-        public Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
-        public string activeShader = "default";
+        public List<Volume> Objects = new List<Volume>();
+        public List<ShadersProperty> ShadersProperties = new List<ShadersProperty>();
+        public Dictionary<string, int> Textures = new Dictionary<string, int>();
+        public Dictionary<string, ShaderProgram> Shaders = new Dictionary<string, ShaderProgram>();
+        public string ActiveShader = "default";
 
         public int Height;
         public int Width;
@@ -42,36 +43,35 @@ namespace LightingModels
 
             // Load shaders from files
             // Default
-            shaders.Add("default", new ShaderProgram("glsl/vs.glsl", "glsl/fs.glsl"));
+            Shaders.Add("default", new ShaderProgram("glsl/vs.glsl", "glsl/fs.glsl"));
 
             // With Texture
-            shaders.Add("textured", new ShaderProgram("glsl/vs_text.glsl", "glsl/fs_text.glsl"));
+            Shaders.Add("textured", new ShaderProgram("glsl/vs_text.glsl", "glsl/fs_text.glsl"));
 
             // Phong Lighting
-            shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
+            Shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
+            ShadersProperties.Add( new PhongProperty());
 
-
-            activeShader = "default";
+            ActiveShader = "phongLight";
             // Load textures from files
             string texturePath = "textures/text_orange.png";
             string textureName = "text_orange.png";
-            textures.Add(textureName, loadImage(texturePath));
+            Textures.Add(textureName, loadImage(texturePath));
          
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
             ttc.Name = "Cube";
             ttc.Position = new Vector3(-1,0,0);
-            ttc.TextureID = textures[textureName];
-            objects.Add(ttc);
+            ttc.TextureID = Textures[textureName];
+            Objects.Add(ttc);
 
 
             ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
             objFromFile.Name = "Teapot";
             objFromFile.Position += new Vector3(1, 0, 0);
             objFromFile.Scale = new Vector3( 0.2f, 0.2f, 0.2f);
-            objFromFile.TextureID = textures[textureName];
-            objects.Add(objFromFile);
-            
+            objFromFile.TextureID = Textures[textureName];
+            Objects.Add(objFromFile);
             
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);
@@ -91,28 +91,28 @@ namespace LightingModels
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(EnableCap.DepthTest);
 
-            shaders[activeShader].EnableVertexAttribArrays();
+            Shaders[ActiveShader].EnableVertexAttribArrays();
 
             int indiceat = 0;
 
             // Draw all our objects
-            foreach (Volume v in objects)
+            foreach (Volume v in Objects)
             {
                 GL.BindTexture(TextureTarget.Texture2D, v.TextureID);
-                GL.UniformMatrix4(shaders[activeShader].GetUniform("modelView"), false, ref v.ModelViewProjectionMatrix);
-                GL.UniformMatrix4(shaders[activeShader].GetUniform("modelViewMatrix"), false, ref v.ModelMatrix);
-                GL.UniformMatrix4(shaders[activeShader].GetUniform("projectionMatrix"), false, ref v.ViewProjectionMatrix);
+                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("modelView"), false, ref v.ModelViewProjectionMatrix);
+                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("modelViewMatrix"), false, ref v.ModelMatrix);
+                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("projectionMatrix"), false, ref v.ViewProjectionMatrix);
 
-                if (shaders[activeShader].GetAttribute("maintexture") != -1)
+                if (Shaders[ActiveShader].GetAttribute("maintexture") != -1)
                 {
-                    GL.Uniform1(shaders[activeShader].GetAttribute("maintexture"), v.TextureID);
+                    GL.Uniform1(Shaders[ActiveShader].GetAttribute("maintexture"), v.TextureID);
                 }
 
                 GL.DrawElements(BeginMode.Triangles, v.IndiceCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
                 indiceat += v.IndiceCount;
             }
 
-            shaders[activeShader].DisableVertexAttribArrays();
+            Shaders[ActiveShader].DisableVertexAttribArrays();
 
             GL.Flush();
             //SwapBuffers(); -> can't do that here, must be done in Form
@@ -129,7 +129,7 @@ namespace LightingModels
 
             // Assemble vertex and indice data for all volumes
             int vertcount = 0;
-            foreach (Volume v in objects)
+            foreach (Volume v in Objects)
             {
                 verts.AddRange(v.GetVerts().ToList());
                 normals.AddRange(v.GetNormals().ToList());
@@ -145,47 +145,70 @@ namespace LightingModels
             coldata = colors.ToArray();
             texcoorddata = texcoords.ToArray();
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[activeShader].GetBuffer("vPosition"));
+            GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[ActiveShader].GetBuffer("vPosition"));
 
             GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vertdata.Length * Vector3.SizeInBytes), vertdata, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(shaders[activeShader].GetAttribute("vPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("vPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Buffer vertex color if shader supports it
-            if (shaders[activeShader].GetAttribute("vColor") != -1)
+            if (Shaders[ActiveShader].GetAttribute("vColor") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[activeShader].GetBuffer("vColor"));
+                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[ActiveShader].GetBuffer("vColor"));
                 GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(coldata.Length * Vector3.SizeInBytes), coldata, BufferUsageHint.StaticDraw);
-                GL.VertexAttribPointer(shaders[activeShader].GetAttribute("vColor"), 3, VertexAttribPointerType.Float, true, 0, 0);
+                GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("vColor"), 3, VertexAttribPointerType.Float, true, 0, 0);
             }
 
 
             // Buffer normal color if shader supports it
-            if (shaders[activeShader].GetAttribute("vNormal") != -1)
+            if (Shaders[ActiveShader].GetAttribute("vNormal") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[activeShader].GetBuffer("vNormal"));
+                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[ActiveShader].GetBuffer("vNormal"));
 
                 GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(normalsdata.Length * Vector3.SizeInBytes), normalsdata, BufferUsageHint.StaticDraw);
-                GL.VertexAttribPointer(shaders[activeShader].GetAttribute("vNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("vNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
 
             }
 
+  
             // Buffer texture coordinates if shader supports it
-            if (shaders[activeShader].GetAttribute("texcoord") != -1)
+            if (Shaders[ActiveShader].GetAttribute("texcoord") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[activeShader].GetBuffer("texcoord"));
+                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[ActiveShader].GetBuffer("texcoord"));
                 GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(texcoorddata.Length * Vector2.SizeInBytes), texcoorddata, BufferUsageHint.StaticDraw);
-                GL.VertexAttribPointer(shaders[activeShader].GetAttribute("texcoord"), 2, VertexAttribPointerType.Float, true, 0, 0);
+                GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("texcoord"), 2, VertexAttribPointerType.Float, true, 0, 0);
             }
 
+            // todo
+            // add data from ShadersProperties
+            foreach (ShadersProperty shaderProperty in ShadersProperties)
+            {
+                if (shaderProperty.ShaderName == ActiveShader){
+                    if (shaderProperty.Vector3PropertiesCount > 0)
+                    {
+                        foreach (KeyValuePair<string,Vector3> property in shaderProperty.Vector3Properties)
+                        {
+                            GL.Uniform3(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key),property.Value);
+                        }
+                    }
+                    if (shaderProperty.FloatPropertiesCount > 0)
+                    {
+                        foreach (KeyValuePair<string,float> property in shaderProperty.FloatProperties)
+                        {
+                            float f = property.Value;
+                            GL.Uniform1(GL.GetUniformLocation(Shaders[ActiveShader].ProgramID, property.Key), 1, ref f);
+                        }
+                    }
+                }
+            }
             // Update model view matrices
-            foreach (Volume v in objects)
+            foreach (Volume v in Objects)
             {
                 v.CalculateModelMatrix();
                 v.ViewProjectionMatrix = Camera.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.3f, Width / (float)Height, 1.0f, 40.0f);
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
             }
 
-            GL.UseProgram(shaders[activeShader].ProgramID);
+            GL.UseProgram(Shaders[ActiveShader].ProgramID);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
@@ -202,13 +225,13 @@ namespace LightingModels
             y = (float)((double)y * Math.PI / 180);
             z = (float)((double)z * Math.PI / 180);
 
-            objects[objectIndex].RotateObject(x, y, z);
+            Objects[objectIndex].RotateObject(x, y, z);
         }
 
         // Move object
         public void MoveObject(int objectIndex, float x, float y, float z)
         {
-            objects[objectIndex].MoveObject(x, y, z);
+            Objects[objectIndex].MoveObject(x, y, z);
         }
 
         //         

@@ -32,7 +32,7 @@ namespace LightingModels
             scene.OnLoad();
                        
             // add obejcts from scene to droplist
-            foreach (Volume entry in scene.objects)
+            foreach (Volume entry in scene.Objects)
             {
                 objectsList.Items.Add(entry.Name);
             }
@@ -41,7 +41,7 @@ namespace LightingModels
 
 
             // add shaders from scene to droplist
-            foreach (KeyValuePair<string, ShaderProgram> entry in scene.shaders)
+            foreach (KeyValuePair<string, ShaderProgram> entry in scene.Shaders)
             {
                 shadersList.Items.Add(entry.Key);
             }
@@ -69,7 +69,6 @@ namespace LightingModels
         //
         private void OnSceneUpdate()
         {
-
             scene.OnUpdateFrame();
             scene.OnRenderFrame();
 
@@ -189,16 +188,14 @@ namespace LightingModels
 
         private void shadersList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            scene.activeShader = shadersList.SelectedItem.ToString();
-            if (openGLLoaded)
-                OnSceneUpdate();
+            scene.ActiveShader = shadersList.SelectedItem.ToString();
+            OnSceneUpdate();
         }
 
         private void objectsList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             currentObjectIndex = objectsList.SelectedIndex;
-            if (openGLLoaded)
-                OnSceneUpdate();
+            OnSceneUpdate();
         }
         
         # endregion

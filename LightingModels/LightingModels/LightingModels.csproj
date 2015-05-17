@@ -50,6 +50,8 @@
     <Compile Include="ObjVolume.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="ShaderProgram.cs" />
+    <Compile Include="ShadersProperties\PhongProperty.cs" />
+    <Compile Include="ShadersProperties\ShadersProperty.cs" />
     <Compile Include="TestCube.cs" />
     <Compile Include="TestTexturedCube.cs" />
     <Compile Include="Usefull.cs" />
