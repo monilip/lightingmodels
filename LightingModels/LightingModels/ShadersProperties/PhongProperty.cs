@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using OpenTK;
 
 // 17.05.2015
-// CLass for all Phong lighting properties
+// Class for all Phong lighting properties
 namespace LightingModels
 {
     class PhongProperty : ShadersProperty
     {
-        public PhongProperty()
+        public void Activate()
         {
             ShaderName = "phongLight";
 

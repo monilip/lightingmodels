@@ -94,6 +94,12 @@
     <None Include="glsl\vs_text.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="models\fromBlender\cube.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="models\fromBlender\monkey.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="models\teapot.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

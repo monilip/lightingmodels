@@ -29,10 +29,9 @@ namespace LightingModels
             openGLLoaded = true;
             scene = new Scene(glControlMain.Width, glControlMain.Height);
 
-           
             scene.OnLoad();
-                       
-            // add obejcts from scene to droplist
+
+            // add objects from scene to droplist
             foreach (Volume entry in scene.Objects)
             {
                 objectsList.Items.Add(entry.Name);

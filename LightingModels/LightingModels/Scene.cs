@@ -50,8 +50,10 @@ namespace LightingModels
 
             // Phong Lighting
             Shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
-            ShadersProperties["phongLight"] = new PhongProperty();
-
+            PhongProperty phong = new PhongProperty();
+            phong.Activate();
+            ShadersProperties.Add("phongLight", phong);
+          
             ActiveShader = "phongLight";
             // Load textures from files
             string texturePath = "textures/text_orange.png";
@@ -61,18 +63,24 @@ namespace LightingModels
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
             ttc.Name = "Cube";
-            ttc.Position = new Vector3(-1,0,0);
+            ttc.Position = new Vector3(-1, 0, 0);
             ttc.TextureID = Textures[textureName];
             Objects.Add(ttc);
 
+            //ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
+            //objFromFile.Name = "Teapot";
+            //objFromFile.Position += new Vector3(1, 0, 0);
+            //objFromFile.Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            //objFromFile.TextureID = Textures[textureName];
+            //Objects.Add(objFromFile);
 
-            ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
-            objFromFile.Name = "Teapot";
-            objFromFile.Position += new Vector3(1, 0, 0);
-            objFromFile.Scale = new Vector3( 0.2f, 0.2f, 0.2f);
-            objFromFile.TextureID = Textures[textureName];
-            Objects.Add(objFromFile);
-            
+            ObjVolume objFromBlenderObjFile = ObjVolume.LoadFromFileFromBlenderObj("models/fromBlender/monkey.obj");
+            objFromBlenderObjFile.Name = "Monkey from Blender";
+            objFromBlenderObjFile.Position += new Vector3(1, 0, 0);
+            objFromBlenderObjFile.Scale = new Vector3(0.4f, 0.4f, 0.4f);
+            objFromBlenderObjFile.TextureID = Textures[textureName];
+            Objects.Add(objFromBlenderObjFile);
+
             // Move camera away from origin
             Camera.Position += new Vector3(0f, 0f, 3f);
         }
@@ -136,6 +144,7 @@ namespace LightingModels
                 inds.AddRange(v.GetIndices(vertcount).ToList());
                 colors.AddRange(v.GetColorData().ToList());
                 texcoords.AddRange(v.GetTextureCoords());
+
                 vertcount += v.VertCount;
             }
 
@@ -158,7 +167,6 @@ namespace LightingModels
                 GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("vColor"), 3, VertexAttribPointerType.Float, true, 0, 0);
             }
 
-
             // Buffer normal color if shader supports it
             if (Shaders[ActiveShader].GetAttribute("vNormal") != -1)
             {
@@ -167,9 +175,7 @@ namespace LightingModels
                 GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(normalsdata.Length * Vector3.SizeInBytes), normalsdata, BufferUsageHint.StaticDraw);
                 GL.VertexAttribPointer(Shaders[ActiveShader].GetAttribute("vNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            }
-
-  
+            }  
             // Buffer texture coordinates if shader supports it
             if (Shaders[ActiveShader].GetAttribute("texcoord") != -1)
             {

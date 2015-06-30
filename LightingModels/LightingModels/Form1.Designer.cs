@@ -330,8 +330,8 @@
             this.Controls.Add(this.camMoveRight);
             this.Controls.Add(this.camMoveLeft);
             this.Controls.Add(this.glControlMain);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Lighting models";
+            this.Text = "Lighting models";
             this.ResumeLayout(false);
             this.PerformLayout();
 
