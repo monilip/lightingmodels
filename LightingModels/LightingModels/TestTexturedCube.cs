@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace LightingModels
 {
-    class TestTexturedCube : TestCube
+    public class TestTexturedCube : TestCube
     {
         public TestTexturedCube()
             : base()

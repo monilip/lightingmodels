@@ -17,8 +17,10 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\textures\text_orange.png
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_text.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\teapot.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\fs_lightPhong.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\glsl\vs_lightPhong.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\fromBlender\cube.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\fromBlender\monkey.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\fromBlender\ball.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\materials\ball.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\textures\2.png

@@ -5,7 +5,11 @@ precision mediump float;
 in vec3 normalInterp;
 in vec3 vertPos;
 
+// tekstura
+in vec2 f_texcoord;
 out vec4 outputColor;
+
+uniform sampler2D maintexture;
 
 uniform float n;
 uniform vec3 lightPos;
@@ -38,5 +42,9 @@ void main()
 	lighting += diffuse*diffuseColor;
 	lighting += specular*specularColor;
 
+
 	outputColor = vec4(lighting, 1.0);
+
+	// tekstura
+	outputColor += texture2D(maintexture, f_texcoord);
 }

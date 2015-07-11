@@ -7,7 +7,7 @@ using LightingModels.Useful;
 // 11.07.2015
 namespace LightingModels
 {
-    class Light : Element
+    public class Light : Element
     {
         private int lightNum = 0;
 

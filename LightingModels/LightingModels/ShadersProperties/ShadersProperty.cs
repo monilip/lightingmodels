@@ -8,7 +8,7 @@ using OpenTK;
 // 17.05.2015
 namespace LightingModels
 {
-    class ShadersProperty
+    public class ShadersProperty
     {
         public string ShaderName { get; protected set; }
 

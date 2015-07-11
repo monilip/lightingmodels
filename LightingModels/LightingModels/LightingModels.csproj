@@ -126,6 +126,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="textures\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="textures\text_orange.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

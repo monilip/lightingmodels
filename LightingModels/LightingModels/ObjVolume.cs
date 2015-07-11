@@ -1,18 +1,20 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace LightingModels
 {
-    class ObjVolume : Volume
+    public class ObjVolume : Volume
     {
         Vector3[] vertices;
         Vector3[] normals;
         Vector3[] colors;
         Vector2[] textureCoords;
         Material material;
-
         List<Tuple<int, int, int>> faces = new List<Tuple<int, int, int>>();
 
         public override int VertCount { get { return vertices.Length; } }
@@ -20,10 +22,7 @@ namespace LightingModels
         public override int IndiceCount { get { return faces.Count * 3; } }
         public override int ColorDataCount { get { return colors.Length; } }
 
-        public string MaterialName;
-
-        public static int VertCountIndex;
-
+      
         //
         public override Vector3[] GetVerts()
         {
@@ -62,18 +61,18 @@ namespace LightingModels
         {
             return textureCoords;
         }
-        
-        //
-        public Material GetMaterial()
-        {
-            return material;
-        }
 
-        //
-        public Material GetMaterial(string name)
-        {
-            return material.GetMaterial(name);
-        }
+
+        //public Material GetMaterial()
+        //{
+        //    return material;
+        //}
+
+        ////
+        //public Material GetMaterial(string name)
+        //{
+        //    return material.GetMaterial(name);
+        //}
 
         //
         public override void CalculateModelMatrix()
@@ -83,14 +82,13 @@ namespace LightingModels
                   
         # region static loading Blender obj methods
         //
-        public static ObjVolume LoadFromFileFromBlenderObj(string filename)
+        public void LoadFromFileFromBlenderObj(string filename)
         {
-            ObjVolume obj = new ObjVolume();
             try
             {
                 using (StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open, FileAccess.Read)))
                 {
-                    obj = LoadFromStringFromBlenderObj(reader.ReadToEnd());
+                    LoadFromStringFromBlenderObj(reader.ReadToEnd());
                 }
             }
             catch (FileNotFoundException e)
@@ -101,8 +99,6 @@ namespace LightingModels
             {
                 UsefulMethods.Log("Error loading file:" + filename);
             }
-
-            return obj;
         }
 
         //
@@ -114,7 +110,7 @@ namespace LightingModels
         // -> face.vertext1 = vertexts[4-1]     // counting starts with 1, not 0!
         // -> face.textCord1 = textureCord[3-1] // counting starts with 1, not 0!
         // -> face.normal1 = normals[2-1]       // counting starts with 1, not 0!
-        public static ObjVolume LoadFromStringFromBlenderObj(string obj)
+        public void LoadFromStringFromBlenderObj(string obj)
         {
             // Seperate lines from the file
             List<String> lines = new List<string>(obj.Split('\n'));
@@ -125,8 +121,6 @@ namespace LightingModels
             List<Vector3> colors = new List<Vector3>();
             List<Vector2> textureCords = new List<Vector2>();
             List<Tuple<int, int, int>> faces = new List<Tuple<int, int, int>>();
-
-            Material material = new Material();
 
 
             // Read file line by line
@@ -142,7 +136,6 @@ namespace LightingModels
                     try
                     {
                         material = new Material();
-
 
                         material.Load(DataPath.MaterialsPath + vertParts[1]);
                     }
@@ -227,17 +220,30 @@ namespace LightingModels
             }
 
             // Create the ObjVolume
-            ObjVolume objVolume = new ObjVolume();
-            objVolume.vertices = vertices.ToArray();
-            objVolume.normals = normals.ToArray();
-            objVolume.faces = new List<Tuple<int, int, int>>(faces);
-            objVolume.colors = colors.ToArray();
-            objVolume.textureCoords = textureCords.ToArray();
-
-            return objVolume;
+            this.vertices = vertices.ToArray();
+            this.normals = normals.ToArray();
+            this.faces = new List<Tuple<int, int, int>>(faces);
+            this.colors = colors.ToArray();
+            this.textureCoords = textureCords.ToArray();
         }
         # endregion
-        
+
+        public override void Render(ShaderProgram shader, int indiceat)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, TextureID);
+            GL.UniformMatrix4(shader.GetUniform("modelView"), false, ref ModelViewProjectionMatrix);
+            GL.UniformMatrix4(shader.GetUniform("modelViewMatrix"), false, ref ModelMatrix);
+            GL.UniformMatrix4(shader.GetUniform("projectionMatrix"), false, ref ViewProjectionMatrix);
+
+            if (shader.GetAttribute("maintexture") != -1)
+            {
+                GL.Uniform1(shader.GetAttribute("maintexture"), TextureID);
+            }
+
+            material.SetMaterial();
+
+            GL.DrawElements(BeginMode.Triangles, IndiceCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
+        }
     }
 
 

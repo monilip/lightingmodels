@@ -22,7 +22,7 @@ namespace LightingModels
      * map_d - Opacity texture map
      */
 
-    class Material
+    public class Material
     {
         private string name;
 
@@ -66,32 +66,32 @@ namespace LightingModels
                 string obj = file.ReadToEnd();
 
                 List<String> lines = new List<string>(obj.Split('\n'));
-
-                Material material = null;
-
+                
                 // Read file line by line
                 foreach (String line in lines)
                 {
                     if (line.StartsWith("newmtl")) 
                     {
                         String temp = line.Substring(7);
+                        temp = temp.Trim('\r', '\t');
+                        //if (material != null) 
+                        //    materials.Add(material);
 
-                        if (material != null) 
-                            materials.Add(material);
-
-                        material = new Material();
+                        //material = new Material();
 
                         String[] lineParts = temp.Split(' ');
 
-                        material.name = lineParts[0];
+                        name = lineParts[0];
                         
-                        UsefulMethods.Log("MaterialName: " + material.name);
+                        UsefulMethods.Log("MaterialName: " + name);
                     }
 
                     // Diffuse color texture map
                     else if (line.StartsWith("map_Kd"))
                     {
                         String temp = line.Substring(7);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
 
                         if (lineParts[0].Contains("Shader_"))
@@ -101,7 +101,7 @@ namespace LightingModels
                         else
                         { 
                             if (Texture.LoadTextures == true)
-                                material.DiffuseTexId = Texture.LoadImage(DataPath.TexturesPath + lineParts[0], lineParts[0]);
+                                DiffuseTexId = Texture.LoadImage(DataPath.TexturesPath + lineParts[0], lineParts[0]);
                         }
 
                     }
@@ -110,6 +110,8 @@ namespace LightingModels
                     else if (line.StartsWith("map_Ka"))
                     {
                         String temp = line.Substring(7);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
 
                         if (lineParts[0].Contains("Shader_"))
@@ -119,7 +121,7 @@ namespace LightingModels
                         else
                         {
                             if (Texture.LoadTextures == true)
-                                material.AmbientTexId = Texture.LoadImage(DataPath.TexturesPath + lineParts[0], lineParts[0]);
+                                AmbientTexId = Texture.LoadImage(DataPath.TexturesPath + lineParts[0], lineParts[0]);
                         }
                     }
                     //// Opacity color texture map
@@ -134,8 +136,10 @@ namespace LightingModels
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
-                        material.PhongSpec = UsefulMethods.GetFloat(lineParts[0]);
+                        PhongSpec = UsefulMethods.GetFloat(lineParts[0]);
                         continue;
                     }
 
@@ -143,8 +147,10 @@ namespace LightingModels
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
-                        material.AmbientColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
+                        AmbientColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
                         continue;
                     }
 
@@ -152,8 +158,10 @@ namespace LightingModels
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
-                        material.DiffuseColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
+                        DiffuseColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
                         continue;
                     }
 
@@ -161,26 +169,30 @@ namespace LightingModels
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
-                        material.SpecularColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
+                        SpecularColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
                     }
 
                     // Dissolve factor (pistetty alphaks)
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
                         String[] lineParts = temp.Split(' ');
 
-                        material.Dissolve = UsefulMethods.GetFloat(lineParts[1]);
+                        Dissolve = UsefulMethods.GetFloat(lineParts[1]);
 
-                        material.DiffuseColor.W = material.Dissolve;
-                        material.AmbientColor.W = material.Dissolve;
-                        material.SpecularColor.W = material.Dissolve;
+                        DiffuseColor.W = Dissolve;
+                        AmbientColor.W = Dissolve;
+                        SpecularColor.W = Dissolve;
                     }
                 }
 
-                if (material != null) 
-                    materials.Add(material);
+                //if (material != null) 
+                //    materials.Add(material);
             }
         }
 

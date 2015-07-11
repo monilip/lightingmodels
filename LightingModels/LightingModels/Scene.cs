@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 // 15.05.2015
 namespace LightingModels
 {
-    class Scene
+    public class Scene
     {
         Vector3[] vertdata;
         Vector3[] normalsdata;
@@ -78,11 +78,13 @@ namespace LightingModels
 
 
             // ball with amterial
-            Volume objFromBlenderObjFile = ObjVolume.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "ball.obj");
+            ObjVolume objFromBlenderObjFile = new ObjVolume();
+            objFromBlenderObjFile.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "ball.obj");
             objFromBlenderObjFile.Name = "Ball from Blender";
             objFromBlenderObjFile.Position += new Vector3(1, 0, 0);
             objFromBlenderObjFile.Scale = new Vector3(0.4f, 0.4f, 0.4f);
-            objFromBlenderObjFile.TextureID = Texture.Textures[textureName];
+            objFromBlenderObjFile.TextureID = Texture.Textures["2.png"];
+
             Objects.Add(objFromBlenderObjFile);
 
             // Move camera away from origin
@@ -110,17 +112,9 @@ namespace LightingModels
             // Draw all our objects
             foreach (Volume v in Objects)
             {
-                GL.BindTexture(TextureTarget.Texture2D, v.TextureID);
-                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("modelView"), false, ref v.ModelViewProjectionMatrix);
-                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("modelViewMatrix"), false, ref v.ModelMatrix);
-                GL.UniformMatrix4(Shaders[ActiveShader].GetUniform("projectionMatrix"), false, ref v.ViewProjectionMatrix);
 
-                if (Shaders[ActiveShader].GetAttribute("maintexture") != -1)
-                {
-                    GL.Uniform1(Shaders[ActiveShader].GetAttribute("maintexture"), v.TextureID);
-                }
-
-                GL.DrawElements(BeginMode.Triangles, v.IndiceCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
+                v.Render(Shaders[ActiveShader],indiceat);
+              
                 indiceat += v.IndiceCount;
             }
 

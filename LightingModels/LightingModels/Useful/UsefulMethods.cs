@@ -9,7 +9,7 @@ using System.Globalization; // for parsing float from string with ".", not ","
 // 11.07.2015
 namespace LightingModels
 {
-    class UsefulMethods
+    public class UsefulMethods
     {
         // 
         public static Vector3 Normalize(Vector3 normal)
@@ -31,9 +31,12 @@ namespace LightingModels
         // debug log 
         public static void Log(string log)
         {
-            Debug.WriteLine("***");
-            Debug.WriteLine(log);
-            Debug.WriteLine("***");
+            if (log.Length > 0)
+            { 
+                Debug.WriteLine("***");
+                Debug.WriteLine(log);
+                Debug.WriteLine("***");
+            }
         }
 
         //

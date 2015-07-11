@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 // 11.07.2015
 namespace LightingModels
 {
-    class Texture
+    public class Texture
     {
 
         public static bool LoadTextures = true;

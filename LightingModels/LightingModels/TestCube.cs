@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace LightingModels
 {
-    class TestCube : Volume
+    public class TestCube : Volume
     {
         public TestCube()
         {

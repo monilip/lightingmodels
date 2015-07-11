@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 // 15.05.2015
 namespace LightingModels
@@ -32,7 +37,6 @@ namespace LightingModels
         public int TextureID;
         public int TextureCoordsCount;
         public abstract Vector2[] GetTextureCoords();
-
 
         public void RotateObject(float x, float y, float z)
         {
@@ -68,7 +72,21 @@ namespace LightingModels
 
             // normalize
             return UsefulMethods.Normalize(faceNormal);
-        }   
+        }
 
+        public virtual void Render(ShaderProgram shader, int indiceat)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, TextureID);
+            GL.UniformMatrix4(shader.GetUniform("modelView"), false, ref ModelViewProjectionMatrix);
+            GL.UniformMatrix4(shader.GetUniform("modelViewMatrix"), false, ref ModelMatrix);
+            GL.UniformMatrix4(shader.GetUniform("projectionMatrix"), false, ref ViewProjectionMatrix);
+
+            if (shader.GetAttribute("maintexture") != -1)
+            {
+                GL.Uniform1(shader.GetAttribute("maintexture"), TextureID);
+            }
+
+            GL.DrawElements(BeginMode.Triangles, IndiceCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
+        }
     }
 }

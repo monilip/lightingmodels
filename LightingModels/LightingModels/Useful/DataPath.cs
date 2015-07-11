@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LightingModels
 {
-    class DataPath
+    public class DataPath
     {
         private static string texturesPath = "textures/";
         private static string materialsPath = "materials/";

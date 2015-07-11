@@ -6,7 +6,7 @@ using System.Collections.Generic;
 // 11.07.2015
 namespace LightingModels.Useful
 {
-    class Element
+    public class Element
     {
         public string Name;
         public Vector3 Position;
