@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// 11.07.2015
 namespace LightingModels
 {
     public class DataPath

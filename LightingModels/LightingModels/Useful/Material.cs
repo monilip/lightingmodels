@@ -3,7 +3,6 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.Generic;
 using System.Globalization; // for parsing float from string with ".", not ","
-using LightingModels.Useful;
 
 // 11.07.2015
 namespace LightingModels
@@ -26,9 +25,7 @@ namespace LightingModels
     {
         private string name;
 
-        List<Material> materials = new List<Material>();
         static string currentMaterial = "";
-
         
         public string ShaderName = "";
        
@@ -74,10 +71,6 @@ namespace LightingModels
                     {
                         String temp = line.Substring(7);
                         temp = temp.Trim('\r', '\t');
-                        //if (material != null) 
-                        //    materials.Add(material);
-
-                        //material = new Material();
 
                         String[] lineParts = temp.Split(' ');
 
@@ -106,7 +99,7 @@ namespace LightingModels
 
                     }
 
-                    //// Ambient color texture m
+                    // Ambient color texture m
                     else if (line.StartsWith("map_Ka"))
                     {
                         String temp = line.Substring(7);
@@ -128,8 +121,9 @@ namespace LightingModels
                     //if (ln[0] == "map_d")
                     //{
                     //    mat.OpacityTex = new Texture();
-                    //    if (loadTextures == true) mat.OpacityTex = Texture.Load(ln[1].ToLower());
-                    //    continue;
+                    //    
+                    //if (Texture.LoadTextures == true)
+                    //    OpacityTex = Texture.LoadImage(DataPath.TexturesPath + lineParts[0], lineParts[0]);
                     //}
 
                    // Phong SpecularTex component
@@ -175,7 +169,7 @@ namespace LightingModels
                         SpecularColor = new Vector4(UsefulMethods.GetFloat(lineParts[0]), UsefulMethods.GetFloat(lineParts[1]), UsefulMethods.GetFloat(lineParts[2]), 1);
                     }
 
-                    // Dissolve factor (pistetty alphaks)
+                    // Dissolve factor
                     else if (line.StartsWith("Ns"))
                     {
                         String temp = line.Substring(3);
@@ -190,25 +184,7 @@ namespace LightingModels
                         SpecularColor.W = Dissolve;
                     }
                 }
-
-                //if (material != null) 
-                //    materials.Add(material);
             }
-        }
-
-        //
-        public Material GetMaterial(string name)
-        {
-            if (this.name == name) 
-                return this;
-
-            for (int i = 0; i < materials.Count; i++)
-            {
-                if (materials[i].name == name) 
-                    return materials[i];
-            }
-
-            return null;
         }
 
         //
@@ -219,22 +195,11 @@ namespace LightingModels
 
             currentMaterial = name;
 
-            //if (DiffuseTex != null) 
-            //    DiffuseTex.Bind();
-
             GL.Material(MaterialFace.Front, MaterialParameter.Ambient, AmbientColor);
             GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, DiffuseColor);
             GL.Material(MaterialFace.Front, MaterialParameter.Specular, SpecularColor);
             GL.Material(MaterialFace.Front, MaterialParameter.Emission, EmissionColor);
             GL.Material(MaterialFace.Front, MaterialParameter.Shininess, PhongSpec);
         }
-
-        //
-        public void SetMaterial(string name)
-        {
-            Material mat = GetMaterial(name);
-            mat.SetMaterial();
-        }
-
     }
 }

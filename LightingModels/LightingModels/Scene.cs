@@ -66,8 +66,7 @@ namespace LightingModels
             PhongProperty phong = new PhongProperty();
             phong.Activate();
             phong.AddLight(lightRed);
-            ShadersProperties.Add("phongLight", phong);
-          
+            ShadersProperties.Add("phongLight", phong);          
 
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
@@ -76,8 +75,7 @@ namespace LightingModels
             ttc.TextureID = Texture.Textures[textureName];
             Objects.Add(ttc);
 
-
-            // ball with amterial
+            // ball with material
             ObjVolume objFromBlenderObjFile = new ObjVolume();
             objFromBlenderObjFile.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "ball.obj");
             objFromBlenderObjFile.Name = "Ball from Blender";
@@ -112,7 +110,6 @@ namespace LightingModels
             // Draw all our objects
             foreach (Volume v in Objects)
             {
-
                 v.Render(Shaders[ActiveShader],indiceat);
               
                 indiceat += v.IndiceCount;

@@ -13,15 +13,8 @@ namespace LightingModels
 {
     public class Texture
     {
-
         public static bool LoadTextures = true;
 
-        string textureName = null;
-        uint textureID = 0;
-        //int width, height;
-
-        //public int Width { get { return width; } }
-        //public int Height { get { return height; } }
         public static Dictionary<string, int> Textures = new Dictionary<string, int>();
 
         //

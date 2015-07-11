@@ -2,7 +2,6 @@
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.Generic;
-using LightingModels.Useful;
 
 // 11.07.2015
 namespace LightingModels
@@ -69,11 +68,14 @@ namespace LightingModels
             Lights.Add(light);
         }
 
+        //
         public static void Remove(Light light)
         {
             light.SetLight(false);
             Lights.Remove(light);
         }
+
+        //
         public void Remove()
         {
             SetLight(false);
