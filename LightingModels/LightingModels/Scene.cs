@@ -41,6 +41,20 @@ namespace LightingModels
         {
             GL.GenBuffers(1, out ibo_elements);
 
+            // Create lights
+            Light.Enable();
+            Light lightRed = new Light("lightRed");
+            lightRed.Position = new Vector3(1.0f, 1.0f, 1.0f);
+            lightRed.Ambient = new Vector3(0.3f, 0.0f, 0.0f);
+            lightRed.Diffuse = new Vector3(0.5f, 0.0f, 0.0f);
+            lightRed.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+            Light.Add(lightRed, 0);
+
+            // Load textures from files
+             string texturePath = "textures/text_orange.png";
+            string textureName = "text_orange.png";
+            Textures.Add(textureName, Texture.LoadImage(texturePath));
+
             // Load shaders from files
             // Default
             Shaders.Add("default", new ShaderProgram("glsl/vs.glsl", "glsl/fs.glsl"));
@@ -52,14 +66,10 @@ namespace LightingModels
             Shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
             PhongProperty phong = new PhongProperty();
             phong.Activate();
+            phong.AddLight(lightRed);
             ShadersProperties.Add("phongLight", phong);
           
-            ActiveShader = "phongLight";
-            // Load textures from files
-            string texturePath = "textures/text_orange.png";
-            string textureName = "text_orange.png";
-            Textures.Add(textureName, loadImage(texturePath));
-         
+
             // Create objects 
             TestTexturedCube ttc = new TestTexturedCube();
             ttc.Name = "Cube";
@@ -67,15 +77,10 @@ namespace LightingModels
             ttc.TextureID = Textures[textureName];
             Objects.Add(ttc);
 
-            //ObjVolume objFromFile = ObjVolume.LoadFromFile("models/teapot.obj");
-            //objFromFile.Name = "Teapot";
-            //objFromFile.Position += new Vector3(1, 0, 0);
-            //objFromFile.Scale = new Vector3(0.2f, 0.2f, 0.2f);
-            //objFromFile.TextureID = Textures[textureName];
-            //Objects.Add(objFromFile);
 
-            ObjVolume objFromBlenderObjFile = ObjVolume.LoadFromFileFromBlenderObj("models/fromBlender/monkey.obj");
-            objFromBlenderObjFile.Name = "Monkey from Blender";
+            // ball with amterial
+            Volume objFromBlenderObjFile = ObjVolume.LoadFromFileFromBlenderObj("models/fromBlender/ball.obj");
+            objFromBlenderObjFile.Name = "Ball from Blender";
             objFromBlenderObjFile.Position += new Vector3(1, 0, 0);
             objFromBlenderObjFile.Scale = new Vector3(0.4f, 0.4f, 0.4f);
             objFromBlenderObjFile.TextureID = Textures[textureName];
@@ -139,6 +144,7 @@ namespace LightingModels
             int vertcount = 0;
             foreach (Volume v in Objects)
             {
+                //v.VertCountIndex = vertcount;
                 verts.AddRange(v.GetVerts().ToList());
                 normals.AddRange(v.GetNormals().ToList());
                 inds.AddRange(v.GetIndices(vertcount).ToList());
@@ -234,85 +240,5 @@ namespace LightingModels
         {
             Objects[objectIndex].MoveObject(x, y, z);
         }
-
-        //         
-        #region files functions
-        int loadImage(Bitmap image)
-        {
-            int texID = GL.GenTexture();
-
-            GL.BindTexture(TextureTarget.Texture2D, texID);
-            BitmapData data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height),
-                ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-
-            image.UnlockBits(data);
-
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            return texID;
-        }
-
-        int loadImage(string filename)
-        {
-            try
-            {
-                Bitmap file = new Bitmap(filename);
-                return loadImage(file);
-            }
-            catch (FileNotFoundException e)
-            {
-                return -1;
-            }
-        }
-        #endregion
-
-        # region static normals
-        // Surface normals
-        public static Vector3 CalculateFaceNormal(Vector3 a, Vector3 b, Vector3 c)
-        {
-            Vector3 A, B;
-
-            // A
-            A.X = a.X - b.X;
-            A.Y = a.Y - b.Y;
-            A.Z = a.Z - b.Z;
-
-            // B
-            B.X = b.X - c.X;
-            B.Y = b.Y - c.Y;
-            B.Z = b.Z - c.Z;
-
-            // calculate the cross product and place the resulting vector
-            // into the normal
-            Vector3 faceNormal = new Vector3();
-            faceNormal.X = (A.Y * B.Z) - (A.Z * B.Y);
-            faceNormal.Y = (A.Z * B.X) - (A.X * B.Z);
-            faceNormal.Z = (A.X * B.Y) - (A.Y * B.X);
-
-            // normalize
-            return normalize(faceNormal);
-        }
-
-        // 
-        internal static Vector3 normalize(Vector3 normal)
-        {
-            // calculate the length of the vector
-            float len = (float)(Math.Sqrt((normal.X * normal.X) + (normal.Y * normal.Y) + (normal.Z * normal.Z)));
-
-            // avoid division by 0
-            if (len == 0.0f)
-                len = 1.0f;
-
-            // reduce to unit size
-            normal.X /= len;
-            normal.Y /= len;
-            normal.Z /= len;
-            return normal;
-        }
-
-        #endregion
     }
 }
