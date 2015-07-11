@@ -44,31 +44,7 @@ namespace LightingModels
             Position = new Vector3(Position.X + x, Position.Y + y, Position.Z + z);
         }
 
-        // Surface normals
-        public static Vector3 CalculateFaceNormal(Vector3 a, Vector3 b, Vector3 c)
-        {
-            Vector3 A, B;
-
-            // A
-            A.X = a.X - b.X;
-            A.Y = a.Y - b.Y;
-            A.Z = a.Z - b.Z;
-
-            // B
-            B.X = b.X - c.X;
-            B.Y = b.Y - c.Y;
-            B.Z = b.Z - c.Z;
-
-            // calculate the cross product and place the resulting vector
-            // into the normal
-            Vector3 faceNormal = new Vector3();
-            faceNormal.X = (A.Y * B.Z) - (A.Z * B.Y);
-            faceNormal.Y = (A.Z * B.X) - (A.X * B.Z);
-            faceNormal.Z = (A.X * B.Y) - (A.Y * B.X);
-
-            // normalize
-            return UsefulMethods.Normalize(faceNormal);
-        }   
+      
 
     }
 }
