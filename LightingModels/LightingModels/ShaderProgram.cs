@@ -78,7 +78,7 @@ namespace LightingModels
             GL.ShaderSource(address, code);
             GL.CompileShader(address);
             GL.AttachShader(ProgramID, address);
-            Console.WriteLine(GL.GetShaderInfoLog(address));
+            UsefulMethods.Log(GL.GetShaderInfoLog(address));
         }
 
         //
@@ -86,7 +86,7 @@ namespace LightingModels
         {
             GL.LinkProgram(ProgramID);
 
-            Console.WriteLine(GL.GetProgramInfoLog(ProgramID));
+            UsefulMethods.Log(GL.GetProgramInfoLog(ProgramID));
 
             GL.GetProgram(ProgramID, ProgramParameter.ActiveAttributes, out AttributeCount);
             GL.GetProgram(ProgramID, ProgramParameter.ActiveUniforms, out UniformCount);
