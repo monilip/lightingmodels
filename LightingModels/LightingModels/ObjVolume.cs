@@ -161,7 +161,7 @@ namespace LightingModels
 
                     // todo
                     // temporaty color/texture coordinates for now
-                    colors.Add(new Vector3(1f,1f,1f));
+                    colors.Add(new Vector3(1f,0f,1f));
                     
                     vertices.Add(vec);
                 }

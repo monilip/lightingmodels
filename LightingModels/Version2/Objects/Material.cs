@@ -64,7 +64,7 @@ namespace Version2
 
                         name = lineParts[0];
 
-                        Useful.Log("MaterialName: " + name);
+                        //Useful.Log("MaterialName: " + name);
                     }
 
                     // Diffuse color texture map

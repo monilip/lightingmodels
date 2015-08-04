@@ -71,6 +71,9 @@ namespace Version2
                         y = Useful.GetFloat(lineParts[1]);
                         z = Useful.GetFloat(lineParts[2]);
 
+                        // temporary
+                        ColorList.Add(new Vector3(1f, 0f, 1f));
+
                         VertexsList.Add(new Vector3(x, y, z));
                         
                         break;
@@ -172,6 +175,7 @@ namespace Version2
 
             // creating VBO from faces:
             Vector3[] dataVertexs = new Vector3[FacesList.Count*3];
+            Vector3[] dataColors = new Vector3[FacesList.Count*3];
             Vector3[] dataNormals = new Vector3[FacesList.Count * 3];
             Vector2[] dataUVs = new Vector2[FacesList.Count * 3];
             int[] triangles = new int[FacesList.Count * 3];
@@ -180,6 +184,10 @@ namespace Version2
                 dataVertexs[i*3] = VertexsList[FacesList[i].VertexsIndices.Item1];
                 dataVertexs[i * 3 + 1] = VertexsList[FacesList[i].VertexsIndices.Item2];
                 dataVertexs[i * 3 + 2] = VertexsList[FacesList[i].VertexsIndices.Item3];
+
+                dataColors[i * 3] = ColorList[FacesList[i].VertexsIndices.Item1];
+                dataColors[i * 3 + 1] = ColorList[FacesList[i].VertexsIndices.Item2];
+                dataColors[i * 3 + 2] = ColorList[FacesList[i].VertexsIndices.Item3];
 
                 dataNormals[i * 3] = NormalsList[FacesList[i].NormalsIndices.Item1];
                 dataNormals[i * 3 + 1] = NormalsList[FacesList[i].NormalsIndices.Item2];
@@ -195,6 +203,7 @@ namespace Version2
             }
             
             this.VertexsVBO = new VBO<Vector3>(dataVertexs);
+            this.ColorsVBO = new VBO<Vector3>(dataColors);
             this.NormalsVBO = new VBO<Vector3>(dataNormals);
             this.UVsVBO = new VBO<Vector2>(dataUVs);
             this.TrianglesVBO = new VBO<int>(triangles, BufferTarget.ElementArrayBuffer);

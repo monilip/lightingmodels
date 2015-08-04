@@ -5,10 +5,12 @@ in  vec3 vColor;
 
 out vec4 color;
 
-uniform mat4 modelView;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 
 void main()
 {
-	gl_Position = modelView * vec4(vPosition, 1.0);
+	gl_Position =  projectionMatrix * viewMatrix * modelMatrix * vec4(vPosition, 1.0);
   	color = vec4( vColor, 1.0);
 }
