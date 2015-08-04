@@ -68,23 +68,23 @@ namespace Version2
             //phong.AddLight(lightRed);
             //ShadersProperties.Add("phongLight", phong);
 
-           // Shaders.Add(new Shader("simpleLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_simpleLight.glsl"), System.IO.File.ReadAllText(@"glsl/fs_simpleLight.glsl"))));
+            Shaders.Add(new Shader("simpleLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_simpleLight.glsl"), System.IO.File.ReadAllText(@"glsl/fs_simpleLight.glsl"))));
 
-            ActiveShaderIndex = 1;
+            ActiveShaderIndex = 2;
 
             Shaders[ActiveShaderIndex].GetShaderProgram().Use();
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
 
-            //if (Shaders[ActiveShaderIndex].GetShaderProgram()["light_direction"] != null)
-            //{
-            //    Shaders[ActiveShaderIndex].GetShaderProgram()["light_direction"].SetValue(new Vector3(0, 0, 1));          
-            //}
+            if (Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"] != null)
+            {
+                Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"].SetValue(new Vector3(0, 0, 1));
+            }
 
-            //if (Shaders[ActiveShaderIndex].GetShaderProgram()["enable_lighting"] != null)
-            //{
-            //        Shaders[ActiveShaderIndex].GetShaderProgram()["enable_lighting"].SetValue(lighting);
-            //}
+            if (Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"] != null)
+            {
+                Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
+            }
             // Objects
             ObjVolume objectFromBlender = new ObjVolume();
             objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
@@ -128,9 +128,8 @@ namespace Version2
                 Gl.BindBufferToShaderAttribute(volume.VertexsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vPosition");
                 Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
 
-                Gl.BindBufferToShaderAttribute(volume.VertexsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vertexPosition");
-                Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vertexNormal");
-                Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vertexUV");
+                Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
+
 
                 // uniform
                 Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(Matrix4.CreateRotationY(yangle / 2) * Matrix4.CreateRotationX(xangle) * Matrix4.CreateTranslation(volume.Position) * Matrix4.CreateScaling(volume.Scale));

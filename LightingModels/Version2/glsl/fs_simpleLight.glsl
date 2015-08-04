@@ -1,19 +1,20 @@
-﻿#version 130
+﻿#version 330
 
-uniform sampler2D texture;
-uniform vec3 light_direction;
-uniform bool enable_lighting;
+in vec2 f_texcoord;
+in vec3 f_normal;
 
-in vec3 normal;
-in vec2 uv;
+out vec4 outputColor;
 
-out vec4 fragment;
+uniform sampler2D maintexture;
+uniform vec3 lightDirection;
+uniform bool enableLighting;
 
 void main(void)
 {
-    float diffuse = max(dot(normal, light_direction), 0);
+	float diffuse = max(dot(f_normal, lightDirection), 0);
     float ambient = 0.3;
-    float lighting = (enable_lighting ? max(diffuse, ambient) : 1);
+    float lighting = (enableLighting ? max(diffuse, ambient) : 1);
 
-    fragment = lighting * texture2D(texture, uv);
+	vec4 color = texture2D(maintexture, f_texcoord);
+    outputColor = lighting * color;
 }

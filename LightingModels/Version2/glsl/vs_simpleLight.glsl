@@ -1,18 +1,20 @@
-﻿in vec3 vertexPosition;
-in vec3 vertexNormal;
-in vec2 vertexUV;
+﻿#version 330
 
-out vec3 normal;
-out vec2 uv;
+in vec3 vPosition;
+in vec3 vNormal;
+in vec2 texcoord;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
+out vec2 f_texcoord;
+out vec3 f_normal;
+
 void main(void)
 {
-    normal = normalize((modelMatrix * vec4(floor(vertexNormal), 0)).xyz);
-    uv = vertexUV;
-
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix  * vec4(vPosition, 1.0);
+    f_texcoord = texcoord;
+	f_normal =  normalize((modelMatrix * vec4(floor(vNormal), 0)).xyz);
 }
+
