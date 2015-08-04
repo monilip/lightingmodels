@@ -16,7 +16,7 @@ namespace Version2
         private static VBO<Vector3> cube, cubeNormals;
         private static VBO<Vector2> cubeUV;
         private static VBO<int> cubeQuads;
-        private static Texture crateTexture;
+        private static Texture texture;
         private static bool lighting = true;
         private static float xangle = 0f, yangle = 0f;
         private static bool left, right, up, down;
@@ -28,6 +28,8 @@ namespace Version2
             simpleOpenGlControl1.InitializeContexts();
            // simpleOpenGlControl1.DestroyContexts();
 
+            Gl.Enable(EnableCap.DepthTest);
+
             program = new ShaderProgram(VertexShader, FragmentShader);
 
             program.Use();
@@ -37,82 +39,31 @@ namespace Version2
             program["light_direction"].SetValue(new Vector3(0, 0, 1));
             program["enable_lighting"].SetValue(lighting);
 
-            crateTexture = new Texture("2.png");
-
-
-            // from cubeWithTexture.obj
-
-            Vector3[] verts = new Vector3[] {
-                new Vector3(1, -1.23, -1), new Vector3(1, -1.23, 1), new Vector3(-1, -1.23, 1), new Vector3(-1, -1.23, -1), 
-                new Vector3(1, 0.77, -1), new Vector3(1, 0.77, 1), new Vector3(-1, 0.77, 1), new Vector3(-1, 0.77, -1)
-            };
-
-
-            int[] vertsIndices = new int[] { 0, 1, 2, 3,
-                                             4, 7, 6, 5,
-                                             0, 4 ,5 ,1,
-                                             1, 5, 6, 2,
-                                             2, 6, 7, 3,
-                                             4, 0, 3, 7
-            };
-
+            texture = new Texture("2.png");
+            
             cube = new VBO<Vector3>(new Vector3[] {
-                verts[0], verts[1], verts[2], verts[3], // face1 - bottom
-                verts[4], verts[7], verts[6], verts[5], // face2 - top
-                verts[0], verts[4], verts[5], verts[1], // face3 - left
-                verts[1], verts[5], verts[6], verts[2], // face4 - back
-                verts[2], verts[6], verts[7], verts[3], // face5 - right
-                verts[4], verts[0], verts[3], verts[7], // face6 - front
-                }
-            );
-
-            Vector3[] normals = new Vector3[]{
-                new Vector3(0, -1, 0), new Vector3(0, 1,0 ), new Vector3(1, 0, 0), 
-                new Vector3(0, 0, 1), new Vector3(01, 0, 0), new Vector3(0, 0, -1)
-            };
-
+                    new Vector3(1, 1, -1), new Vector3(-1, 1, -1), new Vector3(-1, 1, 1), new Vector3(1, 1, 1),         // top
+                    new Vector3(1, -1, 1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1), new Vector3(1, -1, -1),     // bottom
+                    new Vector3(1, 1, 1), new Vector3(-1, 1, 1), new Vector3(-1, -1, 1), new Vector3(1, -1, 1),         // front face
+                    new Vector3(1, -1, -1), new Vector3(-1, -1, -1), new Vector3(-1, 1, -1), new Vector3(1, 1, -1),     // back face
+                    new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, -1), new Vector3(-1, -1, 1),     // left
+                    new Vector3(1, 1, -1), new Vector3(1, 1, 1), new Vector3(1, -1, 1), new Vector3(1, -1, -1) });      // right
             cubeNormals = new VBO<Vector3>(new Vector3[] {
-               normals[0], normals[0], normals[0], normals[0], // face1
-                normals[1], normals[1], normals[1], normals[1], // face2
-                normals[2], normals[2], normals[2], normals[2], // face3
-                normals[3], normals[3], normals[3], normals[3], // face4
-                normals[4], normals[4], normals[4], normals[4], // face5
-                normals[5], normals[5], normals[5], normals[5], // face6
-                }
-            );
-
-            int[] normalsIndices = new int[] { 0, 0, 0, 0,
-                                               1, 1, 1, 1,
-                                               2, 2, 2, 2,
-                                               3, 3, 3, 3,
-                                               4, 4, 4, 4,
-                                               5, 5, 5, 5,
-            };
-
-            Vector2[] textCords = new Vector2[]{
-                new Vector2(1, 1), new Vector2(0, 1), new Vector2(0, 0), new Vector2(1, 0)
-            };
-
+                    new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), 
+                    new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), 
+                    new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), 
+                    new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), 
+                    new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), 
+                    new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0) });
             cubeUV = new VBO<Vector2>(new Vector2[] {
-                textCords[0], textCords[1], textCords[2], textCords[3], // face1
-                textCords[0], textCords[1], textCords[2], textCords[3], // face2
-                textCords[3], textCords[0], textCords[1], textCords[2], // face3
-                textCords[3], textCords[0], textCords[1], textCords[2], // face4
-                textCords[1], textCords[2], textCords[3], textCords[0], // face5
-                textCords[3], textCords[0], textCords[1], textCords[2], // face6
-                }
-            );
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
 
-
-
-            cubeQuads = new VBO<int>(new int[] {
-                                                0, 1, 2, 3,
-                                                4, 5, 6, 7, 
-                                                8, 9, 10, 11,
-                                                12, 13, 14, 15,
-                                                16, 17, 18, 19, 
-                                                20, 21, 22, 23
-            }, BufferTarget.ElementArrayBuffer);
+            cubeQuads = new VBO<int>(new int[] { 3, 2, 1,0, 4, 5, 6, 7, 20, 21, 22, 23, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, }, BufferTarget.ElementArrayBuffer);
 
 
 
@@ -122,10 +73,10 @@ namespace Version2
         private void OnRenderFrame(object sender, EventArgs e)
         {
 
-            if (right) yangle += 0.01f;
-            if (left) yangle -= 0.01f;
-            if (up) xangle -= 0.01f;
-            if (down) xangle += 0.01f;
+            if (right) yangle += 0.05f;
+            if (left) yangle -= 0.05f;
+            if (up) xangle -= 0.05f;
+            if (down) xangle += 0.05f;
 
             // set up the viewport and clear the previous depth and color buffers
             Gl.Viewport(0, 0, SceneWidth, SceneHeight);
@@ -133,7 +84,7 @@ namespace Version2
 
              // make sure the shader program and texture are being used
             Gl.UseProgram(program);
-            Gl.BindTexture(crateTexture);
+            Gl.BindTexture(texture);
 
             // set up the model matrix and draw the cube
             program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
