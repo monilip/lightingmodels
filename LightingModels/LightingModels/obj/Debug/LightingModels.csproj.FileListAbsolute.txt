@@ -24,3 +24,6 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\mode
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\fromBlender\ball.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\materials\ball.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\textures\2.png
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\OpenTK.Compatibility.dll
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\materials\cubeWithTexture.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\LightingModels\bin\Debug\models\fromBlender\cubeWithTexture.obj

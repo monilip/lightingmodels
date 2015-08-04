@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using OpenGL;
 
-
-
 // 04.08.2015
 namespace Version2
 {
@@ -13,13 +11,14 @@ namespace Version2
         public int SceneWidth = 640;
         public int SceneHeight = 360;
         private static ShaderProgram program;
-        private static VBO<Vector3> cube, cubeNormals;
-        private static VBO<Vector2> cubeUV;
-        private static VBO<int> cubeQuads;
+        private static ObjVolume cube;
+        private static VBO<int> cubeTriangles;
         private static Texture texture;
         private static bool lighting = true;
         private static float xangle = 0f, yangle = 0f;
         private static bool left, right, up, down;
+        private static string modelsPath = "models/";
+        private static bool isReady = false;
 
         public Form1()
         {
@@ -40,30 +39,36 @@ namespace Version2
             program["enable_lighting"].SetValue(lighting);
 
             texture = new Texture("2.png");
-            
-            cube = new VBO<Vector3>(new Vector3[] {
-                    new Vector3(1, 1, -1), new Vector3(-1, 1, -1), new Vector3(-1, 1, 1), new Vector3(1, 1, 1),         // top
-                    new Vector3(1, -1, 1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1), new Vector3(1, -1, -1),     // bottom
-                    new Vector3(1, 1, 1), new Vector3(-1, 1, 1), new Vector3(-1, -1, 1), new Vector3(1, -1, 1),         // front face
-                    new Vector3(1, -1, -1), new Vector3(-1, -1, -1), new Vector3(-1, 1, -1), new Vector3(1, 1, -1),     // back face
-                    new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, -1), new Vector3(-1, -1, 1),     // left
-                    new Vector3(1, 1, -1), new Vector3(1, 1, 1), new Vector3(1, -1, 1), new Vector3(1, -1, -1) });      // right
-            cubeNormals = new VBO<Vector3>(new Vector3[] {
-                    new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), 
-                    new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), 
-                    new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), 
-                    new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), 
-                    new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), 
-                    new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0) });
-            cubeUV = new VBO<Vector2>(new Vector2[] {
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
 
-            cubeQuads = new VBO<int>(new int[] { 3, 2, 1,0, 4, 5, 6, 7, 20, 21, 22, 23, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, }, BufferTarget.ElementArrayBuffer);
+            cube = new ObjVolume();
+            cube.LoadFromFileFromBlenderObj(modelsPath + "cubeWithTexture.obj");
+            cube.Name = "Cube from Blender";
+            
+            //cube = new VBO<Vector3>(new Vector3[] {
+            //        new Vector3(1, 1, -1), new Vector3(-1, 1, -1), new Vector3(-1, 1, 1), new Vector3(1, 1, 1),         // top
+            //        new Vector3(1, -1, 1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1), new Vector3(1, -1, -1),     // bottom
+            //        new Vector3(1, 1, 1), new Vector3(-1, 1, 1), new Vector3(-1, -1, 1), new Vector3(1, -1, 1),         // front face
+            //        new Vector3(1, -1, -1), new Vector3(-1, -1, -1), new Vector3(-1, 1, -1), new Vector3(1, 1, -1),     // back face
+            //        new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, -1), new Vector3(-1, -1, 1),     // left
+            //        new Vector3(1, 1, -1), new Vector3(1, 1, 1), new Vector3(1, -1, 1), new Vector3(1, -1, -1) });      // right
+            //cubeNormals = new VBO<Vector3>(new Vector3[] {
+            //        new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), 
+            //        new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), 
+            //        new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), 
+            //        new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), 
+            //        new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), 
+            //        new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0) });
+            //cubeUV = new VBO<Vector2>(new Vector2[] {
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
+
+
+
+            cubeTriangles = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }, BufferTarget.ElementArrayBuffer);
 
 
 
@@ -90,12 +95,12 @@ namespace Version2
             program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
             program["enable_lighting"].SetValue(lighting);
 
-            Gl.BindBufferToShaderAttribute(cube, program, "vertexPosition");
-            Gl.BindBufferToShaderAttribute(cubeNormals, program, "vertexNormal");
-            Gl.BindBufferToShaderAttribute(cubeUV, program, "vertexUV");
-            Gl.BindBuffer(cubeQuads);
+            Gl.BindBufferToShaderAttribute(cube.VertexsVBO, program, "vertexPosition");
+            Gl.BindBufferToShaderAttribute(cube.NormalsVBO, program, "vertexNormal");
+            Gl.BindBufferToShaderAttribute(cube.UVsVBO, program, "vertexUV");
+            Gl.BindBuffer(cubeTriangles);
             
-            Gl.DrawElements(BeginMode.Quads, cubeQuads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.DrawElements(BeginMode.Triangles, cubeTriangles.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
 
             simpleOpenGlControl1.SwapBuffers();
