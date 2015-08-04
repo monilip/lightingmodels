@@ -51,9 +51,9 @@ namespace LightingModels
         //
         public void ChangeN(float n)
         {
-            if (Vector3Properties.ContainsKey("n"))
-                Vector3Properties.Remove("n");
-            FloatProperties.Add("n", 4.0f);
+            if (FloatProperties.ContainsKey("n"))
+                FloatProperties.Remove("n");
+            FloatProperties.Add("n", n);
         }
     }
 }

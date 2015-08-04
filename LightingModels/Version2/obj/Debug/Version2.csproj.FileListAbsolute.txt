@@ -19,3 +19,6 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_te
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cubeWithTexture.png
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_simpleLight.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_simpleLight.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithTexture.png
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWIthTexture.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWIthTexture.obj

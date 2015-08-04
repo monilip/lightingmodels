@@ -48,9 +48,9 @@ namespace Version2
             // Lights
             Light lightRed = new Light("lightRed");
             lightRed.Position = new Vector3(1.0f, 1.0f, 1.0f);
-            lightRed.Ambient = new Vector3(0.3f, 0.0f, 0.0f);
-            lightRed.Diffuse = new Vector3(0.5f, 0.0f, 0.0f);
-            lightRed.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+            lightRed.Ambient = new Vector3(0.0f, 0.0f, 0.0f);
+            lightRed.Diffuse = new Vector3(0.0f, 0.0f, 0.0f);
+            lightRed.Specular = new Vector3(1.0f, 0.0f, 0.0f);
 
             // Shaders
             // Load shaders from files
@@ -62,11 +62,12 @@ namespace Version2
             Shaders.Add(new Shader("textured", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_text.glsl"), System.IO.File.ReadAllText(@"glsl/fs_text.glsl"))));
 
             // Phong Lighting
-            //Shaders.Add(new Shader("phongLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
-            //PhongProperty phong = new PhongProperty();
-            //phong.Activate();
-            //phong.AddLight(lightRed);
-            //ShadersProperties.Add("phongLight", phong);
+            Shaders.Add(new Shader("phongLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
+            PhongProperty phong = new PhongProperty();
+            phong.Activate();
+            phong.AddLight(lightRed);
+            phong.ChangeN(100);
+            ShadersProperties.Add("phongLight", phong);
 
             Shaders.Add(new Shader("simpleLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_simpleLight.glsl"), System.IO.File.ReadAllText(@"glsl/fs_simpleLight.glsl"))));
 
@@ -75,7 +76,6 @@ namespace Version2
             Shaders[ActiveShaderIndex].GetShaderProgram().Use();
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
-
             if (Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"] != null)
             {
                 Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"].SetValue(new Vector3(0, 0, 1));
@@ -85,18 +85,41 @@ namespace Version2
             {
                 Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
             }
-            // Objects
-            ObjVolume objectFromBlender = new ObjVolume();
-            objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
-            objectFromBlender.Name = "Cube from Blender";
-            objectFromBlender.Scale = new Vector3(1, 1, 1);
-            objectFromBlender.Position = new Vector3(1, 0, 0);
 
-            Objects.Add(objectFromBlender);
+            // add data from ShadersProperties         
+            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3PropertiesCount > 0)
+            {
+                foreach (KeyValuePair<string, Vector3> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties)
+                {
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
+                    } 
+                }
+            }
+            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatPropertiesCount > 0)
+            {
+                foreach (KeyValuePair<string, float> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatProperties)
+                {
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
+                    } 
+                }
+            }
+
+            // Objects
+            //ObjVolume objectFromBlender = new ObjVolume();
+            //objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
+            //objectFromBlender.Name = "Cube from Blender";
+            //objectFromBlender.Scale = new Vector3(1, 1, 1);
+            //objectFromBlender.Position = new Vector3(1, 0, 0);
+
+            //Objects.Add(objectFromBlender);
 
             ObjVolume objectFromBlender2 = new ObjVolume();
-            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
-            objectFromBlender2.Name = "Smaller ube from Blender";
+            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithTexture.obj");
+            objectFromBlender2.Name = "Ball from Blender";
             objectFromBlender2.Scale = new Vector3(0.5, 0.5, 0.5);
             objectFromBlender2.Position = new Vector3(-3,0,0);
             Objects.Add(objectFromBlender2);

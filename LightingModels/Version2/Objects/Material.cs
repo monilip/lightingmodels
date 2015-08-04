@@ -80,8 +80,15 @@ namespace Version2
                             // todo -> material shader??
                         }
                         else
-                        { 
-                           diffuseTexture = new Texture(lineParts[0]);
+                        {
+                            try
+                            {
+                                diffuseTexture = new Texture(lineParts[0]);
+                            }
+                            catch (Exception e)
+                            {
+                               Useful.Log("Error!" + e.ToString());
+                            }
                         }
 
                     }
