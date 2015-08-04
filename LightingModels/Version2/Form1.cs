@@ -2,24 +2,32 @@
 using System.Drawing;
 using System.Windows.Forms;
 using OpenGL;
+using System.Collections.Generic;
 
 // 04.08.2015
 namespace Version2
 {
     public partial class Form1 : Form
     {
+        public List<Volume> Objects = new List<Volume>();
+        public Dictionary<string, ShadersProperty> ShadersProperties = new Dictionary<string, ShadersProperty>();
+        public Dictionary<string, ShaderProgram> Shaders = new Dictionary<string, ShaderProgram>();
+        public string ActiveShader = "default";
+
+        // objects
+        private static ShaderProgram program;
+       // private static ObjVolume cube;
+       // private static Texture texture;
+
+        
+        // Scene
+        private static bool left, right, up, down;
+        private static float xangle = 0f, yangle = 0f;
         public int SceneWidth = 640;
         public int SceneHeight = 360;
-        private static ShaderProgram program;
-        private static ObjVolume cube;
-        private static VBO<int> cubeTriangles;
-        private static Texture texture;
         private static bool lighting = true;
-        private static float xangle = 0f, yangle = 0f;
-        private static bool left, right, up, down;
-        private static string modelsPath = "models/";
-        private static bool isReady = false;
 
+         
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +36,9 @@ namespace Version2
            // simpleOpenGlControl1.DestroyContexts();
 
             Gl.Enable(EnableCap.DepthTest);
+
+
+            InitScene();
 
             program = new ShaderProgram(VertexShader, FragmentShader);
 
@@ -38,41 +49,57 @@ namespace Version2
             program["light_direction"].SetValue(new Vector3(0, 0, 1));
             program["enable_lighting"].SetValue(lighting);
 
-            texture = new Texture("2.png");
+         //   texture = new Texture("2.png");
 
-            cube = new ObjVolume();
-            cube.LoadFromFileFromBlenderObj(modelsPath + "cubeWithTexture.obj");
-            cube.Name = "Cube from Blender";
-            
-            //cube = new VBO<Vector3>(new Vector3[] {
-            //        new Vector3(1, 1, -1), new Vector3(-1, 1, -1), new Vector3(-1, 1, 1), new Vector3(1, 1, 1),         // top
-            //        new Vector3(1, -1, 1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1), new Vector3(1, -1, -1),     // bottom
-            //        new Vector3(1, 1, 1), new Vector3(-1, 1, 1), new Vector3(-1, -1, 1), new Vector3(1, -1, 1),         // front face
-            //        new Vector3(1, -1, -1), new Vector3(-1, -1, -1), new Vector3(-1, 1, -1), new Vector3(1, 1, -1),     // back face
-            //        new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, -1), new Vector3(-1, -1, 1),     // left
-            //        new Vector3(1, 1, -1), new Vector3(1, 1, 1), new Vector3(1, -1, 1), new Vector3(1, -1, -1) });      // right
-            //cubeNormals = new VBO<Vector3>(new Vector3[] {
-            //        new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), 
-            //        new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), 
-            //        new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), 
-            //        new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), 
-            //        new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), 
-            //        new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0) });
-            //cubeUV = new VBO<Vector2>(new Vector2[] {
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
-            //        new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
-
-
-
-            cubeTriangles = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }, BufferTarget.ElementArrayBuffer);
-
-
+            //cube = new ObjVolume();
+            //cube.LoadFromFileFromBlenderObj(modelsPath + "cubeWithTexture.obj");
+            //cube.Name = "Cube from Blender";
+            //cube.Position = new Vector3(0, 0, 0);
 
             Application.Idle += OnRenderFrame;
+        }
+
+        // create light, shaders and objects
+        private void InitScene()
+        {
+            // Lights
+            Light lightRed = new Light("lightRed");
+            lightRed.Position = new Vector3(1.0f, 1.0f, 1.0f);
+            lightRed.Ambient = new Vector3(0.3f, 0.0f, 0.0f);
+            lightRed.Diffuse = new Vector3(0.5f, 0.0f, 0.0f);
+            lightRed.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+
+            // Shaders
+            // Load shaders from files
+            // Default
+            Shaders.Add("default", new ShaderProgram("glsl/vs.glsl", "glsl/fs.glsl"));
+
+            // With Texture
+            Shaders.Add("textured", new ShaderProgram("glsl/vs_text.glsl", "glsl/fs_text.glsl"));
+
+            // Phong Lighting
+            Shaders.Add("phongLight", new ShaderProgram("glsl/vs_lightPhong.glsl", "glsl/fs_lightPhong.glsl"));
+            PhongProperty phong = new PhongProperty();
+            phong.Activate();
+            phong.AddLight(lightRed);
+            ShadersProperties.Add("phongLight", phong);   
+        
+            // Objects
+            ObjVolume objectFromBlender = new ObjVolume();
+            objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
+            objectFromBlender.Name = "Cube from Blender";
+            objectFromBlender.Scale = new Vector3(1, 1, 1);
+            objectFromBlender.Position = new Vector3(1, 0, 0);
+
+            Objects.Add(objectFromBlender);
+
+            ObjVolume objectFromBlender2 = new ObjVolume();
+            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithTexture.obj");
+            objectFromBlender2.Name = "Smaller ube from Blender";
+            objectFromBlender2.Scale = new Vector3(0.5, 0.5, 0.5);
+            objectFromBlender2.Position = new Vector3(-3,0,0);
+            Objects.Add(objectFromBlender2);
+
         }     
 
         private void OnRenderFrame(object sender, EventArgs e)
@@ -88,19 +115,27 @@ namespace Version2
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
              // make sure the shader program and texture are being used
-            Gl.UseProgram(program);
-            Gl.BindTexture(texture);
-
-            // set up the model matrix and draw the cube
-            program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
-            program["enable_lighting"].SetValue(lighting);
-
-            Gl.BindBufferToShaderAttribute(cube.VertexsVBO, program, "vertexPosition");
-            Gl.BindBufferToShaderAttribute(cube.NormalsVBO, program, "vertexNormal");
-            Gl.BindBufferToShaderAttribute(cube.UVsVBO, program, "vertexUV");
-            Gl.BindBuffer(cubeTriangles);
+            Gl.UseProgram(program);         
             
-            Gl.DrawElements(BeginMode.Triangles, cubeTriangles.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+            foreach (var volume in Objects)
+            {
+                // set up the model matrix and draw the cube
+                program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle) * Matrix4.CreateTranslation(volume.Position) * Matrix4.CreateScaling(volume.Scale));
+                program["enable_lighting"].SetValue(lighting);
+
+                Gl.BindTexture(volume.GetTexture());
+
+                Gl.BindBufferToShaderAttribute(volume.VertexsVBO, program, "vertexPosition");
+                Gl.BindBufferToShaderAttribute(volume.NormalsVBO, program, "vertexNormal");
+                Gl.BindBufferToShaderAttribute(volume.UVsVBO, program, "vertexUV");
+
+                Gl.BindBuffer(volume.TrianglesVBO);
+
+                Gl.DrawElements(BeginMode.Triangles, volume.TrianglesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            }
+
+           
 
 
             simpleOpenGlControl1.SwapBuffers();
@@ -167,10 +202,25 @@ void main(void)
 
         private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.W) up = true;
-            else if (e.KeyCode == Keys.S) down = true;
-            else if (e.KeyCode == Keys.D) right = true;
-            else if (e.KeyCode == Keys.A) left = true;
+            if (e.KeyCode == Keys.W) 
+                up = true;
+            else 
+                up = false;
+
+            if (e.KeyCode == Keys.S)
+                down = true;
+            else
+                down = false;
+            
+            if (e.KeyCode == Keys.D) 
+                right = true;
+            else
+                right = false;
+
+            if (e.KeyCode == Keys.A)
+                left = true;
+            else
+                left = false;
         }
 
 

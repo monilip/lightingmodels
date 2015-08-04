@@ -71,5 +71,11 @@ namespace Version2
 
             return i;
         }
+
+        //
+        public static string GetModelsPath()
+        {
+            return "models/";
+        }
     }
 }

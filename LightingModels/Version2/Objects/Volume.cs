@@ -10,7 +10,7 @@ namespace Version2
         public string Name;
         public Vector3 Position = Vector3.Zero;
         public Vector3 Rotation = Vector3.Zero;
-        public Vector3 Scale = new Vector3(1,1,1);
+        public Vector3 Scale = new Vector3(1, 1, 1);
 
         public List<Vector3> VertexsList = new List<Vector3>();
         public List<Vector3> NormalsList = new List<Vector3>();
@@ -20,5 +20,19 @@ namespace Version2
         public VBO<Vector3> VertexsVBO;
         public VBO<Vector3> NormalsVBO;
         public VBO<Vector2> UVsVBO;
+        public VBO<int> TrianglesVBO;
+
+        public string TextureName;
+        public Texture Texture;
+
+        public Material Material;
+
+        public OpenGL.Texture GetTexture()
+        {
+            if (Material != null)
+                return Material.GetTexture();
+            else
+                return Texture;
+        }
     }
 }

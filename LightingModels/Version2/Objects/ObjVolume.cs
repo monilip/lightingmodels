@@ -144,6 +144,27 @@ namespace Version2
                         
                         break;
 
+                    case "mt":
+                        if (line.Substring(0, 6).Equals("mtllib"))
+                        {
+                            // Cut off beginning of line
+                            temp = line.Substring(6);
+                            temp = temp.Trim('\r', '\t');
+
+                            String[] vertParts = temp.Split(' ');
+                            this.Material = null;
+                            try
+                            {
+                                this.Material = new Material();
+
+                                Material.Load(Useful.GetModelsPath() + vertParts[1]);
+                            }
+                            catch (Exception e)
+                            {
+                                Useful.Log(e.ToString());
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -153,6 +174,7 @@ namespace Version2
             Vector3[] dataVertexs = new Vector3[FacesList.Count*3];
             Vector3[] dataNormals = new Vector3[FacesList.Count * 3];
             Vector2[] dataUVs = new Vector2[FacesList.Count * 3];
+            int[] triangles = new int[FacesList.Count * 3];
             for (int i = 0; i < FacesList.Count; i++)
             {
                 dataVertexs[i*3] = VertexsList[FacesList[i].VertexsIndices.Item1];
@@ -167,16 +189,19 @@ namespace Version2
                 dataUVs[i * 3 + 1] = UVsList[FacesList[i].UVsIndices.Item2];
                 dataUVs[i * 3 + 2] = UVsList[FacesList[i].UVsIndices.Item3];
 
+                triangles[i * 3] = i * 3;
+                triangles[i * 3 + 1] = i * 3 + 1;
+                triangles[i * 3 + 2] = i * 3 + 2;
             }
-
-
-            // Create the ObjVolume
+            
             this.VertexsVBO = new VBO<Vector3>(dataVertexs);
             this.NormalsVBO = new VBO<Vector3>(dataNormals);
             this.UVsVBO = new VBO<Vector2>(dataUVs);
-
+            this.TrianglesVBO = new VBO<int>(triangles, BufferTarget.ElementArrayBuffer);
         }
 
         #endregion
+
+
     }
 }
