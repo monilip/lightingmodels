@@ -138,7 +138,7 @@ namespace LightingModels
                     }
 
                     // Ambient color
-                    else if (line.StartsWith("Ns"))
+                    else if (line.StartsWith("Ka"))
                     {
                         String temp = line.Substring(3);
                         temp = temp.Trim('\r', '\t');
@@ -149,7 +149,7 @@ namespace LightingModels
                     }
 
                     // Diffuse color
-                    else if (line.StartsWith("Ns"))
+                    else if (line.StartsWith("Kd"))
                     {
                         String temp = line.Substring(3);
                         temp = temp.Trim('\r', '\t');
@@ -160,7 +160,7 @@ namespace LightingModels
                     }
 
                     // Specular color
-                    else if (line.StartsWith("Ns"))
+                    else if (line.StartsWith("Ks"))
                     {
                         String temp = line.Substring(3);
                         temp = temp.Trim('\r', '\t');
@@ -170,14 +170,14 @@ namespace LightingModels
                     }
 
                     // Dissolve factor
-                    else if (line.StartsWith("Ns"))
+                    else if (line.StartsWith("d"))
                     {
-                        String temp = line.Substring(3);
+                        String temp = line.Substring(2);
                         temp = temp.Trim('\r', '\t');
 
                         String[] lineParts = temp.Split(' ');
 
-                        Dissolve = UsefulMethods.GetFloat(lineParts[1]);
+                        Dissolve = UsefulMethods.GetFloat(lineParts[0]);
 
                         DiffuseColor.W = Dissolve;
                         AmbientColor.W = Dissolve;
