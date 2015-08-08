@@ -15,6 +15,6 @@ void main(void)
 {
     gl_Position = projectionMatrix * viewMatrix * modelMatrix  * vec4(vPosition, 1.0);
     f_texcoord = texcoord;
-	f_normal =  normalize((modelMatrix * vec4(floor(vNormal), 0)).xyz);
+	f_normal =  normalize((viewMatrix * vNormal);
 }
 

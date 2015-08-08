@@ -52,5 +52,10 @@ namespace Version2
         {
             Rotation = new Vector3(Rotation.x + x, Rotation.y + y, Rotation.z + z);
         }
+
+        public void MoveObject(float x, float y, float z)
+        {
+            Position = new Vector3(Position.x + x, Position.y + y, Position.z + z);
+        }
     }
 }

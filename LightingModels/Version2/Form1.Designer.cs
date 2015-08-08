@@ -43,7 +43,7 @@
             this.simpleOpenGlControl1.DepthBits = ((byte)(16));
             this.simpleOpenGlControl1.Location = new System.Drawing.Point(12, 12);
             this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
-            this.simpleOpenGlControl1.Size = new System.Drawing.Size(559, 361);
+            this.simpleOpenGlControl1.Size = new System.Drawing.Size(900, 500);
             this.simpleOpenGlControl1.StencilBits = ((byte)(0));
             this.simpleOpenGlControl1.TabIndex = 0;
             this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 446);
+            this.ClientSize = new System.Drawing.Size(934, 527);
             this.Controls.Add(this.simpleOpenGlControl1);
             this.Name = "Form1";
             this.Text = "Form1";

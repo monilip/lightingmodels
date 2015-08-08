@@ -22,10 +22,8 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cub
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\earthTexture.jpg
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.obj
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth2.mtl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth2.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\test1.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\test1.obj
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\PoolBalluv1.jpg
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\Ball1.mtl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\Ball1.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth2.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth2.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cube.obj

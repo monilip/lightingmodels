@@ -7,8 +7,6 @@ namespace Version2
 {
     public class Light : Element
     {
-        private int lightNum = 0;
-
         public static List<Light> Lights = new List<Light>();
         public Vector3 Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
         public Vector3 Specular = new Vector3(0.5f, 0.5f, 0.5f);

@@ -55,7 +55,7 @@ namespace Version2
             // Read file line by line
             foreach (String line in lines)
             {
-                if (line.Length == 0)
+                if (line.Length < 2)
                     continue;
 
                 lineStart = line.Substring(0, 2);
@@ -135,7 +135,10 @@ namespace Version2
                             String[] indices = lineParts[i].Split('/');
 
                             faceVectors[i] = Useful.GetInt(indices[0]) -1;
-                            faceUVs[i] = Useful.GetInt(indices[1]) - 1;
+                            if (indices[1].Length != 0)
+                                faceUVs[i] = Useful.GetInt(indices[1]) - 1;
+                            else
+                                faceUVs[i] = 0;
                             faceNormals[i] = Useful.GetInt(indices[2]) -1;
                         }
 
@@ -196,10 +199,12 @@ namespace Version2
                 dataNormals[i * 3 + 1] = NormalsList[FacesList[i].NormalsIndices.Item2];
                 dataNormals[i * 3 + 2] = NormalsList[FacesList[i].NormalsIndices.Item3];
 
-                dataUVs[i * 3] = UVsList[FacesList[i].UVsIndices.Item1];
-                dataUVs[i * 3 + 1] = UVsList[FacesList[i].UVsIndices.Item2];
-                dataUVs[i * 3 + 2] = UVsList[FacesList[i].UVsIndices.Item3];
-
+                if (UVsList.Count !=0)
+                {
+                    dataUVs[i * 3] = UVsList[FacesList[i].UVsIndices.Item1];
+                    dataUVs[i * 3 + 1] = UVsList[FacesList[i].UVsIndices.Item2];
+                    dataUVs[i * 3 + 2] = UVsList[FacesList[i].UVsIndices.Item3];
+                }
                 triangles[i * 3] = i * 3;
                 triangles[i * 3 + 1] = i * 3 + 1;
                 triangles[i * 3 + 2] = i * 3 + 2;
@@ -213,7 +218,8 @@ namespace Version2
             this.VertexsVBO = new VBO<Vector3>(dataVertexs);
             this.ColorsVBO = new VBO<Vector3>(dataColors);
             this.NormalsVBO = new VBO<Vector3>(dataNormals);
-            this.UVsVBO = new VBO<Vector2>(dataUVs);
+            if (UVsList.Count != 0)
+                this.UVsVBO = new VBO<Vector2>(dataUVs);
             this.TrianglesVBO = new VBO<int>(triangles, BufferTarget.ElementArrayBuffer);
 
         }

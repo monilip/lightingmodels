@@ -113,7 +113,6 @@ namespace Version2
         public static float GetFloat(string s)
         {
             float f = 0.0f;
-
             try
             {
                 f = float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
@@ -130,6 +129,9 @@ namespace Version2
         public static int GetInt(string s)
         {
             int i = 0;
+
+            if (s.Length == 0)
+                return 0;
 
             try
             {
