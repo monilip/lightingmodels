@@ -209,11 +209,7 @@ namespace Version2
                 triangles[i * 3 + 1] = i * 3 + 1;
                 triangles[i * 3 + 2] = i * 3 + 2;
             }
-            
-        //    Useful.LogVec3Array(dataVertexs,"vertex");
-         //   Useful.LogVec3Array(dataNormals,"normals");
-         //   Useful.LogVec2Array(dataUVs, "uv");
-         //   Useful.LogIntArray(triangles, "triangles");
+
 
             this.VertexsVBO = new VBO<Vector3>(dataVertexs);
             this.ColorsVBO = new VBO<Vector3>(dataColors);

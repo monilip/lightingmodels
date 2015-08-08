@@ -1,7 +1,6 @@
 ﻿#version 330
 
 in vec3 vPosition;
-in vec3 vColor;
 in vec3 vNormal;
 in vec2 texcoord;
 
@@ -15,9 +14,10 @@ uniform mat4 projectionMatrix;
 
 void main()
 {
-	f_texcoord = texcoord;
-	f_normal =  normalize((modelMatrix * vec4(floor(vNormal), 0)).xyz);
-	vec4 pos = viewMatrix * modelMatrix * vec4(vPosition, 1.0);
-	f_vertPos =  pos.xyz;
+	vec4 pos = modelMatrix * viewMatrix * vec4(vPosition, 1.0);
+	f_vertPos = pos.xyz;
 	gl_Position = projectionMatrix * pos;
+	f_normal = vec3(modelMatrix * viewMatrix * vec4(vNormal, 0.0));
+	
+	f_texcoord = texcoord;
 }

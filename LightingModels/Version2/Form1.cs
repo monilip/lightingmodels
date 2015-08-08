@@ -44,15 +44,11 @@ namespace Version2
         // create light, shaders and objects
         private void InitScene()
         {
-
-
             Light lightRed = new Light("lightRed");
-            lightRed.Position = new Vector3(-2.0f, 0.0f, 0.0f);
-            lightRed.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-            lightRed.Diffuse = new Vector3(1.0f, 0.1f, 0.1f);
+            lightRed.Position = new Vector3(3.0f, 5.0f, 20.0f);
+            lightRed.Ambient = new Vector3(0.0f, 0.0f, 0.0f);
+            lightRed.Diffuse = new Vector3(0.3f, 0.3f, 0.3f);
             lightRed.Specular = new Vector3(1.0, 0.0f, 0.0f);
-            lightRed.LightDirection = new Vector3(0, 0, 0);
-            LightDirection = lightRed.LightDirection;
             LightPosition = lightRed.Position;
             // Shaders
             // Load shaders from files
@@ -68,7 +64,7 @@ namespace Version2
             PhongProperty phong = new PhongProperty();
             phong.Activate();
             phong.AddLight(lightRed);
-            phong.ChangeN(4);
+            phong.ChangeN(50);
             ShadersProperties.Add("phongLight", phong);
 
             Shaders.Add(new Shader("simpleLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_simpleLight.glsl"), System.IO.File.ReadAllText(@"glsl/fs_simpleLight.glsl"))));
@@ -111,21 +107,19 @@ namespace Version2
             }
 
             // Objects
+            ObjVolume objectFromBlender = new ObjVolume();
+            objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
+            objectFromBlender.Name = "Test from Blender";
+            objectFromBlender.Scale = new Vector3(1, 1, 1);
+            objectFromBlender.Position = new Vector3(1.5, 0, 0);
+            Objects.Add(objectFromBlender);
 
-            ObjVolume objectFromBlender3 = new ObjVolume();
-            objectFromBlender3.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
-            objectFromBlender3.Name = "Test from Blender";
-            objectFromBlender3.Scale = new Vector3(1, 1, 1);
-            objectFromBlender3.Position = new Vector3(1, 0, 0);
-            objectFromBlender3.Texture = new Texture("2.png");
-            Objects.Add(objectFromBlender3);
-
-            ObjVolume lightObj1 = new ObjVolume();
-            lightObj1.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
-            lightObj1.Name = "As light from Blender";
-            lightObj1.Scale = new Vector3(0.2, 0.2, 0.2);
-            lightObj1.Position = LightPosition;
-            Objects.Add(lightObj1);
+            ObjVolume objectFromBlender2 = new ObjVolume();
+            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
+            objectFromBlender2.Name = "Test from Blender";
+            objectFromBlender2.Scale = new Vector3(1, 1, 1);
+            objectFromBlender2.Position = new Vector3(-1.5, 0, 0);
+            Objects.Add(objectFromBlender2);
         }     
 
         private void OnRenderFrame(object sender, EventArgs e)
@@ -159,27 +153,15 @@ namespace Version2
             //    }
             //}    
 
-            //if (Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"] != null)
-            //{
-            //    Shaders[ActiveShaderIndex].GetShaderProgram()["lightDirection"].SetValue(LightDirection);
-            //}
-
-            //if (Shaders[ActiveShaderIndex].GetShaderProgram()["lightPos"] != null)
-            //{
-            //    Shaders[ActiveShaderIndex].GetShaderProgram()["lightPos"].SetValue(LightPosition);
-            //} 
-
             foreach (var volume in Objects)
             {
+                // bind texture
                 Gl.BindTexture(volume.GetTexture());
-                // uniform
+
+                // set uniform
                 Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(volume.CalculateModelMatrix());
 
-
                 // set shaders parameters
-                // default
-                // texture
-                // i               
                 Gl.BindBufferToShaderAttribute(volume.ColorsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vColor");
                 Gl.BindBufferToShaderAttribute(volume.VertexsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vPosition");
                 if (volume.UVsVBO != null)
@@ -188,15 +170,13 @@ namespace Version2
                         
                 Gl.BindBuffer(volume.TrianglesVBO);
 
+                // draw volume
                 Gl.DrawElements(BeginMode.Triangles, volume.TrianglesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            }
-           
+            }        
 
-
-            simpleOpenGlControl1.SwapBuffers();
+                simpleOpenGlControl1.SwapBuffers();
         }
-
-
+        
         // used instead of glutDisplayFunc
         private void OnPaint(object sender, PaintEventArgs e)
         {
@@ -209,29 +189,25 @@ namespace Version2
             Shaders[ActiveShaderIndex].GetShaderProgram().Use();
         }
        
-
+        //
         private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.NumPad1)
-            //    ActiveObjectIndex = 0;
+            if (e.KeyCode == Keys.NumPad1)
+                ActiveObjectIndex = 0;
 
-            //if (e.KeyCode == Keys.NumPad2)
-            //    ActiveObjectIndex = 1;
+            if (e.KeyCode == Keys.NumPad2)
+                ActiveObjectIndex = 1;
 
             if (e.KeyCode == Keys.W)
-                //RotateObject(Objects[ActiveObjectIndex], -10, 0, 0);
                 Objects[ActiveObjectIndex].MoveObject(0, 0.1f, 0);                
 
             if (e.KeyCode == Keys.S)
-              //  RotateObject(Objects[ActiveObjectIndex], 10, 0, 0);
                 Objects[ActiveObjectIndex].MoveObject(0, -0.1f, 0);
 
             if (e.KeyCode == Keys.D) 
-               // RotateObject(Objects[ActiveObjectIndex],0, 10, 0);                
                 Objects[ActiveObjectIndex].MoveObject(0.1f, 0, 0);
 
             if (e.KeyCode == Keys.A)
-               // RotateObject(Objects[ActiveObjectIndex], 0, -10, 0);
                 Objects[ActiveObjectIndex].MoveObject(-0.1f, 0, 0);
 
             if (e.KeyCode == Keys.Q)
@@ -239,47 +215,9 @@ namespace Version2
 
             if (e.KeyCode == Keys.E)
                 Objects[ActiveObjectIndex].MoveObject(0, 0, -0.1f);
-
-            if (e.KeyCode == Keys.M)
-            {
-                Objects[1].MoveObject(-0.1f, 0, 0);
-              //  Objects[2].MoveObject(-0.1f, 0, 0);
-                LightPosition.x -= 0.1f;
-            }
-            if (e.KeyCode == Keys.N)
-            {
-                LightPosition.y -= 0.1f;
-                Objects[1].MoveObject(0, -0.1f, 0);
-             //   Objects[2].MoveObject(0, -0.1f, 0);
-            }
-            if (e.KeyCode == Keys.B)
-            { 
-                LightPosition.z -= 0.1f;
-                Objects[1].MoveObject(0, 0, -0.1f);
-             //   Objects[2].MoveObject(0, 0, -0.1f);
-            }
-            if (e.KeyCode == Keys.L)
-            {
-                LightPosition.x += 0.1f;
-                Objects[1].MoveObject(+0.1f, 0, 0);
-               // Objects[2].MoveObject(+0.1f, 0, 0);
-            }
-            if (e.KeyCode == Keys.K)
-            { 
-                LightPosition.y += 0.1f;
-                Objects[1].MoveObject(0, +0.1f, 0);
-              //  Objects[2].MoveObject(0, +0.1f, 0);
-            }
-            if (e.KeyCode == Keys.J)
-            { 
-                LightPosition.z += 0.1f;
-                Objects[1].MoveObject(0, 0, +0.1f);
-              //  Objects[2].MoveObject(0, 0, +0.1f);
-            }
-
         }
 
-
+        //
         public void RotateObject(Volume obj, float xx, float yy, float zz)
         {
             float x = (float)((double)xx * Math.PI / 180);
