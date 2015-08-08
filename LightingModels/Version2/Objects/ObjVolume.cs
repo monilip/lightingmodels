@@ -55,6 +55,9 @@ namespace Version2
             // Read file line by line
             foreach (String line in lines)
             {
+                if (line.Length == 0)
+                    continue;
+
                 lineStart = line.Substring(0, 2);
 
                 switch (lineStart)
@@ -202,11 +205,17 @@ namespace Version2
                 triangles[i * 3 + 2] = i * 3 + 2;
             }
             
+        //    Useful.LogVec3Array(dataVertexs,"vertex");
+         //   Useful.LogVec3Array(dataNormals,"normals");
+         //   Useful.LogVec2Array(dataUVs, "uv");
+         //   Useful.LogIntArray(triangles, "triangles");
+
             this.VertexsVBO = new VBO<Vector3>(dataVertexs);
             this.ColorsVBO = new VBO<Vector3>(dataColors);
             this.NormalsVBO = new VBO<Vector3>(dataNormals);
             this.UVsVBO = new VBO<Vector2>(dataUVs);
             this.TrianglesVBO = new VBO<int>(triangles, BufferTarget.ElementArrayBuffer);
+
         }
 
         #endregion

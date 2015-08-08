@@ -38,6 +38,77 @@ namespace Version2
             }
         }
 
+        // debug log 
+        public static void LogVec3Array(Vector3[] array, string name = null)
+        {
+            Debug.WriteLine("***");
+
+            if (name != null)
+            {
+                Debug.WriteLine("Name: " + name);
+            }
+            if (array.Length > 0)
+            {
+                
+                Debug.WriteLine("new Vector3[] {");
+                foreach (Vector3 vec in array)
+                {
+                    string line = "new Vector3(" + vec.x.ToString().Replace(",", ".") + "," + vec.y.ToString().Replace(",", ".") + "," + vec.z.ToString().Replace(",", ".") + "),";
+
+
+                    Debug.WriteLine(line);                    
+                }
+                Debug.WriteLine("}");              
+            }
+            Debug.WriteLine("***");
+        }
+
+        // debug log
+        public static void LogVec2Array(Vector2[] array, string name = null)
+        {
+            Debug.WriteLine("***");
+
+            if (name != null)
+            {
+                Debug.WriteLine("Name: " + name);
+            }
+            if (array.Length > 0)
+            {
+
+                Debug.WriteLine("new Vector2[] {");
+                foreach (Vector2 vec in array)
+                {
+                    string line = "new Vector2(" + vec.x.ToString().Replace(",", ".") + "," + vec.y.ToString().Replace(",",".") + "),";
+
+
+                    Debug.WriteLine(line);
+                }
+                Debug.WriteLine("}");
+            }
+            Debug.WriteLine("***");
+        }
+
+        public static void LogIntArray(int[] array, string name = null)
+        {
+            Debug.WriteLine("***");
+
+            if (name != null)
+            {
+                Debug.WriteLine("Name: " + name);
+            }
+            if (array.Length > 0)
+            {
+
+                Debug.WriteLine("new int[] {");
+                foreach (int i in array)
+                {
+                    Debug.WriteLine(i + ",");
+                }
+                Debug.WriteLine("}");
+            }
+            Debug.WriteLine("***");
+        }
+
         //
         public static float GetFloat(string s)
         {

@@ -27,6 +27,7 @@ namespace Version2
         public VBO<Vector3> NormalsVBO;
         public VBO<Vector2> UVsVBO;
         public VBO<int> TrianglesVBO;
+        public VBO<int> QuadsVBO;
 
         public string TextureName;
         public Texture Texture;
@@ -41,10 +42,15 @@ namespace Version2
                 return Texture;
         }
 
-        public void CalculateModelMatrix()
+        public Matrix4 CalculateModelMatrix()
         {
             ModelMatrix = Matrix4.CreateScaling(Scale) * Matrix4.CreateRotationX(Rotation.x) * Matrix4.CreateRotationY(Rotation.y) * Matrix4.CreateRotationZ(Rotation.z) * Matrix4.CreateTranslation(Position);
-        
+            return ModelMatrix;
+        }
+
+        public void RotateObject(float x, float y, float z)
+        {
+            Rotation = new Vector3(Rotation.x + x, Rotation.y + y, Rotation.z + z);
         }
     }
 }

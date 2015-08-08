@@ -55,6 +55,9 @@ namespace Version2
                 // Read file line by line
                 foreach (String line in lines)
                 {
+                    if (line.Length == 0)
+                        continue;
+
                     if (line.StartsWith("newmtl")) 
                     {
                         String temp = line.Substring(7);
@@ -83,7 +86,7 @@ namespace Version2
                         {
                             try
                             {
-                                diffuseTexture = new Texture(lineParts[0]);
+                                diffuseTexture = new Texture(Useful.GetModelsPath() + lineParts[0]);
                             }
                             catch (Exception e)
                             {

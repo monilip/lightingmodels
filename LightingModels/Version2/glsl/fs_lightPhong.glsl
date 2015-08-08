@@ -19,16 +19,12 @@ uniform vec3 lightDirection;
 
 void main() 
 {
-	const vec3 lightPosC = vec3(1.0,1.0,1.0);
-	const vec3 ambientColorC = vec3(0.3, 0.0, 0.0);
-	const vec3 diffuseColorC = vec3(0.5, 0.0, 0.0);
-	const vec3 specularColorC = vec3(1.0, 1.0, 1.0);
-
-
 	vec3 normal = normalize(f_normal);
-    vec3 lightDir = normalize(lightPosC - f_vertPos);
-    vec3 reflectDir = -reflect(lightDir, normal);
+    vec3 lightDir = lightDirection;
+    vec3 reflectDir = reflect(lightDir, normal);
     vec3 viewDir = normalize(-f_vertPos);
+
+
 	
 	float lambertian = max(dot(lightDir,normal), 0.0);
     float specular = 0.0;
@@ -38,7 +34,7 @@ void main()
        specular = pow(specAngle, 4.0);
     }
 
-	vec3 lighting = ambientColorC + lambertian*diffuseColorC + specular*specularColorC;
+	vec3 lighting = ambientColor + lambertian*diffuseColor + specular*specularColor;
 	outputColor = vec4(lighting, 1.0);
 
 	// texture
