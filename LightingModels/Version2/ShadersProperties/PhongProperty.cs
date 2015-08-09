@@ -23,8 +23,7 @@ namespace Version2
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3PropertiesCount = 4;
 
-            FloatProperties.Add("n", 4.0f);
-            FloatPropertiesCount = 1;
+            FloatPropertiesCount = 0;
         }
 
         //
@@ -46,14 +45,6 @@ namespace Version2
             Vector3Properties.Add("ambientColor", light.Ambient);
             Vector3Properties.Add("diffuseColor", light.Diffuse);
             Vector3Properties.Add("specularColor", light.Specular);
-        }
-
-        //
-        public void ChangeN(float n)
-        {
-            if (FloatProperties.ContainsKey("n"))
-                FloatProperties.Remove("n");
-            FloatProperties.Add("n", n);
         }
     }
 }

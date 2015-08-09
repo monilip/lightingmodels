@@ -22,3 +22,5 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cub
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\earthTexture.jpg
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballSteel.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballSteel.obj

@@ -25,6 +25,12 @@ namespace Version2
         private string name;
         private Texture diffuseTexture;
 
+        public Vector3 Kd;
+        public Vector3 Ka;
+        public Vector3 Ks;
+        public float Ns;
+
+
         //
         public Material()
         {
@@ -58,6 +64,7 @@ namespace Version2
                     if (line.Length == 0)
                         continue;
 
+                    // todo - zamienić na switcha?
                     if (line.StartsWith("newmtl")) 
                     {
                         String temp = line.Substring(7);
@@ -68,6 +75,65 @@ namespace Version2
                         name = lineParts[0];
 
                         //Useful.Log("MaterialName: " + name);
+                    }
+
+                    // Phong SpecularTex 
+                    if (line.StartsWith("Ns"))
+                    {
+                        String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
+                        String[] lineParts = temp.Split(' ');
+
+                        Ns = Useful.GetFloat(lineParts[0]);
+                    }
+
+                    // Ambient color
+                    if (line.StartsWith("Ka"))
+                    {
+                        // Cut off beginning of line
+                        String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
+                        String[] lineParts = temp.Split(' ');
+
+                        float x = Useful.GetFloat(lineParts[0]);
+                        float y = Useful.GetFloat(lineParts[1]);
+                        float z = Useful.GetFloat(lineParts[2]);
+
+                        Ka = new Vector3(x, y, z);
+                    }
+
+                    // Diffuse color
+                    if (line.StartsWith("Kd"))
+                    {
+                        // Cut off beginning of line
+                        String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
+                        String[] lineParts = temp.Split(' ');
+
+                        float x = Useful.GetFloat(lineParts[0]);
+                        float y = Useful.GetFloat(lineParts[1]);
+                        float z = Useful.GetFloat(lineParts[2]);
+
+                        Kd = new Vector3(x, y, z);
+                    }
+
+                    // Specular color
+                    if (line.StartsWith("Ks"))
+                    {
+                        // Cut off beginning of line
+                        String temp = line.Substring(3);
+                        temp = temp.Trim('\r', '\t');
+
+                        String[] lineParts = temp.Split(' ');
+
+                        float x = Useful.GetFloat(lineParts[0]);
+                        float y = Useful.GetFloat(lineParts[1]);
+                        float z = Useful.GetFloat(lineParts[2]);
+
+                        Ks = new Vector3(x, y, z);
                     }
 
                     // Diffuse color texture map
@@ -90,7 +156,7 @@ namespace Version2
                             }
                             catch (Exception e)
                             {
-                               Useful.Log("Error!" + e.ToString());
+                                Useful.Log("Error!" + e.ToString());
                             }
                         }
 

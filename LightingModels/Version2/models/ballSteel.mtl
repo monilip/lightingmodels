@@ -1,12 +1,11 @@
-# Blender MTL File: 'ballWithEarth.blend'
+# Blender MTL File: 'ballSteel.blend'
 # Material Count: 1
 
 newmtl Material.001
-Ns 17.647059
+Ns 194.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.250000 0.250000 0.250000
 Ks 1.000000 1.000000 1.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd earthTexture.jpg

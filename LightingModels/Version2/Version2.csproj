@@ -109,6 +109,12 @@
     <None Include="glsl\vs_text.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="models\ballSteel.mtl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="models\ballSteel.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="models\ballWithEarth.mtl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

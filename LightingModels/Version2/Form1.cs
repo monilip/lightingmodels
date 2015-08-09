@@ -14,13 +14,6 @@ namespace Version2
         public List<Shader> Shaders = new List<Shader>();
         public int ActiveShaderIndex = 0;
         public int ActiveObjectIndex = 0;
-        public Vector3 LightDirection;
-        public Vector3 LightPosition;
-        // objects
-       // private static Shader program;
-       // private static ObjVolume cube;
-       // private static Texture texture;
-
         
         // Scene
         public int SceneWidth = 900;
@@ -44,15 +37,14 @@ namespace Version2
         // create light, shaders and objects
         private void InitScene()
         {
-            Light lightRed = new Light("lightRed");
-            lightRed.Position = new Vector3(3.0f, 5.0f, 20.0f);
-            lightRed.Ambient = new Vector3(0.0f, 0.0f, 0.0f);
-            lightRed.Diffuse = new Vector3(0.3f, 0.3f, 0.3f);
-            lightRed.Specular = new Vector3(1.0, 0.0f, 0.0f);
-            LightPosition = lightRed.Position;
+            Light ligthWhite = new Light("ligthWhite");
+            ligthWhite.Position = new Vector3(5.0f, 10.0f, 1.0f);
+            ligthWhite.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
+            ligthWhite.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
+            ligthWhite.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+
             // Shaders
             // Load shaders from files
-
             // Default
             Shaders.Add(new Shader("default", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs.glsl"), System.IO.File.ReadAllText(@"glsl/fs.glsl"))));
 
@@ -63,8 +55,7 @@ namespace Version2
             Shaders.Add(new Shader("phongLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
             PhongProperty phong = new PhongProperty();
             phong.Activate();
-            phong.AddLight(lightRed);
-            phong.ChangeN(50);
+            phong.AddLight(ligthWhite);
             ShadersProperties.Add("phongLight", phong);
 
             Shaders.Add(new Shader("simpleLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_simpleLight.glsl"), System.IO.File.ReadAllText(@"glsl/fs_simpleLight.glsl"))));
@@ -109,14 +100,15 @@ namespace Version2
             // Objects
             ObjVolume objectFromBlender = new ObjVolume();
             objectFromBlender.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
-            objectFromBlender.Name = "Test from Blender";
+            objectFromBlender.Name = "Ball with Earth";
             objectFromBlender.Scale = new Vector3(1, 1, 1);
             objectFromBlender.Position = new Vector3(1.5, 0, 0);
+            objectFromBlender.Rotation = new Vector3(0.1f, 0, 0);
             Objects.Add(objectFromBlender);
 
             ObjVolume objectFromBlender2 = new ObjVolume();
-            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
-            objectFromBlender2.Name = "Test from Blender";
+            objectFromBlender2.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballSteel.obj");
+            objectFromBlender2.Name = "Ball with steel";
             objectFromBlender2.Scale = new Vector3(1, 1, 1);
             objectFromBlender2.Position = new Vector3(-1.5, 0, 0);
             Objects.Add(objectFromBlender2);
@@ -127,8 +119,8 @@ namespace Version2
             // set up the viewport and clear the previous depth and color buffers
             Gl.Viewport(0, 0, SceneWidth, SceneHeight);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-             // make sure the shader program and texture are being used
+            Gl.ClearColor(0.1f, 0.1f, 0.1f, 1);
+            // make sure the shader program and texture are being used
             Gl.UseProgram(Shaders[ActiveShaderIndex].GetShaderProgram());
 
             // add data from ShadersProperties      
@@ -156,8 +148,16 @@ namespace Version2
             foreach (var volume in Objects)
             {
                 // bind texture
-                Gl.BindTexture(volume.GetTexture());
-
+                if (volume.GetTexture() != null)
+                {
+                    Gl.BindTexture(volume.GetTexture());
+                    Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(true);
+                }
+                else
+                {
+                    Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(false);
+                }
+                    
                 // set uniform
                 Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(volume.CalculateModelMatrix());
 
@@ -168,6 +168,30 @@ namespace Version2
                     Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
                 Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
                         
+                // set uniforms parametrs for material (if volume has them)
+                if (volume.Material != null)
+                {
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"].SetValue(volume.Material.Ka);
+                    }
+
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"].SetValue(volume.Material.Kd);
+                    }
+
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"].SetValue(volume.Material.Ks);
+                    }
+
+                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
+                    {
+                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"].SetValue(volume.Material.Ns);
+                    }
+                }
+
                 Gl.BindBuffer(volume.TrianglesVBO);
 
                 // draw volume
@@ -197,6 +221,19 @@ namespace Version2
 
             if (e.KeyCode == Keys.NumPad2)
                 ActiveObjectIndex = 1;
+
+            if (e.KeyCode == Keys.P)
+                RotateObject(Objects[ActiveObjectIndex],1,0,0);
+
+            if (e.KeyCode == Keys.O)
+                RotateObject(Objects[ActiveObjectIndex], -1, 0, 0);
+
+            if (e.KeyCode == Keys.K)
+                RotateObject(Objects[ActiveObjectIndex], 0, 1, 0);
+
+            if (e.KeyCode == Keys.L)
+                RotateObject(Objects[ActiveObjectIndex], 0, -1, 0);
+
 
             if (e.KeyCode == Keys.W)
                 Objects[ActiveObjectIndex].MoveObject(0, 0.1f, 0);                
