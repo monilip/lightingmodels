@@ -64,32 +64,48 @@ namespace Version2
             objectsList.SelectedIndex = 1;
 
             // update object's parameters
-            // UpdateObjectParameters();
-
+            UpdateObjectParameters();
             # endregion
         }
 
         //
         private void UpdateObjectParameters()
         {
+            UpdateObjectPositionParameters();
+
+            UpdateObjectRotationParameters();
+
+            UpdateObjectScaleParameters();
+        }
+
+        // 
+        private void UpdateObjectPositionParameters()
+        {
             // update object's position
-            //posX.Text = Objects[ActiveObjectIndex].Position.x.ToString();
-            //posY.Text = Objects[ActiveObjectIndex].Position.y.ToString();
-            //posZ.Text = Objects[ActiveObjectIndex].Position.z.ToString();
+            posX.Text = Objects[ActiveObjectIndex].Position.x.ToString();
+            posY.Text = Objects[ActiveObjectIndex].Position.y.ToString();
+            posZ.Text = Objects[ActiveObjectIndex].Position.z.ToString();
+        }
 
-            //// update object's rotation
+        // 
+        private void UpdateObjectRotationParameters()
+        {
+            // update object's rotation
+            double x = Math.Round((double)Objects[ActiveObjectIndex].Rotation.x / Math.PI * 180);
+            double y = Math.Round((double)Objects[ActiveObjectIndex].Rotation.y / Math.PI * 180);
+            double z = Math.Round((double)Objects[ActiveObjectIndex].Rotation.z / Math.PI * 180);
+            rotX.Text = x.ToString();
+            rotY.Text = y.ToString();
+            rotZ.Text = z.ToString();
+        }
 
-            //double x = Math.Round((double)Objects[ActiveObjectIndex].Rotation.x / Math.PI * 180);
-            //double y = Math.Round((double)Objects[ActiveObjectIndex].Rotation.y / Math.PI * 180);
-            //double z = Math.Round((double)Objects[ActiveObjectIndex].Rotation.z / Math.PI * 180);
-            //rotX.Text = x.ToString();
-            //rotY.Text = y.ToString();
-            //rotZ.Text = z.ToString();
-
-            //// update object's scale
-            //scaleX.Text = Objects[ActiveObjectIndex].Scale.x.ToString();
-            //scaleY.Text = Objects[ActiveObjectIndex].Scale.y.ToString();
-            //scaleZ.Text = Objects[ActiveObjectIndex].Scale.z.ToString();
+        // 
+        private void UpdateObjectScaleParameters()
+        {
+            // update object's scale
+            scaleX.Text = Objects[ActiveObjectIndex].Scale.x.ToString();
+            scaleY.Text = Objects[ActiveObjectIndex].Scale.y.ToString();
+            scaleZ.Text = Objects[ActiveObjectIndex].Scale.z.ToString();
         }
 
         // create light, shaders and objects
@@ -163,18 +179,22 @@ namespace Version2
             ObjVolume blackPlainBall = new ObjVolume();
             blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballBlackPlain.obj");
             blackPlainBall.Name = "Plain black ball";
+            blackPlainBall.UpdateVolume += UpdateVolume;
             Objects.Add(blackPlainBall);
 
             ObjVolume ballWithEarth = new ObjVolume();
             ballWithEarth.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
             ballWithEarth.Name = "Ball with Earth";
-            ballWithEarth.Rotation = new Vector3(0.5f, -1.5f, 0.1f);
+            ballWithEarth.Position = new Vector3(0.5f, 0f, 0f);
+            ballWithEarth.Rotation = new Vector3(0.5f, 4.5f, 0.1f);
+            ballWithEarth.UpdateVolume += UpdateVolume;
             Objects.Add(ballWithEarth);
 
             ObjVolume cubeWIthSquares = new ObjVolume();
             cubeWIthSquares.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
             cubeWIthSquares.Name = "Cube with aquares";
-            cubeWIthSquares.Rotation = new Vector3(-0.3f, 0.3f, 0f);
+            cubeWIthSquares.Rotation = new Vector3(0.3f, 0.3f, 0f);
+            cubeWIthSquares.UpdateVolume += UpdateVolume;
             Objects.Add(cubeWIthSquares);
         }
 
@@ -351,11 +371,13 @@ namespace Version2
 
             // position control
             if (e.KeyCode == Keys.W)
+            {
                 Objects[ActiveObjectIndex].MoveObject(0, 0.1f, 0);
-
+            }
             if (e.KeyCode == Keys.S)
+            { 
                 Objects[ActiveObjectIndex].MoveObject(0, -0.1f, 0);
-
+            }
             if (e.KeyCode == Keys.D)
                 Objects[ActiveObjectIndex].MoveObject(0.1f, 0, 0);
 
@@ -406,27 +428,95 @@ namespace Version2
         //
         private void UpdateObjectPosition(object sender, System.EventArgs e)
         {
-            // Objects[ActiveObjectIndex].Position = new Vector3(Useful.GetFloat(posX.Text),Useful.GetFloat(posY.Text),Useful.GetFloat(posZ.Text));
+            switch (((System.Windows.Forms.TextBoxBase)sender).Name)
+            {
+                case "rotX":
+                    if (rotX.Text.Length == 0)
+                        rotX.Text = "0";
+                    Objects[ActiveObjectIndex].Position.x = Useful.GetFloat(posX.Text);
+                    break;
+                case "rotY":
+                    if (rotY.Text.Length == 0)
+                        rotY.Text = "0";
+                    Objects[ActiveObjectIndex].Position.y = Useful.GetFloat(posY.Text);
+                    break;
+                case "rotZ":
+                    if (rotZ.Text.Length == 0)
+                        rotZ.Text = "0";
+                    Objects[ActiveObjectIndex].Position.z = Useful.GetFloat(posZ.Text);
+                    break;
+                default:
+                    break;
+            }
         }
 
         //
         private void UpdateObjectRotation(object sender, System.EventArgs e)
         {
-            //if (rotX.Text.Length > 0 && rotY.Text.Length > 0 && rotZ.Text.Length > 0)
-            //{
-            //    float x = (float)(Useful.GetFloat(rotX.Text) * Math.PI / 180);
-            //    float y = (float)(Useful.GetFloat(rotY.Text) * Math.PI / 180);
-            //    float z = (float)(Useful.GetFloat(rotZ.Text) * Math.PI / 180);
-
-            //    Objects[ActiveObjectIndex].Rotation = new Vector3(x, y, z);
-            //}
-
+            switch (((System.Windows.Forms.TextBoxBase)sender).Name)
+            {
+                case "rotX":
+                    if (rotX.Text.Length == 0)
+                        rotX.Text = "0";
+                    float x = (float)(Useful.GetFloat(rotX.Text) * Math.PI / 180);
+                    Objects[ActiveObjectIndex].Rotation.x = x;
+                    break;
+                case "rotY":
+                    if (rotY.Text.Length == 0)
+                        rotY.Text = "0";
+                    float y = (float)(Useful.GetFloat(rotY.Text) * Math.PI / 180);
+                    Objects[ActiveObjectIndex].Rotation.y = y;
+                    break;
+                case "rotZ":
+                    if (rotZ.Text.Length == 0)
+                        rotZ.Text = "0";
+                    float z = (float)(Useful.GetFloat(rotZ.Text) * Math.PI / 180);
+                    Objects[ActiveObjectIndex].Rotation.z = z;
+                    break;
+                default:
+                    break;
+            }
         }
 
         //
         private void UpdateObjectScale(object sender, System.EventArgs e)
         {
-            //Objects[ActiveObjectIndex].Scale = new Vector3(Useful.GetFloat(scaleX.Text), Useful.GetFloat(scaleY.Text), Useful.GetFloat(scaleZ.Text));
+            switch (((System.Windows.Forms.TextBoxBase)sender).Name)
+            {
+                case "scaleX":
+                    if (Useful.GetFloat(scaleX.Text) == 0)
+                        scaleX.Text = "1";
+                    Objects[ActiveObjectIndex].Scale.x = Useful.GetFloat(scaleX.Text);
+                    break;
+                case "scaleY":
+                     if (Useful.GetFloat(scaleY.Text) == 0)
+                        scaleY.Text = "1";
+                     Objects[ActiveObjectIndex].Scale.y = Useful.GetFloat(scaleY.Text);
+                    break;
+                case "scaleZ":
+                     if (Useful.GetFloat(scaleZ.Text) == 0)
+                        scaleZ.Text = "1";
+                    Objects[ActiveObjectIndex].Scale.z = Useful.GetFloat(scaleZ.Text);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        
+        private void UpdateVolume(Volume.UpdateType type)
+        {
+            switch (type)
+            {
+                case Volume.UpdateType.POSITION:
+                    UpdateObjectPositionParameters();
+                    break;
+                case Volume.UpdateType.ROTATION:
+                    UpdateObjectRotationParameters();
+                    break;             
+                default:
+                    break;
+            }
         }
 
         # endregion

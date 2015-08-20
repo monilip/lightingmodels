@@ -115,6 +115,7 @@ namespace Version2
             float f = 0.0f;
             try
             {
+                s = s.Replace(',', '.');
                 f = float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
             }
             catch (Exception e)

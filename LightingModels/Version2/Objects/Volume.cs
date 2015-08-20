@@ -7,6 +7,15 @@ namespace Version2
 {
     public abstract class Volume
     {
+        public enum UpdateType
+        {
+            POSITION,
+            ROTATION,
+        }
+
+        public event UpdateHandler UpdateVolume;
+        public delegate void UpdateHandler(UpdateType type);
+
         public string Name;
         public Vector3 Position = Vector3.Zero;
         public Vector3 Rotation = Vector3.Zero;
@@ -46,14 +55,29 @@ namespace Version2
             return ModelMatrix;
         }
 
-        public void RotateObjectAxis(float x, float y, float z)
+        public void RotateObjectAxis(float xx, float yy, float zz)
         {
-            Rotation = new Vector3(Rotation.x + x, Rotation.y + y, Rotation.z + z);
+            float x = Rotation.x + xx;
+            if (x >= 2 * Math.PI || x < 0)
+                x = 0;
+
+            float y = Rotation.y + yy;
+            if (y >= 2 * Math.PI || y < 0)
+                y = 0;
+
+            float z = Rotation.z + zz;
+            if (z >= 2 * Math.PI || z < 0)
+                z = 0;
+            Rotation = new Vector3(x, y, z);
+
+            UpdateVolume(UpdateType.ROTATION);
         }
 
-        public void MoveObject(float x, float y, float z)
+        public void MoveObject(float xx, float yy, float zz)
         {
-            Position = new Vector3(Position.x + x, Position.y + y, Position.z + z);
+            Position = new Vector3(Position.x + xx, Position.y + yy, Position.z + zz);
+
+            UpdateVolume(UpdateType.POSITION);
         }
     }
 }
