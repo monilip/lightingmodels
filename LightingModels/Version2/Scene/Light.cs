@@ -11,7 +11,6 @@ namespace Version2
         public Vector3 Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
         public Vector3 Specular = new Vector3(0.5f, 0.5f, 0.5f);
         public Vector3 Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-        public Vector3 LightDirection = new Vector3(0f, 0f, 1f);
 
         //
         public Light(string name, Vector3 diffuse, Vector3 specular, Vector3 ambient, Vector3 direction)
@@ -20,7 +19,6 @@ namespace Version2
             Diffuse = diffuse;
             Specular = specular;
             Ambient = ambient;
-            LightDirection = direction;
         }
 
         ////
@@ -29,6 +27,5 @@ namespace Version2
         {
 
         }
-
     }
 }

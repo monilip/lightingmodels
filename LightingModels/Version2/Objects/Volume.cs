@@ -19,8 +19,6 @@ namespace Version2
         public List<Face> FacesList = new List<Face>();
 
         public Matrix4 ModelMatrix = Matrix4.Identity;
-        public Matrix4 ViewProjectionMatrix = Matrix4.Identity;
-        public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
         public VBO<Vector3> VertexsVBO;
         public VBO<Vector3> ColorsVBO;
@@ -44,11 +42,11 @@ namespace Version2
 
         public Matrix4 CalculateModelMatrix()
         {
-            ModelMatrix = Matrix4.CreateScaling(Scale) * Matrix4.CreateRotationX(Rotation.x) * Matrix4.CreateRotationY(Rotation.y) * Matrix4.CreateRotationZ(Rotation.z) * Matrix4.CreateTranslation(Position);
+            ModelMatrix = Matrix4.CreateScaling(Scale) * Matrix4.CreateRotationY(Rotation.y) * Matrix4.CreateRotationZ(Rotation.z) * Matrix4.CreateRotationX(Rotation.x) * Matrix4.CreateTranslation(Position);
             return ModelMatrix;
         }
 
-        public void RotateObject(float x, float y, float z)
+        public void RotateObjectAxis(float x, float y, float z)
         {
             Rotation = new Vector3(Rotation.x + x, Rotation.y + y, Rotation.z + z);
         }

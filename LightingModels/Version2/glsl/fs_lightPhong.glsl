@@ -16,7 +16,6 @@ uniform vec3 lightPos;
 uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
-uniform vec3 lightDirection;
 
 uniform vec3 Ka;
 uniform vec3 Kd;

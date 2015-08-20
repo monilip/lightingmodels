@@ -18,7 +18,7 @@ void main()
 {
 	vec4 pos = viewMatrix * modelMatrix * vec4(vPosition, 1.0);
 	f_vertPos = pos.xyz;
-	gl_Position = projectionMatrix * pos;
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vPosition, 1.0);
 	f_normal = vec3(modelMatrix * viewMatrix * vec4(vNormal, 0.0));
 	
 	f_texcoord = texcoord;

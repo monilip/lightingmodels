@@ -16,12 +16,12 @@ namespace Version2
         public int ActiveShaderIndex = 0;
         public int ActiveObjectIndex = 0;
         public int ActiveLightIndex = 0;
-        
+
         // Scene
-        public int SceneWidth = 900;
+        public int SceneWidth = 500;
         public int SceneHeight = 500;
         private static bool lighting = true;
-     
+
         public Form1()
         {
             InitializeComponent();
@@ -29,13 +29,67 @@ namespace Version2
             SceneHeight = simpleOpenGlControl1.Height;
 
             simpleOpenGlControl1.InitializeContexts();
-           // simpleOpenGlControl1.DestroyContexts();
+            // simpleOpenGlControl1.DestroyContexts();
 
             Gl.Enable(EnableCap.DepthTest);
-            
+
             InitScene();
 
             Application.Idle += OnRenderFrame;
+
+            // init GUI varriables
+            # region GUI
+            // add shaders to droplist
+            foreach (Shader shader in Shaders)
+            {
+                shadersList.Items.Add(shader.GetShaderName());
+            }
+
+            shadersList.SelectedIndex = 1;
+
+            // add lights to droplist
+            foreach (Light light in Lights)
+            {
+                lightsList.Items.Add(light.Name);
+            }
+
+            lightsList.SelectedIndex = 0;
+
+            // add objects to droplist
+            foreach (Volume volume in Objects)
+            {
+                objectsList.Items.Add(volume.Name);
+            }
+
+            objectsList.SelectedIndex = 1;
+
+            // update object's parameters
+            // UpdateObjectParameters();
+
+            # endregion
+        }
+
+        //
+        private void UpdateObjectParameters()
+        {
+            // update object's position
+            //posX.Text = Objects[ActiveObjectIndex].Position.x.ToString();
+            //posY.Text = Objects[ActiveObjectIndex].Position.y.ToString();
+            //posZ.Text = Objects[ActiveObjectIndex].Position.z.ToString();
+
+            //// update object's rotation
+
+            //double x = Math.Round((double)Objects[ActiveObjectIndex].Rotation.x / Math.PI * 180);
+            //double y = Math.Round((double)Objects[ActiveObjectIndex].Rotation.y / Math.PI * 180);
+            //double z = Math.Round((double)Objects[ActiveObjectIndex].Rotation.z / Math.PI * 180);
+            //rotX.Text = x.ToString();
+            //rotY.Text = y.ToString();
+            //rotZ.Text = z.ToString();
+
+            //// update object's scale
+            //scaleX.Text = Objects[ActiveObjectIndex].Scale.x.ToString();
+            //scaleY.Text = Objects[ActiveObjectIndex].Scale.y.ToString();
+            //scaleZ.Text = Objects[ActiveObjectIndex].Scale.z.ToString();
         }
 
         // create light, shaders and objects
@@ -91,7 +145,7 @@ namespace Version2
                     if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
                     {
                         Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    } 
+                    }
                 }
             }
             if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatPropertiesCount > 0)
@@ -101,36 +155,28 @@ namespace Version2
                     if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
                     {
                         Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    } 
+                    }
                 }
             }
 
             // Objects
-
-            ObjVolume ballWithEarth = new ObjVolume();
-            ballWithEarth.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballBlackPlain.obj");
-            ballWithEarth.Name = "Plain black ball";
-          //  ballWithEarth.Scale = new Vector3(0.8, 0.8, 0.8);
-            ballWithEarth.Position = new Vector3(-2.5, 0, 0);
-            Objects.Add(ballWithEarth);
-
             ObjVolume blackPlainBall = new ObjVolume();
-            blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
-            blackPlainBall.Name = "Ball with Earth";
-            //   blackPlainBall.Scale = new Vector3(0.5, 0.5, 0.5);
-            blackPlainBall.Position = new Vector3(0, 0, 0);
-            blackPlainBall.Rotation = new Vector3(0.1f, 0, 0);
+            blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballBlackPlain.obj");
+            blackPlainBall.Name = "Plain black ball";
             Objects.Add(blackPlainBall);
 
+            ObjVolume ballWithEarth = new ObjVolume();
+            ballWithEarth.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
+            ballWithEarth.Name = "Ball with Earth";
+            ballWithEarth.Rotation = new Vector3(0.5f, -1.5f, 0.1f);
+            Objects.Add(ballWithEarth);
 
             ObjVolume cubeWIthSquares = new ObjVolume();
             cubeWIthSquares.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
             cubeWIthSquares.Name = "Cube with aquares";
-            cubeWIthSquares.Scale = new Vector3(0.8, 0.8, 0.8);
-            cubeWIthSquares.Position = new Vector3(2.5, 0, 0);
-            cubeWIthSquares.Rotation = new Vector3(0.1f, 0, 0);
+            cubeWIthSquares.Rotation = new Vector3(-0.3f, 0.3f, 0f);
             Objects.Add(cubeWIthSquares);
-        }     
+        }
 
         private void OnRenderFrame(object sender, EventArgs e)
         {
@@ -141,7 +187,7 @@ namespace Version2
             // make sure the shader program and texture are being used
             Gl.UseProgram(Shaders[ActiveShaderIndex].GetShaderProgram());
 
-          
+
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
 
@@ -150,7 +196,7 @@ namespace Version2
                 Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
             }
 
-           //  add data from ShadersProperties      
+            //  add data from ShadersProperties      
             if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3PropertiesCount > 0)
             {
                 foreach (KeyValuePair<string, Vector3> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties)
@@ -170,10 +216,12 @@ namespace Version2
                         Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
                     }
                 }
-            }    
+            }
 
-            foreach (var volume in Objects)
+            // foreach (Volume volume in Objects)
             {
+                Volume volume = Objects[ActiveObjectIndex];
+
                 // bind texture
                 if (volume.GetTexture() != null)
                 {
@@ -186,7 +234,7 @@ namespace Version2
                     if (Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"] != null)
                         Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(false);
                 }
-                    
+
                 // set uniform
                 Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(volume.CalculateModelMatrix());
 
@@ -196,7 +244,7 @@ namespace Version2
                 if (volume.UVsVBO != null)
                     Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
                 Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
-                        
+
                 // set uniforms parametrs for material (if volume has them)
                 if (volume.Material != null)
                 {
@@ -225,11 +273,11 @@ namespace Version2
 
                 // draw volume
                 Gl.DrawElements(BeginMode.Triangles, volume.TrianglesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            }        
+            }
 
-                simpleOpenGlControl1.SwapBuffers();
+            simpleOpenGlControl1.SwapBuffers();
         }
-        
+
         // used instead of glutDisplayFunc
         private void OnPaint(object sender, PaintEventArgs e)
         {
@@ -239,50 +287,48 @@ namespace Version2
         // used instead of glutReshapeFunc
         private void OnResize(object sender, EventArgs e)
         {
-            Shaders[ActiveShaderIndex].GetShaderProgram().Use();
+           // Shaders[ActiveShaderIndex].GetShaderProgram().Use();
         }
-       
+
         //
         private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
         {
             // shaders control
-            if (e.KeyCode == Keys.D1)
-                ActiveShaderIndex = 0;
+            //if (e.KeyCode == Keys.D1)
+            //    ActiveShaderIndex = 0;
 
-            if (e.KeyCode == Keys.D2)
-                ActiveShaderIndex = 1;
+            //if (e.KeyCode == Keys.D2)
+            //    ActiveShaderIndex = 1;
 
-            if (e.KeyCode == Keys.D3)
-                ActiveShaderIndex = 2;
-
-            if (e.KeyCode == Keys.D4)
-                ActiveShaderIndex = 3;
+            //if (e.KeyCode == Keys.D3)
+            //    ActiveShaderIndex = 2;
 
             // light control
-            if (e.KeyCode == Keys.D0)
-            {
-                ActiveLightIndex = 0;
-                string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
-                if (ShadersProperties.ContainsKey(activeShaderName))
-                    ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
-            }
+            //if (e.KeyCode == Keys.D0)
+            //{
+            //    ActiveLightIndex = 0;
+            //    string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
+            //    if (ShadersProperties.ContainsKey(activeShaderName))
+            //        ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
+            //}
 
-            if (e.KeyCode == Keys.D9)
-            {
-                ActiveLightIndex = 1;
-                string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
-                if (ShadersProperties.ContainsKey(activeShaderName))
-                    ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
-            }
+            //if (e.KeyCode == Keys.D9)
+            //{
+            //    ActiveLightIndex = 1;
+            //    string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
+            //    if (ShadersProperties.ContainsKey(activeShaderName))
+            //        ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
+            //}
+
             // active object control
-            if (e.KeyCode == Keys.NumPad1)
-                ActiveObjectIndex = 0;
+            //if (e.KeyCode == Keys.NumPad1)
+            //    ActiveObjectIndex = 0;
 
-            if (e.KeyCode == Keys.NumPad2)
-                ActiveObjectIndex = 1;
+            //if (e.KeyCode == Keys.NumPad2)
+            //    ActiveObjectIndex = 1;
 
-            if (e.KeyCode == Keys.NumPad3)
-                ActiveObjectIndex = 2;
+            //if (e.KeyCode == Keys.NumPad3)
+            //    ActiveObjectIndex = 2;
 
             // rotation control
             if (e.KeyCode == Keys.P)
@@ -296,6 +342,12 @@ namespace Version2
 
             if (e.KeyCode == Keys.L)
                 RotateObject(Objects[ActiveObjectIndex], 0, -1, 0);
+
+            if (e.KeyCode == Keys.N)
+                RotateObject(Objects[ActiveObjectIndex], 0, 0, -1);
+
+            if (e.KeyCode == Keys.M)
+                RotateObject(Objects[ActiveObjectIndex], 0, 0, 1);
 
             // position control
             if (e.KeyCode == Keys.W)
@@ -324,8 +376,60 @@ namespace Version2
             float y = (float)((double)yy * Math.PI / 180);
             float z = (float)((double)zz * Math.PI / 180);
 
-            obj.RotateObject(x, y, z);
+            obj.RotateObjectAxis(x, y, z);
         }
+
+
+        // GUI functions
+        #region GUI
+        private void shadersList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActiveShaderIndex = shadersList.SelectedIndex;
+        }
+
+        //
+        private void lightsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActiveLightIndex = lightsList.SelectedIndex;
+            string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
+            if (ShadersProperties.ContainsKey(activeShaderName))
+                ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
+        }
+
+        //
+        private void objectsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActiveObjectIndex = objectsList.SelectedIndex;
+            UpdateObjectParameters();
+        }
+
+        //
+        private void UpdateObjectPosition(object sender, System.EventArgs e)
+        {
+            // Objects[ActiveObjectIndex].Position = new Vector3(Useful.GetFloat(posX.Text),Useful.GetFloat(posY.Text),Useful.GetFloat(posZ.Text));
+        }
+
+        //
+        private void UpdateObjectRotation(object sender, System.EventArgs e)
+        {
+            //if (rotX.Text.Length > 0 && rotY.Text.Length > 0 && rotZ.Text.Length > 0)
+            //{
+            //    float x = (float)(Useful.GetFloat(rotX.Text) * Math.PI / 180);
+            //    float y = (float)(Useful.GetFloat(rotY.Text) * Math.PI / 180);
+            //    float z = (float)(Useful.GetFloat(rotZ.Text) * Math.PI / 180);
+
+            //    Objects[ActiveObjectIndex].Rotation = new Vector3(x, y, z);
+            //}
+
+        }
+
+        //
+        private void UpdateObjectScale(object sender, System.EventArgs e)
+        {
+            //Objects[ActiveObjectIndex].Scale = new Vector3(Useful.GetFloat(scaleX.Text), Useful.GetFloat(scaleY.Text), Useful.GetFloat(scaleZ.Text));
+        }
+
+        # endregion
     }
 }
 
