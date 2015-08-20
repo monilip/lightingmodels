@@ -74,8 +74,8 @@ namespace Version2
                         y = Useful.GetFloat(lineParts[1]);
                         z = Useful.GetFloat(lineParts[2]);
 
-                        // temporary
-                        ColorList.Add(new Vector3(1f, 0f, 1f));
+                        // todo// if object does not have colours from blender obj set black
+                        ColorList.Add(new Vector3(0f, 0f, 0f));
 
                         VertexsList.Add(new Vector3(x, y, z));
                         

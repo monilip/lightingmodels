@@ -27,7 +27,7 @@ namespace Version2
         }
 
         //
-        public void AddLight(Light light)
+        public override void ChangeLight(Light light)
         {
             // light properties
 

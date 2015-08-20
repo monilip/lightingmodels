@@ -24,7 +24,7 @@ uniform vec3 Ks;
 uniform float Ns;
 
 uniform bool isTexture;
-
+uniform bool enableLighting;
 void main() 
 {
 	vec3 normal = normalize(f_normal);
@@ -46,12 +46,12 @@ void main()
 	lighting += diffuse*diffuseColor * Kd;
 	lighting += specular*specularColor * Ks;
 
-
-	outputColor = vec4(lighting, 1.0);
+	if (enableLighting == true)
+		outputColor = vec4(lighting, 1.0);
 
 	// texture
 	if (isTexture == true)
 		outputColor += texture2D(maintexture, f_texcoord);
-	//else
-	//	outputColor += f_color;
+	else
+		outputColor += f_color;
 }

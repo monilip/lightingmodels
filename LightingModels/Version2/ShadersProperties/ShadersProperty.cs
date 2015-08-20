@@ -26,5 +26,9 @@ namespace Version2
             FloatPropertiesCount = 0;
             FloatProperties = new Dictionary<string,float>();
         }
+
+        public virtual void ChangeLight(Light light)
+        {
+        }
     }
 }

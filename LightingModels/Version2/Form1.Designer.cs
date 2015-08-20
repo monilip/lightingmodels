@@ -43,7 +43,7 @@
             this.simpleOpenGlControl1.DepthBits = ((byte)(16));
             this.simpleOpenGlControl1.Location = new System.Drawing.Point(12, 12);
             this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
-            this.simpleOpenGlControl1.Size = new System.Drawing.Size(900, 500);
+            this.simpleOpenGlControl1.Size = new System.Drawing.Size(571, 329);
             this.simpleOpenGlControl1.StencilBits = ((byte)(0));
             this.simpleOpenGlControl1.TabIndex = 0;
             this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
