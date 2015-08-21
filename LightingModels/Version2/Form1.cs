@@ -142,7 +142,7 @@ namespace Version2
 
             // Cook-Torrence
             Shaders.Add(new Shader("Cook-Torrence", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightCookTorrence.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightCookTorrence.glsl"))));
-            PhongProperty cookTorrence = new PhongProperty();
+            CookTorrenceProperty cookTorrence = new CookTorrenceProperty();
             cookTorrence.Activate();
             cookTorrence.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Cook-Torrence", cookTorrence);

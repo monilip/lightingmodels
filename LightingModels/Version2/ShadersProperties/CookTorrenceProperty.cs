@@ -18,16 +18,19 @@ namespace Version2
 
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
-            Vector3Properties.Add("ambientColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
+
+            FloatProperties.Add("m", 1.0f);
+            FloatProperties.Add("F0", 1.0f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
-                Tuple.Create("Ambient color", ShadersProperty.Type.VECTOR3,"ambientColor"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
+                Tuple.Create("Roughtness Value", ShadersProperty.Type.FLOAT,"m"),
+                Tuple.Create("Fresnel Value", ShadersProperty.Type.FLOAT,"F0"),
             };
         }
 

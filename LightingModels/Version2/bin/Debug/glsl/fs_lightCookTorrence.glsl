@@ -1,5 +1,5 @@
 ﻿#version 330
-
+#define PI 3.14159265358
 precision mediump float;
 
 in vec3 f_normal;
@@ -11,19 +11,15 @@ out vec4 outputColor;
 
 uniform sampler2D maintexture;
 
-uniform float n;
 uniform vec3 lightPos;
-uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 
-uniform vec3 Ka;
-uniform vec3 Kd;
-uniform vec3 Ks;
-uniform float Ns;
+uniform float F0;
+uniform float m;
 
 uniform bool isTexture;
-uniform bool enableLighting;
+
 void main() 
 {
 	// Cook-Torrence
@@ -53,11 +49,6 @@ void main()
 	// G2 = 2 * cos(B) * cos(A) / cos(D)
 
 	// RS_denominator = PI * cos(C) * cos(A)
-
-	// shader parametrs: F0 (0-1), roughnessValue (m in equasion)
-	float F0 = 1;
-	float m = 1;
-	float PI = 3.14;
 	
 	// ancillary variables
 	vec3 N = normalize(f_normal);
@@ -89,7 +80,7 @@ void main()
 	float RS_denominator = PI * NdotV * NdotL;
 	vec3 RS = RS_numerator / RS_denominator;
 
-	outputColor = vec4(max(0.0, NdotL) * (specularColor * RS * + diffuseColor),1.0);
+	outputColor = vec4((specularColor * RS + diffuseColor),1.0);
 
 	// texture
 	if (isTexture == true)
