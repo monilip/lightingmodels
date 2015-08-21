@@ -12,18 +12,20 @@ namespace Version2
     {
         public string ShaderName { get; protected set; }
 
-        public int Vector3PropertiesCount { get; protected set; }
         public Dictionary<string,Vector3> Vector3Properties { get; set; }
-
-        public int FloatPropertiesCount { get; protected set; }
         public Dictionary<string,float> FloatProperties { get; set; }
+
+        public List<Tuple<string, ShadersProperty.Type, string>> PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>();
+
+        public enum Type
+        {
+            VECTOR3,
+            FLOAT,
+        }
 
         public ShadersProperty()
         {
-            Vector3PropertiesCount = 0;
             Vector3Properties = new Dictionary<string,Vector3>();
-
-            FloatPropertiesCount = 0;
             FloatProperties = new Dictionary<string,float>();
         }
 

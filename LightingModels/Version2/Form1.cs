@@ -153,27 +153,8 @@ namespace Version2
                 Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
             }
 
-            // add data from ShadersProperties         
-            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3PropertiesCount > 0)
-            {
-                foreach (KeyValuePair<string, Vector3> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties)
-                {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    }
-                }
-            }
-            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatPropertiesCount > 0)
-            {
-                foreach (KeyValuePair<string, float> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatProperties)
-                {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    }
-                }
-            }
+            AddDataFromShadersProperties();
+           
 
             // Objects
             ObjVolume blackPlainBall = new ObjVolume();
@@ -198,6 +179,35 @@ namespace Version2
             Objects.Add(cubeWIthSquares);
         }
 
+        //
+        private void AddDataFromShadersProperties()
+        {
+            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()))
+            {
+                ShadersProperty shaderProperties = ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()];
+                foreach (Tuple<string, ShadersProperty.Type, string> property in shaderProperties.PropertiesList)
+                {
+                    switch (property.Item2)
+                    {
+                        case ShadersProperty.Type.VECTOR3:
+                            if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Item3] != null)
+                            {
+                                Shaders[ActiveShaderIndex].GetShaderProgram()[property.Item3].SetValue(shaderProperties.Vector3Properties[property.Item3]);
+                            }
+                            break;
+                        case ShadersProperty.Type.FLOAT:
+                            if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Item3] != null)
+                            {
+                                Shaders[ActiveShaderIndex].GetShaderProgram()[property.Item3].SetValue(shaderProperties.FloatProperties[property.Item3]);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
         private void OnRenderFrame(object sender, EventArgs e)
         {
             // set up the viewport and clear the previous depth and color buffers
@@ -217,26 +227,8 @@ namespace Version2
             }
 
             //  add data from ShadersProperties      
-            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3PropertiesCount > 0)
-            {
-                foreach (KeyValuePair<string, Vector3> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties)
-                {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    }
-                }
-            }
-            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()) && ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatPropertiesCount > 0)
-            {
-                foreach (KeyValuePair<string, float> property in ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatProperties)
-                {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()[property.Key].SetValue(property.Value);
-                    }
-                }
-            }
+            AddDataFromShadersProperties();
+
 
             // foreach (Volume volume in Objects)
             {
@@ -407,6 +399,7 @@ namespace Version2
         private void shadersList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActiveShaderIndex = shadersList.SelectedIndex;
+            UpdateShadersPropertiesForms();
         }
 
         //
@@ -416,6 +409,7 @@ namespace Version2
             string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
             if (ShadersProperties.ContainsKey(activeShaderName))
                 ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
+            UpdateShadersPropertiesForms();
         }
 
         //
@@ -503,7 +497,7 @@ namespace Version2
             }
         }
 
-        
+        //
         private void UpdateVolume(Volume.UpdateType type)
         {
             switch (type)
@@ -517,6 +511,125 @@ namespace Version2
                 default:
                     break;
             }
+        }
+
+        //
+        private void UpdateShadersPropertiesForms()
+        {
+            // clear panel
+            shadersPanel.Controls.Clear();
+
+            // add data from ShadersProperties if exist
+            if (ShadersProperties.ContainsKey(Shaders[ActiveShaderIndex].GetShaderName()))
+            {
+                ShadersProperty shaderProperties = ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()];
+                int top = 0;
+                foreach (Tuple<string,ShadersProperty.Type,string> property in shaderProperties.PropertiesList)
+                {
+                    Label label = new Label();          
+
+                    switch (property.Item2)
+                    {
+                        case ShadersProperty.Type.VECTOR3:
+                            // add main label
+                            label.Text = property.Item1;
+                            label.Top = top;
+                            label.Left = 0;
+                            label.Width = 80;
+                            shadersPanel.Controls.Add(label);
+
+                            // add X textBox
+                            TextBox xTextBox = new TextBox();
+                            xTextBox.Text = shaderProperties.Vector3Properties[property.Item3].x.ToString().Replace(',', '.');
+                            xTextBox.Top = top;
+                            xTextBox.Name = property.Item1 + "X";
+                            xTextBox.Location = new Point(label.Right + 5, top);
+                            xTextBox.Width = 30;
+                            shadersPanel.Controls.Add(xTextBox);
+
+                            // add Y textBox
+                            TextBox yTextBox = new TextBox();
+                            yTextBox.Text = shaderProperties.Vector3Properties[property.Item3].y.ToString().Replace(',', '.');
+                            yTextBox.Top = top;
+                            yTextBox.Name = property.Item1 + "Y";
+                            yTextBox.Location = new Point(xTextBox.Right + 5, top);
+                            yTextBox.Width = 30;
+                            shadersPanel.Controls.Add(yTextBox);
+
+                            // add Z textBox
+                            TextBox zTextBox = new TextBox();
+                            zTextBox.Text = shaderProperties.Vector3Properties[property.Item3].z.ToString().Replace(',', '.');
+                            zTextBox.Top = top;
+                            zTextBox.Name = property.Item1 + "Z";
+                            zTextBox.Location = new Point(yTextBox.Right + 5, top);
+                            zTextBox.Width = 30;
+                            shadersPanel.Controls.Add(zTextBox);
+
+                            top += label.Height;
+                            break;
+                        case ShadersProperty.Type.FLOAT:
+                            // add label
+                            label.Text = property.Item1;
+                            label.Top = top;
+                            label.Left = 0;
+                            label.Width = 80;
+                            shadersPanel.Controls.Add(label);
+
+                            // add textBox
+                            TextBox textBox = new TextBox();
+                            textBox.Text = shaderProperties.FloatProperties[property.Item3].ToString();
+                            textBox.Top = top;
+                            textBox.Name = property.Item1;
+                            textBox.Location = new Point(label.Right + 5, top);
+                            textBox.Width = 30;
+                            shadersPanel.Controls.Add(textBox);
+
+                            top += label.Height;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // update button
+                Button updateButton = new Button();
+                updateButton.Text = "Update shader";
+                updateButton.Top = top;
+                updateButton.Width = 100;
+                updateButton.Click += UpdareShaderProperties;
+                shadersPanel.Controls.Add(updateButton);
+            }
+        }
+
+        //
+        private void UpdareShaderProperties(object sender, EventArgs e)
+        {
+            ShadersProperty shaderProperties = ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()];
+            Dictionary<string, float> floatProperties = new Dictionary<string, float>();
+            Dictionary<string, Vector3> vector3Properties = new Dictionary<string, Vector3>();
+            
+            foreach (Tuple<string, ShadersProperty.Type, string> property in shaderProperties.PropertiesList)
+            {
+                switch (property.Item2)
+                {
+                    case ShadersProperty.Type.VECTOR3:
+                        float x = Useful.GetFloat(shadersPanel.Controls.Find(property.Item1 + "X", true)[0].Text);
+                        float y = Useful.GetFloat(shadersPanel.Controls.Find(property.Item1 + "Y", true)[0].Text);
+                        float z = Useful.GetFloat(shadersPanel.Controls.Find(property.Item1 + "Z", true)[0].Text);
+
+                        vector3Properties.Add(property.Item3, new Vector3(x, y, z));
+                        break;
+                    case ShadersProperty.Type.FLOAT:
+                        float val = Useful.GetFloat(shadersPanel.Controls.Find(property.Item1, true)[0].Text);
+                        floatProperties.Add(property.Item3, val);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatProperties = floatProperties;
+            ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties = vector3Properties;
         }
 
         # endregion

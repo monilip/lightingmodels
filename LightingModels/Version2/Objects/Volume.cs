@@ -58,16 +58,23 @@ namespace Version2
         public void RotateObjectAxis(float xx, float yy, float zz)
         {
             float x = Rotation.x + xx;
-            if (x >= 2 * Math.PI || x < 0)
-                x = 0;
+            if (x >= 2 * Math.PI)
+                 x = 0;
+            if (x < 0)
+                x = 2 * (float)Math.PI;
 
             float y = Rotation.y + yy;
-            if (y >= 2 * Math.PI || y < 0)
+            if (y >= 2 * Math.PI)
                 y = 0;
+            if (y < 0)
+                y = 2 * (float)Math.PI;
 
             float z = Rotation.z + zz;
-            if (z >= 2 * Math.PI || z < 0)
+            if (z >= 2 * Math.PI)
                 z = 0;
+            if (z < 0)
+                z = 2 * (float)Math.PI;
+
             Rotation = new Vector3(x, y, z);
 
             UpdateVolume(UpdateType.ROTATION);
