@@ -20,7 +20,6 @@ namespace Version2
         // Scene
         public int SceneWidth = 500;
         public int SceneHeight = 500;
-        private static bool lighting = true;
 
         public Form1()
         {
@@ -61,7 +60,7 @@ namespace Version2
                 objectsList.Items.Add(volume.Name);
             }
 
-            objectsList.SelectedIndex = 1;
+            objectsList.SelectedIndex = 0;
 
             // update object's parameters
             UpdateObjectParameters();
@@ -134,24 +133,25 @@ namespace Version2
             // With Texture
             Shaders.Add(new Shader("textured", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_text.glsl"), System.IO.File.ReadAllText(@"glsl/fs_text.glsl"))));
 
-            // Phong Lighting
-            Shaders.Add(new Shader("phongLight", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
+            // Phong
+            Shaders.Add(new Shader("Phong", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
             PhongProperty phong = new PhongProperty();
             phong.Activate();
             phong.ChangeLight(Lights[ActiveLightIndex]);
-            ShadersProperties.Add("phongLight", phong);
+            ShadersProperties.Add("Phong", phong);
 
-            ActiveShaderIndex = 2;
+            // Cook-Torrence
+            Shaders.Add(new Shader("Cook-Torrence", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightCookTorrence.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightCookTorrence.glsl"))));
+            PhongProperty cookTorrence = new PhongProperty();
+            cookTorrence.Activate();
+            cookTorrence.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Cook-Torrence", cookTorrence);
+
+            ActiveShaderIndex = 0;
 
             Shaders[ActiveShaderIndex].GetShaderProgram().Use();
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
-
-
-            if (Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"] != null)
-            {
-                Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
-            }
 
             AddDataFromShadersProperties();
            
@@ -220,11 +220,6 @@ namespace Version2
 
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
-
-            if (Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"] != null)
-            {
-                Shaders[ActiveShaderIndex].GetShaderProgram()["enableLighting"].SetValue(lighting);
-            }
 
             //  add data from ShadersProperties      
             AddDataFromShadersProperties();

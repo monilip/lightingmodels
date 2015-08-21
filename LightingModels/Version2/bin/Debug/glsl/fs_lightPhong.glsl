@@ -23,19 +23,24 @@ uniform vec3 Ks;
 uniform float Ns;
 
 uniform bool isTexture;
-uniform bool enableLighting;
 void main() 
 {
-	vec3 normal = normalize(f_normal);
-	vec3 lightDir = normalize(lightPos - f_vertPos);
-	vec3 reflectDir = reflect(-lightDir, normal);
-	vec3 viewDir = normalize(-f_vertPos);
+	// Phong
+	// P = ambientColor + diffuse * diffuseColor + specular*specularColor;
+	// diffuse = cos(A), A -> angle between light direction and normal
+	// specular = cos(B)^n, B -> angle between reflected light direction and vector to viewer
 
-	float diffuse = max(dot(lightDir,normal), 0.0);
+	// ancillary variables
+	vec3 N = normalize(f_normal);
+	vec3 L = normalize(lightPos - f_vertPos);
+	vec3 R = -reflect(L, N);
+	vec3 V = normalize(-f_vertPos);
+
+	float diffuse = max(dot(N,L), 0.0);
 	float specular = 0.0;
 
 	if(diffuse > 0.0) {
-       float specAngle = max(dot(reflectDir, viewDir), 0.0);
+       float specAngle = max(dot(R, V), 0.0);
        specular = pow(specAngle, Ns); 
     }
 	
@@ -45,8 +50,7 @@ void main()
 	lighting += diffuse*diffuseColor * Kd;
 	lighting += specular*specularColor * Ks;
 
-	if (enableLighting == true)
-		outputColor = vec4(lighting, 1.0);
+	outputColor = vec4(lighting, 1.0);
 
 	// texture
 	if (isTexture == true)

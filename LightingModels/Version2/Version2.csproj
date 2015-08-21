@@ -71,6 +71,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scene\ShaderProgram.cs" />
+    <Compile Include="ShadersProperties\CookTorrenceProperty.cs" />
     <Compile Include="ShadersProperties\PhongProperty.cs" />
     <Compile Include="ShadersProperties\ShadersProperty.cs" />
     <Compile Include="Objects\Useful.cs" />
@@ -87,6 +88,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="glsl\vs_lightCookTorrence.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\fs_lightCookTorrence.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="glsl\fs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

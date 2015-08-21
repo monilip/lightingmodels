@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenGL;
 
-// 17.05.2015
-// Class for all Phong lighting properties
+// 21.08.2015
+// Class for all Cook-Torrence lighting properties
 namespace Version2
 {
-    class PhongProperty : ShadersProperty
+    class CookTorrenceProperty : ShadersProperty
     {
         //
         public void Activate()
         {
-            ShaderName = "Phong";
+            ShaderName = "Cook-Torrence";
 
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
