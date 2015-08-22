@@ -1,0 +1,11 @@
+# Blender MTL File: 'ballSteel.blend'
+# Material Count: 1
+
+newmtl Material.001
+Ns 10.117647
+Ka 0.100000 0.100000 0.100000
+Kd 0.250000 0.250000 0.250000
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2

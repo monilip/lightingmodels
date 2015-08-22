@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 // 15.05.2015
@@ -76,9 +75,16 @@ namespace LightingModels
             Objects.Add(ttc);
 
             // ball with material
+            //ObjVolume objFromBlenderObjFile = new ObjVolume();
+            //objFromBlenderObjFile.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "ball.obj");
+            //objFromBlenderObjFile.Name = "Ball from Blender";
+            //objFromBlenderObjFile.Position += new Vector3(1, 0, 0);
+            //objFromBlenderObjFile.Scale = new Vector3(0.4f, 0.4f, 0.4f);
+            //objFromBlenderObjFile.TextureID = Texture.Textures["2.png"];
+
             ObjVolume objFromBlenderObjFile = new ObjVolume();
-            objFromBlenderObjFile.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "ball.obj");
-            objFromBlenderObjFile.Name = "Ball from Blender";
+            objFromBlenderObjFile.LoadFromFileFromBlenderObj(DataPath.ModelsPath + "cubeWithTexture.obj");
+            objFromBlenderObjFile.Name = "Cube from Blender";
             objFromBlenderObjFile.Position += new Vector3(1, 0, 0);
             objFromBlenderObjFile.Scale = new Vector3(0.4f, 0.4f, 0.4f);
             objFromBlenderObjFile.TextureID = Texture.Textures["2.png"];
@@ -144,7 +150,7 @@ namespace LightingModels
             }
 
             vertdata = verts.ToArray();
-            normalsdata = verts.ToArray();
+            normalsdata = normals.ToArray();
             indicedata = inds.ToArray();
             coldata = colors.ToArray();
             texcoorddata = texcoords.ToArray();
