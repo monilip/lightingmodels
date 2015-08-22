@@ -41,20 +41,27 @@ void main()
 
 	if(diffuse > 0.0) {
        float specAngle = max(dot(R, V), 0.0);
-       specular = pow(specAngle, Ns); 
+       specular = pow(specAngle, Ns * n); 
     }
 	
-	vec3 lighting;
-
-	lighting = ambientColor * Ka;
-	lighting += diffuse*diffuseColor * Kd;
-	lighting += specular*specularColor * Ks;
-
-	outputColor = vec4(lighting, 1.0);
-
-	// texture
+	vec3 Amb = clamp(ambientColor * Ka,0.0f,1.0f);	
+	vec3 Dif = clamp(diffuse*diffuseColor * Kd,0.0f,1.0f);
+	vec3 Spec = clamp(specular*specularColor * Ks,0.0f,1.0f);
+	
 	if (isTexture == true)
-		outputColor += texture2D(maintexture, f_texcoord);
+	{
+		Dif.r +=texture2D(maintexture, f_texcoord).r;
+		Dif.g +=texture2D(maintexture, f_texcoord).g;
+		Dif.b +=texture2D(maintexture, f_texcoord).b;
+
+		outputColor = vec4(Amb + Dif + Spec, texture2D(maintexture, f_texcoord).a);
+	}
 	else
-		outputColor += f_color;
+	{
+		Dif.r +=f_color.r;
+		Dif.g +=f_color.g;
+		Dif.b +=f_color.b;
+
+		outputColor = vec4(Amb + Dif + Spec, 1.0f);
+	}
 }

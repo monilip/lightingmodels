@@ -20,8 +20,6 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cub
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\earthTexture.jpg
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballWithEarth.obj
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballBlackPlain.mtl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballBlackPlain.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\OpenTK.dll
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\OpenTK.pdb
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\OpenTK.xml
@@ -30,3 +28,7 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_li
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\monkeyTexture.png
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\monkey.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\monkey.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballPlain.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballPlain.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.mtl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.obj

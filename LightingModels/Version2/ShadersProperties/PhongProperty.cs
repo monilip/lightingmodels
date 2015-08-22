@@ -22,12 +22,15 @@ namespace Version2
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
 
+            FloatProperties.Add("n", 1.0f);
+
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
                 Tuple.Create("Ambient color", ShadersProperty.Type.VECTOR3,"ambientColor"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
+                Tuple.Create("N", ShadersProperty.Type.FLOAT,"n"),
             };
         }
 

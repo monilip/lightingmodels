@@ -20,6 +20,10 @@ uniform float m;
 
 uniform bool isTexture;
 
+uniform vec3 Ka;
+uniform vec3 Kd;
+uniform vec3 Ks;
+
 void main() 
 {
 	// Cook-Torrence
@@ -57,9 +61,9 @@ void main()
 	vec3 H = normalize(L + V);
 
 	float NdotL = clamp(dot(N,L),0.0,1.0);  
-    float NdotH = clamp(dot(N,H),0.0,1.0);
-    float NdotV = clamp(dot(N,V),0.0,1.0);
-    float VdotH = clamp(dot(V,H),0.0,1.0);
+	float NdotH = clamp(dot(N,H),0.0,1.0);
+	float NdotV = clamp(dot(N,V),0.0,1.0);
+	float VdotH = clamp(dot(V,H),0.0,1.0);
 
 	// Geometric
 	float G1 = 2 * NdotH * NdotV / VdotH;
@@ -67,24 +71,38 @@ void main()
 	float Geometric = min(1.0, min(G1, G2));
 
 	/// Roughness (Beckmann’s distribution)
-	float R1 = pow(m,2) * pow(NdotH,4);
-	float R2 = (NdotH * NdotH - 1.0f) / (NdotH * NdotH * pow(m,2) );
-	float Roughness = (1 / R1) * exp(R2);
+	float R1 = pow(m,2.0f) * pow(NdotH,4.0f);
+	float R2 = (NdotH * NdotH - 1.0f) / (NdotH * NdotH * pow(m,2.0f) );
+	float Roughness = (1.0f / R1) * exp(R2);
 
 	// Fresnel
 	float Fresnel = pow((1.0f-VdotH),5.0f);
-    Fresnel *= (1.0f-F0);
-    Fresnel += F0;
+	Fresnel *= (1.0f-F0);
+	Fresnel += F0;
 	
 	vec3 RS_numerator = vec3(Fresnel * Geometric * Roughness);
 	float RS_denominator = PI * NdotV * NdotL;
 	vec3 RS = RS_numerator / RS_denominator;
 
-	outputColor = vec4(max(0.0, NdotL) * (specularColor * RS + diffuseColor),1.0);
-
 	// texture
 	if (isTexture == true)
-		outputColor += texture2D(maintexture, f_texcoord);
+	{
+		vec3 Dif = diffuseColor;
+		Dif.r +=texture2D(maintexture, f_texcoord).r;
+		Dif.g +=texture2D(maintexture, f_texcoord).g;
+		Dif.b +=texture2D(maintexture, f_texcoord).b;
+
+		vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
+
+		outputColor = vec4(lighting,texture2D(maintexture, f_texcoord).a);
+	}
 	else
-		outputColor += f_color;
+	{
+		vec3 Dif = diffuseColor;
+
+		Dif += vec3(f_color);
+
+		vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
+		outputColor = vec4(lighting,1.0);
+	}
 }

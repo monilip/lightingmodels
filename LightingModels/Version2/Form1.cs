@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics;
 using OpenGL;
 using System.Collections.Generic;
 
@@ -20,6 +21,13 @@ namespace Version2
         // Scene
         public int SceneWidth = 500;
         public int SceneHeight = 500;
+
+        //
+        private Stopwatch stopWatch = null;
+        private bool measureTimeOfRenderFrame = false;
+        private int measureTimeFrames = 5;
+        private int measureTimeFrameNumber = 0;
+        private double measuredTime = 0;
 
         public Form1()
         {
@@ -44,7 +52,7 @@ namespace Version2
                 shadersList.Items.Add(shader.GetShaderName());
             }
 
-            shadersList.SelectedIndex = 1;
+            shadersList.SelectedIndex = 2;
 
             // add lights to droplist
             foreach (Light light in Lights)
@@ -156,17 +164,16 @@ namespace Version2
             AddDataFromShadersProperties();
            
 
-            // Objects
+           //  Objects
             ObjVolume blackPlainBall = new ObjVolume();
-            blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballBlackPlain.obj");
-            blackPlainBall.Name = "Plain black ball";
+            blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballPlain.obj");
+            blackPlainBall.Name = "Plain ball";
             blackPlainBall.UpdateVolume += UpdateVolume;
             Objects.Add(blackPlainBall);
 
             ObjVolume ballWithEarth = new ObjVolume();
             ballWithEarth.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballWithEarth.obj");
             ballWithEarth.Name = "Ball with Earth";
-            ballWithEarth.Position = new Vector3(0.5f, 0f, 0f);
             ballWithEarth.Rotation = new Vector3(0.5f, 4.5f, 0.1f);
             ballWithEarth.UpdateVolume += UpdateVolume;
             Objects.Add(ballWithEarth);
@@ -181,9 +188,14 @@ namespace Version2
             ObjVolume monkey = new ObjVolume();
             monkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "monkey.obj");
             monkey.Name = "Monkey";
-            //monkey.Rotation = new Vector3(0.3f, 0.3f, 0f);
             monkey.UpdateVolume += UpdateVolume;
             Objects.Add(monkey);
+
+            ObjVolume smoothMonkey = new ObjVolume();
+            smoothMonkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "smoothMonkey.obj");
+            smoothMonkey.Name = "Smooth Monkey";
+            smoothMonkey.UpdateVolume += UpdateVolume;
+            Objects.Add(smoothMonkey);
         }
 
         //
@@ -217,6 +229,13 @@ namespace Version2
 
         private void OnRenderFrame(object sender, EventArgs e)
         {
+            if (measureTimeOfRenderFrame == true)
+            { 
+                stopWatch = new Stopwatch();
+                stopWatch.Start();
+                measureTimeFrameNumber++;
+            }
+
             // set up the viewport and clear the previous depth and color buffers
             Gl.Viewport(0, 0, SceneWidth, SceneHeight);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -232,9 +251,9 @@ namespace Version2
             AddDataFromShadersProperties();
 
 
-            // foreach (Volume volume in Objects)
+             foreach (Volume volume in Objects)
             {
-                Volume volume = Objects[ActiveObjectIndex];
+              //  Volume volume = Objects[ActiveObjectIndex];
 
                 // bind texture
                 if (volume.GetTexture() != null)
@@ -290,6 +309,20 @@ namespace Version2
             }
 
             simpleOpenGlControl1.SwapBuffers();
+
+            if (measureTimeOfRenderFrame == true)
+            {
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                measuredTime = ts.TotalMilliseconds;
+                if (measureTimeFrameNumber > measureTimeFrames)
+                {
+                    Useful.Log("Time of scene render: " + (measuredTime / measureTimeFrames));
+                    measureTimeOfRenderFrame = false;
+                    measureTimeFrameNumber = 0;
+                }
+            }
+
         }
 
         // used instead of glutDisplayFunc
@@ -383,6 +416,13 @@ namespace Version2
 
             if (e.KeyCode == Keys.E)
                 Objects[ActiveObjectIndex].MoveObject(0, 0, -0.1f);
+
+            if (e.KeyCode == Keys.T)
+            {
+                measureTimeOfRenderFrame = true;
+                measureTimeFrameNumber = 0;
+                measuredTime = 0;
+            }
         }
 
         //
