@@ -68,7 +68,7 @@ namespace Version2
                 objectsList.Items.Add(volume.Name);
             }
 
-            objectsList.SelectedIndex = 0;
+            objectsList.SelectedIndex = 3;
 
             // update object's parameters
             UpdateObjectParameters();
@@ -122,14 +122,14 @@ namespace Version2
             Light ligthWhite = new Light("ligthWhite");
             ligthWhite.Position = new Vector3(5.0f, 5.0f, 1.0f);
             ligthWhite.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-            ligthWhite.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
+            ligthWhite.Diffuse = new Vector3(0.2f, 0.2f, 0.2f);
             ligthWhite.Specular = new Vector3(1.0f, 1.0f, 1.0f);
             Lights.Add(ligthWhite);
 
             Light ligthRed = new Light("ligthRed");
             ligthRed.Position = new Vector3(5.0f, 10.0f, 1.0f);
             ligthRed.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-            ligthRed.Diffuse = new Vector3(0.5f, 0.5f, 0.5f);
+            ligthRed.Diffuse = new Vector3(0.3f, 0.1f, 0.1f);
             ligthRed.Specular = new Vector3(1.0f, 0.1f, 0.1f);
             Lights.Add(ligthRed);
 
@@ -154,6 +154,14 @@ namespace Version2
             cookTorrence.Activate();
             cookTorrence.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Cook-Torrence", cookTorrence);
+
+            // Cook-Torrence
+            Shaders.Add(new Shader("Ward", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
+            WardProperty ward = new WardProperty();
+            ward.Activate();
+            ward.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ward", ward);
+
 
             ActiveShaderIndex = 0;
 
@@ -251,9 +259,9 @@ namespace Version2
             AddDataFromShadersProperties();
 
 
-             foreach (Volume volume in Objects)
+             //foreach (Volume volume in Objects)
             {
-              //  Volume volume = Objects[ActiveObjectIndex];
+                Volume volume = Objects[ActiveObjectIndex];
 
                 // bind texture
                 if (volume.GetTexture() != null)
@@ -466,17 +474,17 @@ namespace Version2
         {
             switch (((System.Windows.Forms.TextBoxBase)sender).Name)
             {
-                case "rotX":
+                case "posX":
                     if (rotX.Text.Length == 0)
                         rotX.Text = "0";
                     Objects[ActiveObjectIndex].Position.x = Useful.GetFloat(posX.Text);
                     break;
-                case "rotY":
+                case "posY":
                     if (rotY.Text.Length == 0)
                         rotY.Text = "0";
                     Objects[ActiveObjectIndex].Position.y = Useful.GetFloat(posY.Text);
                     break;
-                case "rotZ":
+                case "posZ":
                     if (rotZ.Text.Length == 0)
                         rotZ.Text = "0";
                     Objects[ActiveObjectIndex].Position.z = Useful.GetFloat(posZ.Text);

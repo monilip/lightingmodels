@@ -40,7 +40,6 @@ void main()
 	// Roughness (Beckmann’s distribution) = (1 / R1) * exp(R2)
 	// R1 = cos(B) ^ 4 * roughnessSquare, B -> angle between normal and half vector
 
-	// from D3DBook:(Lighting)_Cook-Torrance
 	// R2 = -(tan(B)/m)^2
 	// tan^2(B) = sin^2(B) / cos^2(B)
 	// sin^2(B) + cos^2(B) = 1
@@ -84,25 +83,23 @@ void main()
 	float RS_denominator = PI * NdotV * NdotL;
 	vec3 RS = RS_numerator / RS_denominator;
 
-	// texture
+	vec3 Dif;
+
+	// texture or color
 	if (isTexture == true)
 	{
-		vec3 Dif = diffuseColor;
+		Dif = diffuseColor;
 		Dif.r +=texture2D(maintexture, f_texcoord).r;
 		Dif.g +=texture2D(maintexture, f_texcoord).g;
 		Dif.b +=texture2D(maintexture, f_texcoord).b;
-
-		vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
-
-		outputColor = vec4(lighting,texture2D(maintexture, f_texcoord).a);
 	}
 	else
 	{
-		vec3 Dif = diffuseColor;
+		Dif = diffuseColor * Kd;
 
 		Dif += vec3(f_color);
-
-		vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
-		outputColor = vec4(lighting,1.0);
-	}
+	}	
+	
+	vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
+	outputColor = vec4(lighting,1.0);
 }

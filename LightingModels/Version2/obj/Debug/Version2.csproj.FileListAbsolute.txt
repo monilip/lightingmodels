@@ -32,3 +32,5 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\bal
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballPlain.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.obj
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightWard.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightWard.glsl

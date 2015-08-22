@@ -48,20 +48,19 @@ void main()
 	vec3 Dif = clamp(diffuse*diffuseColor * Kd,0.0f,1.0f);
 	vec3 Spec = clamp(specular*specularColor * Ks,0.0f,1.0f);
 	
+	// texture or color
 	if (isTexture == true)
 	{
 		Dif.r +=texture2D(maintexture, f_texcoord).r;
 		Dif.g +=texture2D(maintexture, f_texcoord).g;
 		Dif.b +=texture2D(maintexture, f_texcoord).b;
-
-		outputColor = vec4(Amb + Dif + Spec, texture2D(maintexture, f_texcoord).a);
 	}
 	else
 	{
 		Dif.r +=f_color.r;
 		Dif.g +=f_color.g;
 		Dif.b +=f_color.b;
-
-		outputColor = vec4(Amb + Dif + Spec, 1.0f);
 	}
+	
+	outputColor = vec4(Amb + Dif + Spec, 1.0f);
 }

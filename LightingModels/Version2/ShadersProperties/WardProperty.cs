@@ -9,28 +9,28 @@ using OpenGL;
 // Class for all Cook-Torrence lighting properties
 namespace Version2
 {
-    class CookTorrenceProperty : ShadersProperty
+    class WardProperty : ShadersProperty
     {
         //
         public void Activate()
         {
-            ShaderName = "Cook-Torrence";
+            ShaderName = "Ward";
 
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
 
-            FloatProperties.Add("m", 0.25f);
-            FloatProperties.Add("F0", 0.6f);
+            FloatProperties.Add("alphaX", 0.3f);
+            FloatProperties.Add("alphaY", 0.3f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
-                Tuple.Create("Roughtness Value", ShadersProperty.Type.FLOAT,"m"),
-                Tuple.Create("Fresnel Value", ShadersProperty.Type.FLOAT,"F0"),
+                Tuple.Create("Alpha X", ShadersProperty.Type.FLOAT,"alphaX"),
+                Tuple.Create("Alpha Y", ShadersProperty.Type.FLOAT,"alphaY"),
             };
         }
 
