@@ -177,6 +177,13 @@ namespace Version2
             cubeWIthSquares.Rotation = new Vector3(0.3f, 0.3f, 0f);
             cubeWIthSquares.UpdateVolume += UpdateVolume;
             Objects.Add(cubeWIthSquares);
+
+            ObjVolume monkey = new ObjVolume();
+            monkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "monkey.obj");
+            monkey.Name = "Monkey";
+            //monkey.Rotation = new Vector3(0.3f, 0.3f, 0f);
+            monkey.UpdateVolume += UpdateVolume;
+            Objects.Add(monkey);
         }
 
         //
@@ -345,10 +352,10 @@ namespace Version2
                 RotateObject(Objects[ActiveObjectIndex], -1, 0, 0);
 
             if (e.KeyCode == Keys.K)
-                RotateObject(Objects[ActiveObjectIndex], 0, 1, 0);
+                RotateObject(Objects[ActiveObjectIndex], 0, -1, 0);
 
             if (e.KeyCode == Keys.L)
-                RotateObject(Objects[ActiveObjectIndex], 0, -1, 0);
+                RotateObject(Objects[ActiveObjectIndex], 0, 1, 0);
 
             if (e.KeyCode == Keys.N)
                 RotateObject(Objects[ActiveObjectIndex], 0, 0, -1);

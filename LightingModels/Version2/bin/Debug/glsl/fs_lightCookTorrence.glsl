@@ -80,7 +80,7 @@ void main()
 	float RS_denominator = PI * NdotV * NdotL;
 	vec3 RS = RS_numerator / RS_denominator;
 
-	outputColor = vec4((specularColor * RS + diffuseColor),1.0);
+	outputColor = vec4(max(0.0, NdotL) * (specularColor * RS + diffuseColor),1.0);
 
 	// texture
 	if (isTexture == true)
