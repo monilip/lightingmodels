@@ -55,18 +55,7 @@ void main()
 	float VdotH = clamp(dot(V,H),0.0,1.0);
 
 	vec3 Pd = diffuseColor;
-	vec3 Ps = specularColor * Ks;
-	vec3 epsilon = vec3(0.0f,0.0f,-1.0f); 
-	vec3 T = normalize(cross(N,epsilon));
-	vec3 B = normalize(cross(N,T));
-	float HdotT = max(dot(H,T),0.0f);
-	float HdotB = max(dot(H,B),0.0f);
-	float HdotN = max(dot(H,N),0.0f);
-
-	float Beta = - 2.0f * ((HdotT/alphaX * HdotT/alphaX + HdotB/alphaY * HdotB/alphaY) / ( 1.0f + HdotN));
-
-	vec3 Spec = Ps * 1.0f / max(0.1,((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))) * exp(Beta);
-
+	
 	// texture or color
 	if (isTexture == true)
 	{
@@ -78,6 +67,19 @@ void main()
 	{
 		Pd += vec3(f_color);
 	}
+
+	vec3 Ps = specularColor * Ks;
+	vec3 epsilon = vec3(0.0f,0.0f,-1.0f); 
+	vec3 T = normalize(cross(N,epsilon));
+	vec3 B = normalize(cross(N,T));
+	float HdotT = dot(H,T);
+	float HdotB = dot(H,B);
+	float HdotN = dot(H,N);
+
+	float Beta = - 2.0f * ((HdotT/alphaX * HdotT/alphaX + HdotB/alphaY * HdotB/alphaY) / ( 1.0f + HdotN));
+
+	vec3 Spec = Ps * 1.0f / max(0.1,((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))) * exp(Beta);
+
 
 	Pd *= Kd;
 	vec3 lighting = NdotL * (Pd + Spec);//, 0.0, 1.0);

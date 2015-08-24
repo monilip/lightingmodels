@@ -71,7 +71,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scene\ShaderProgram.cs" />
-    <Compile Include="ShadersProperties\CookTorrenceProperty.cs" />
+    <Compile Include="ShadersProperties\CookTorranceProperty.cs" />
+    <Compile Include="ShadersProperties\AshikhminShirleyProperty.cs" />
+    <Compile Include="ShadersProperties\LambertProperty.cs" />
     <Compile Include="ShadersProperties\WardProperty.cs" />
     <Compile Include="ShadersProperties\PhongProperty.cs" />
     <Compile Include="ShadersProperties\ShadersProperty.cs" />
@@ -89,16 +91,34 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="glsl\vs_lightAshikhminShirley.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\fs_lightAshikhminShirley.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\fs_lightLambert.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\vs_lightLambert.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\fs_lightBlinnPhong.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="glsl\vs_lightBlinnPhong.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="glsl\fs_lightWard.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="glsl\vs_lightWard.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="glsl\vs_lightCookTorrence.glsl">
+    <None Include="glsl\vs_lightCookTorrance.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="glsl\fs_lightCookTorrence.glsl">
+    <None Include="glsl\fs_lightCookTorrance.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="glsl\fs.glsl">
@@ -160,7 +180,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="models\earthTexture.jpg">

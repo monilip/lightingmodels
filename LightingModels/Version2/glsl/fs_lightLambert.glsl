@@ -25,7 +25,7 @@ uniform float Ns;
 uniform bool isTexture;
 void main() 
 {
-	// Phong
+	// Lambert
 	// I = ambientColor + diffuse * diffuseColor + specular*specularColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
 	// specular = cos(B)^n, B -> angle between reflected light direction and vector to viewer
@@ -33,20 +33,10 @@ void main()
 	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
-	vec3 R = -reflect(L, N);
-	vec3 V = normalize(-f_vertPos);
 
-	float diffuse = max(dot(N,L), 0.0);
-	float specular = 0.0;
+	float lambert = max(dot(N,L), 0.0);
 
-	if(diffuse > 0.0) {
-       float specAngle = max(dot(R, V), 0.0);
-       specular = pow(specAngle, Ns * n); 
-    }
-	
-	vec3 Amb = ambientColor;	
-	vec3 Dif = diffuseColor;
-	vec3 Spec = specularColor;
+	vec3 Dif = clamp(lambert*diffuseColor * Kd,0.0f,1.0f);
 	
 	// texture or color
 	if (isTexture == true)
@@ -62,9 +52,5 @@ void main()
 		Dif.b +=f_color.b;
 	}
 	
-	Amb = Amb * Ka;
-	Dif = Dif * diffuse * Kd;
-	Spec = Spec * specular * Ks;
-
-	outputColor = vec4(Amb + Dif + Spec, 1.0f);
+	outputColor = vec4(Dif, 1.0f);
 }

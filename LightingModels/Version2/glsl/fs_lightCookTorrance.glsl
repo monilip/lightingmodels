@@ -26,7 +26,7 @@ uniform vec3 Ks;
 
 void main() 
 {
-	// Cook-Torrence
+	// Cook-Torrance
 	// R = I * (specularColor * RS * + diffuseColor)
 	// I = cos(A), A -> angle between light direction and normal => max(0.0,clamp(dot(lightDir,normal),0.0,1.0))
 					
@@ -34,7 +34,7 @@ void main()
 
 	// RS_numerator = Fresnel x Roughness x Geometric
 
-	// Fresnel (Schlick's approximation) = F0 + (1-F0) * (1 - VdotH)^5
+	// Fresnel (Schlick's approximation) = F0 + (1-F0) * (1 - HdotV)^5
 	// F0 -> put in shader (goes from 0.0 to 1.0) 
 
 	// Roughness (Beckmann’s distribution) = (1 / R1) * exp(R2)
@@ -62,11 +62,11 @@ void main()
 	float NdotL = clamp(dot(N,L),0.0,1.0);  
 	float NdotH = clamp(dot(N,H),0.0,1.0);
 	float NdotV = clamp(dot(N,V),0.0,1.0);
-	float VdotH = clamp(dot(V,H),0.0,1.0);
+	float HdotV = clamp(dot(V,H),0.0,1.0);
 
 	// Geometric
-	float G1 = 2 * NdotH * NdotV / VdotH;
-	float G2 = 2 * NdotH * NdotL / VdotH;
+	float G1 = 2 * NdotH * NdotV / HdotV;
+	float G2 = 2 * NdotH * NdotL / HdotV;
 	float Geometric = min(1.0, min(G1, G2));
 
 	/// Roughness (Beckmann’s distribution)
@@ -75,7 +75,7 @@ void main()
 	float Roughness = (1.0f / R1) * exp(R2);
 
 	// Fresnel
-	float Fresnel = pow((1.0f-VdotH),5.0f);
+	float Fresnel = pow((1.0f-HdotV),5.0f);
 	Fresnel *= (1.0f-F0);
 	Fresnel += F0;
 	

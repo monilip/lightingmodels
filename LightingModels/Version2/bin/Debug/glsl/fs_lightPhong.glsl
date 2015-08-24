@@ -26,7 +26,7 @@ uniform bool isTexture;
 void main() 
 {
 	// Phong
-	// P = ambientColor + diffuse * diffuseColor + specular*specularColor;
+	// I = ambientColor + diffuse * diffuseColor + specular*specularColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
 	// specular = cos(B)^n, B -> angle between reflected light direction and vector to viewer
 
@@ -44,9 +44,9 @@ void main()
        specular = pow(specAngle, Ns * n); 
     }
 	
-	vec3 Amb = clamp(ambientColor * Ka,0.0f,1.0f);	
-	vec3 Dif = clamp(diffuse*diffuseColor * Kd,0.0f,1.0f);
-	vec3 Spec = clamp(specular*specularColor * Ks,0.0f,1.0f);
+	vec3 Amb = ambientColor;	
+	vec3 Dif = diffuseColor;
+	vec3 Spec = specularColor;
 	
 	// texture or color
 	if (isTexture == true)
@@ -62,5 +62,9 @@ void main()
 		Dif.b +=f_color.b;
 	}
 	
+	Amb = Amb * Ka;
+	Dif = Dif * diffuse * Kd;
+	Spec = Spec * specular * Ks;
+
 	outputColor = vec4(Amb + Dif + Spec, 1.0f);
 }

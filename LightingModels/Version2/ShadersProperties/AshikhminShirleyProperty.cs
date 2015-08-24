@@ -9,28 +9,32 @@ using OpenGL;
 // Class for all Cook-Torrence lighting properties
 namespace Version2
 {
-    class CookTorrenceProperty : ShadersProperty
+    class AshikhminShirleyProperty : ShadersProperty
     {
         //
         public void Activate()
         {
-            ShaderName = "Cook-Torrence";
+            ShaderName = "Ashikhmin-Shirley";
 
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
+            Vector3Properties.Add("Rs", new Vector3(0.2f, 0.2f, 0.2f));
 
-            FloatProperties.Add("m", 0.25f);
-            FloatProperties.Add("F0", 0.6f);
+            FloatProperties.Add("Nu", 35.0f);
+            FloatProperties.Add("Nv", 50.0f);
+            FloatProperties.Add("lighter", 2.0f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
-                Tuple.Create("Roughtness Value", ShadersProperty.Type.FLOAT,"m"),
-                Tuple.Create("Fresnel Value", ShadersProperty.Type.FLOAT,"F0"),
+                Tuple.Create("AshikhminAnisotropy X", ShadersProperty.Type.FLOAT,"Nu"),
+                Tuple.Create("AshikhminAnisotropy Y", ShadersProperty.Type.FLOAT,"Nv"),
+                Tuple.Create("Rs", ShadersProperty.Type.VECTOR3,"Rs"),
+                Tuple.Create("Make it lighter", ShadersProperty.Type.FLOAT,"lighter"),
             };
         }
 

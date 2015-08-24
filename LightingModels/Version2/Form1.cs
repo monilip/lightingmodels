@@ -134,12 +134,20 @@ namespace Version2
             Lights.Add(ligthRed);
 
             // Shaders
+            #region shaders
             // Load shaders from files
             // Default
             Shaders.Add(new Shader("default", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs.glsl"), System.IO.File.ReadAllText(@"glsl/fs.glsl"))));
 
             // With Texture
             Shaders.Add(new Shader("textured", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_text.glsl"), System.IO.File.ReadAllText(@"glsl/fs_text.glsl"))));
+
+            // Lambert
+            Shaders.Add(new Shader("Lambert", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightLambert.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightLambert.glsl"))));
+            LambertProperty lambert = new LambertProperty();
+            lambert.Activate();
+            lambert.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Lambert", lambert);
 
             // Phong
             Shaders.Add(new Shader("Phong", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightPhong.glsl"))));
@@ -148,20 +156,35 @@ namespace Version2
             phong.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Phong", phong);
 
-            // Cook-Torrence
-            Shaders.Add(new Shader("Cook-Torrence", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightCookTorrence.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightCookTorrence.glsl"))));
-            CookTorrenceProperty cookTorrence = new CookTorrenceProperty();
+            // Blinn-Phong
+            Shaders.Add(new Shader("Blinn-Phong", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightBlinnPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightBlinnPhong.glsl"))));
+            PhongProperty blinnPhong = new PhongProperty();
+            blinnPhong.Activate("Blinn-Phong");
+            blinnPhong.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Blinn-Phong", blinnPhong);
+
+            // Cook-Torrance
+            Shaders.Add(new Shader("Cook-Torrance", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightCookTorrance.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightCookTorrance.glsl"))));
+            CookTorranceProperty cookTorrence = new CookTorranceProperty();
             cookTorrence.Activate();
             cookTorrence.ChangeLight(Lights[ActiveLightIndex]);
-            ShadersProperties.Add("Cook-Torrence", cookTorrence);
+            ShadersProperties.Add("Cook-Torrance", cookTorrence);
 
-            // Cook-Torrence
+            // Ward
             Shaders.Add(new Shader("Ward", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
             WardProperty ward = new WardProperty();
             ward.Activate();
             ward.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Ward", ward);
 
+            // Ward
+            Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));
+            AshikhminShirleyProperty ashikhminShirley = new AshikhminShirleyProperty();
+            ashikhminShirley.Activate();
+            ashikhminShirley.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ashikhmin-Shirley", ashikhminShirley);
+
+            #endregion
 
             ActiveShaderIndex = 0;
 
@@ -170,9 +193,11 @@ namespace Version2
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
 
             AddDataFromShadersProperties();
-           
 
-           //  Objects
+
+            //  Objects
+
+            #region objects
             ObjVolume blackPlainBall = new ObjVolume();
             blackPlainBall.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "ballPlain.obj");
             blackPlainBall.Name = "Plain ball";
@@ -199,11 +224,13 @@ namespace Version2
             monkey.UpdateVolume += UpdateVolume;
             Objects.Add(monkey);
 
-            ObjVolume smoothMonkey = new ObjVolume();
-            smoothMonkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "smoothMonkey.obj");
-            smoothMonkey.Name = "Smooth Monkey";
-            smoothMonkey.UpdateVolume += UpdateVolume;
-            Objects.Add(smoothMonkey);
+            //ObjVolume smoothMonkey = new ObjVolume();
+            //smoothMonkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "smoothMonkey.obj");
+            //smoothMonkey.Name = "Smooth Monkey";
+            //smoothMonkey.UpdateVolume += UpdateVolume;
+            //Objects.Add(smoothMonkey);
+
+            #endregion
         }
 
         //
@@ -342,49 +369,12 @@ namespace Version2
         // used instead of glutReshapeFunc
         private void OnResize(object sender, EventArgs e)
         {
-           // Shaders[ActiveShaderIndex].GetShaderProgram().Use();
+            Shaders[ActiveShaderIndex].GetShaderProgram().Use();
         }
 
         //
         private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
         {
-            // shaders control
-            //if (e.KeyCode == Keys.D1)
-            //    ActiveShaderIndex = 0;
-
-            //if (e.KeyCode == Keys.D2)
-            //    ActiveShaderIndex = 1;
-
-            //if (e.KeyCode == Keys.D3)
-            //    ActiveShaderIndex = 2;
-
-            // light control
-            //if (e.KeyCode == Keys.D0)
-            //{
-            //    ActiveLightIndex = 0;
-            //    string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
-            //    if (ShadersProperties.ContainsKey(activeShaderName))
-            //        ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
-            //}
-
-            //if (e.KeyCode == Keys.D9)
-            //{
-            //    ActiveLightIndex = 1;
-            //    string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
-            //    if (ShadersProperties.ContainsKey(activeShaderName))
-            //        ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
-            //}
-
-            // active object control
-            //if (e.KeyCode == Keys.NumPad1)
-            //    ActiveObjectIndex = 0;
-
-            //if (e.KeyCode == Keys.NumPad2)
-            //    ActiveObjectIndex = 1;
-
-            //if (e.KeyCode == Keys.NumPad3)
-            //    ActiveObjectIndex = 2;
-
             // rotation control
             if (e.KeyCode == Keys.P)
                 RotateObject(Objects[ActiveObjectIndex], 1, 0, 0);
@@ -457,8 +447,11 @@ namespace Version2
         {
             ActiveLightIndex = lightsList.SelectedIndex;
             string activeShaderName = Shaders[ActiveShaderIndex].GetShaderName();
-            if (ShadersProperties.ContainsKey(activeShaderName))
-                ShadersProperties[activeShaderName].ChangeLight(Lights[ActiveLightIndex]);
+            foreach (KeyValuePair<string,ShadersProperty> shader in ShadersProperties)
+            {
+                shader.Value.ChangeLight(Lights[ActiveLightIndex]);   
+            }
+            
             UpdateShadersPropertiesForms();
         }
 
