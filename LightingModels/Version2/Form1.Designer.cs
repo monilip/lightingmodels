@@ -51,6 +51,7 @@
             this.scaleX = new System.Windows.Forms.TextBox();
             this.xyzlabel3 = new System.Windows.Forms.Label();
             this.scaleLabel = new System.Windows.Forms.Label();
+            this.renderScene = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // simpleOpenGlControl1
@@ -262,11 +263,22 @@
             this.scaleLabel.TabIndex = 47;
             this.scaleLabel.Text = "Scale";
             // 
+            // renderScene
+            // 
+            this.renderScene.Location = new System.Drawing.Point(12, 484);
+            this.renderScene.Name = "renderScene";
+            this.renderScene.Size = new System.Drawing.Size(75, 23);
+            this.renderScene.TabIndex = 52;
+            this.renderScene.Text = "Render scene";
+            this.renderScene.UseVisualStyleBackColor = true;
+            this.renderScene.Click += new System.EventHandler(this.renderScene_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 561);
+            this.Controls.Add(this.renderScene);
             this.Controls.Add(this.scaleZ);
             this.Controls.Add(this.scaleY);
             this.Controls.Add(this.scaleX);
@@ -322,6 +334,7 @@
         private System.Windows.Forms.TextBox scaleX;
         private System.Windows.Forms.Label xyzlabel3;
         private System.Windows.Forms.Label scaleLabel;
+        private System.Windows.Forms.Button renderScene;
 
     }
 }

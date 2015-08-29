@@ -32,5 +32,37 @@ namespace Version2
         public virtual void ChangeLight(Light light)
         {
         }
+
+        public void SetVector3Property(string propertyName, Vector3 vec3)
+        {
+            if (Vector3Properties.ContainsKey(propertyName))
+                Vector3Properties.Remove(propertyName);
+
+            Vector3Properties.Add(propertyName, vec3);
+        }
+
+        public Vector3 GetVector3Property(string vec3Name)
+        {
+            if (Vector3Properties.ContainsKey(vec3Name))
+                return Vector3Properties[vec3Name];
+            else
+                return Vector3.Zero;
+        }
+
+        public void SetFloatProperty(string propertyName, float f)
+        {
+            if (FloatProperties.ContainsKey(propertyName))
+                FloatProperties.Remove(propertyName);
+
+            FloatProperties.Add(propertyName, f);
+        }
+
+        public float GetFloatProperty(string floatName)
+        {
+            if (FloatProperties.ContainsKey(floatName))
+                return FloatProperties[floatName];
+            else 
+                return 0.0f;
+        }
     }
 }

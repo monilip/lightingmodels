@@ -28,7 +28,7 @@ namespace Version2
         private int measureTimeFrames = 5;
         private int measureTimeFrameNumber = 0;
         private double measuredTime = 0;
-
+        private bool isSceneInited = false;
         public Form1()
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace Version2
 
             InitScene();
 
-            Application.Idle += OnRenderFrame;
+           // Application.Idle += OnRenderFrame;
 
             // init GUI varriables
             # region GUI
@@ -52,7 +52,7 @@ namespace Version2
                 shadersList.Items.Add(shader.GetShaderName());
             }
 
-            shadersList.SelectedIndex = 2;
+            shadersList.SelectedIndex = 0;
 
             // add lights to droplist
             foreach (Light light in Lights)
@@ -68,11 +68,13 @@ namespace Version2
                 objectsList.Items.Add(volume.Name);
             }
 
-            objectsList.SelectedIndex = 3;
+            objectsList.SelectedIndex = 0;
 
             // update object's parameters
             UpdateObjectParameters();
             # endregion
+
+            OnRenderFrame();
         }
 
         //
@@ -83,6 +85,49 @@ namespace Version2
             UpdateObjectRotationParameters();
 
             UpdateObjectScaleParameters();
+
+            UpdateObjectMaterialParameters(false);
+
+            // update shaders properies
+            UpdateShadersPropertiesForms();
+            OnRenderFrame();
+        }
+
+        private void UpdateObjectMaterialParameters(bool checkIfNew = true)
+        {
+            if (Objects[ActiveObjectIndex].Material != null)
+            {
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ka", Objects[ActiveObjectIndex].Material.Ka);
+                }
+
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Kd", Objects[ActiveObjectIndex].Material.Kd);
+                }
+
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ks", Objects[ActiveObjectIndex].Material.Ks);
+                }
+
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetFloatProperty("Ns") == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetFloatProperty("Ns", Objects[ActiveObjectIndex].Material.Ns);
+                }
+
+            }
         }
 
         // 
@@ -137,10 +182,10 @@ namespace Version2
             #region shaders
             // Load shaders from files
             // Default
-            Shaders.Add(new Shader("default", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs.glsl"), System.IO.File.ReadAllText(@"glsl/fs.glsl"))));
+            //Shaders.Add(new Shader("default", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs.glsl"), System.IO.File.ReadAllText(@"glsl/fs.glsl"))));
 
-            // With Texture
-            Shaders.Add(new Shader("textured", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_text.glsl"), System.IO.File.ReadAllText(@"glsl/fs_text.glsl"))));
+            //// With Texture
+            //Shaders.Add(new Shader("textured", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_text.glsl"), System.IO.File.ReadAllText(@"glsl/fs_text.glsl"))));
 
             // Lambert
             Shaders.Add(new Shader("Lambert", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightLambert.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightLambert.glsl"))));
@@ -231,6 +276,10 @@ namespace Version2
             //Objects.Add(smoothMonkey);
 
             #endregion
+
+
+            isSceneInited = true;
+
         }
 
         //
@@ -262,8 +311,12 @@ namespace Version2
             }
         }
 
-        private void OnRenderFrame(object sender, EventArgs e)
+        //private void OnRenderFrame(object sender, EventArgs e)
+        private void OnRenderFrame()
         {
+            if (isSceneInited == false)
+                return;
+
             if (measureTimeOfRenderFrame == true)
             { 
                 stopWatch = new Stopwatch();
@@ -281,9 +334,6 @@ namespace Version2
 
             Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
             Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
-
-            //  add data from ShadersProperties      
-            AddDataFromShadersProperties();
 
 
              //foreach (Volume volume in Objects)
@@ -313,29 +363,14 @@ namespace Version2
                     Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
                 Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
 
-                // set uniforms parametrs for material (if volume has them)
-                if (volume.Material != null)
-                {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"].SetValue(volume.Material.Ka);
-                    }
+                // update material parameters
+                UpdateObjectMaterialParameters();
 
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"].SetValue(volume.Material.Kd);
-                    }
+                // update shaders properies
+                UpdateShadersPropertiesForms();
 
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"].SetValue(volume.Material.Ks);
-                    }
-
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
-                    {
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"].SetValue(volume.Material.Ns);
-                    }
-                }
+                //  add data from ShadersProperties      
+                AddDataFromShadersProperties();
 
                 Gl.BindBuffer(volume.TrianglesVBO);
 
@@ -439,7 +474,14 @@ namespace Version2
         private void shadersList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActiveShaderIndex = shadersList.SelectedIndex;
+            // update material parameters
+            UpdateObjectMaterialParameters();
+
+            // update shaders properies
             UpdateShadersPropertiesForms();
+
+
+            OnRenderFrame();
         }
 
         //
@@ -453,6 +495,8 @@ namespace Version2
             }
             
             UpdateShadersPropertiesForms();
+
+            OnRenderFrame();
         }
 
         //
@@ -460,6 +504,7 @@ namespace Version2
         {
             ActiveObjectIndex = objectsList.SelectedIndex;
             UpdateObjectParameters();
+
         }
 
         //
@@ -485,6 +530,8 @@ namespace Version2
                 default:
                     break;
             }
+
+            OnRenderFrame();
         }
 
         //
@@ -513,6 +560,8 @@ namespace Version2
                 default:
                     break;
             }
+
+            OnRenderFrame();
         }
 
         //
@@ -538,6 +587,8 @@ namespace Version2
                 default:
                     break;
             }
+
+            OnRenderFrame();
         }
 
         //
@@ -554,6 +605,8 @@ namespace Version2
                 default:
                     break;
             }
+
+            OnRenderFrame();
         }
 
         //
@@ -624,7 +677,7 @@ namespace Version2
                             textBox.Top = top;
                             textBox.Name = property.Item1;
                             textBox.Location = new Point(label.Right + 5, top);
-                            textBox.Width = 30;
+                            textBox.Width = 100;
                             shadersPanel.Controls.Add(textBox);
 
                             top += label.Height;
@@ -673,6 +726,13 @@ namespace Version2
 
             ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].FloatProperties = floatProperties;
             ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].Vector3Properties = vector3Properties;
+
+            OnRenderFrame();
+        }
+
+        private void renderScene_Click(object sender, EventArgs e)
+        {
+            OnRenderFrame();
         }
 
         # endregion

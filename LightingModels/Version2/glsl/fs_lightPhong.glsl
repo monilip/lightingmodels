@@ -11,7 +11,7 @@ out vec4 outputColor;
 
 uniform sampler2D maintexture;
 
-uniform float n;
+//uniform float n;
 uniform vec3 lightPos;
 uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
@@ -41,7 +41,7 @@ void main()
 
 	if(diffuse > 0.0) {
        float specAngle = max(dot(R, V), 0.0);
-       specular = pow(specAngle, Ns * n); 
+       specular = pow(specAngle, Ns); 
     }
 	
 	vec3 Amb = ambientColor;	
