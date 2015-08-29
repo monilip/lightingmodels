@@ -36,8 +36,9 @@ void main()
 
 	float lambert = max(dot(N,L), 0.0);
 
-	vec3 Dif = clamp(lambert*diffuseColor * Kd,0.0f,1.0f);
-	
+	vec3 Amb = ambientColor;	
+	vec3 Dif = diffuseColor;
+
 	// texture or color
 	if (isTexture == true)
 	{
@@ -52,5 +53,7 @@ void main()
 		Dif.b +=f_color.b;
 	}
 	
-	outputColor = vec4(Dif, 1.0f);
+	Amb = Amb * Ka;
+	Dif = Dif * lambert * Kd;
+	outputColor = vec4(Amb + Dif, 1.0f);
 }
