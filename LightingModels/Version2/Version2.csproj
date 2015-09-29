@@ -73,6 +73,7 @@
     <Compile Include="Scene\ShaderProgram.cs" />
     <Compile Include="ShadersProperties\CookTorranceProperty.cs" />
     <Compile Include="ShadersProperties\AshikhminShirleyProperty.cs" />
+    <Compile Include="ShadersProperties\Ward2Property.cs" />
     <Compile Include="ShadersProperties\LambertProperty.cs" />
     <Compile Include="ShadersProperties\WardProperty.cs" />
     <Compile Include="ShadersProperties\PhongProperty.cs" />
@@ -91,6 +92,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="glsl\fs_lightWard2.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="glsl\vs_lightAshikhminShirley.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -161,12 +165,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="models\monkey.obj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="models\smoothMonkey.mtl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="models\smoothMonkey.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">

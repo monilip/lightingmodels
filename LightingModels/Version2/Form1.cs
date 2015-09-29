@@ -167,7 +167,7 @@ namespace Version2
             Light ligthWhite = new Light("ligthWhite");
             ligthWhite.Position = new Vector3(5.0f, 5.0f, 1.0f);
             ligthWhite.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-            ligthWhite.Diffuse = new Vector3(0.2f, 0.2f, 0.2f);
+            ligthWhite.Diffuse = new Vector3(0.2f, 0.3f, 0.2f);
             ligthWhite.Specular = new Vector3(1.0f, 1.0f, 1.0f);
             Lights.Add(ligthWhite);
 
@@ -216,11 +216,19 @@ namespace Version2
             ShadersProperties.Add("Cook-Torrance", cookTorrence);
 
             // Ward
-            Shaders.Add(new Shader("Ward", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
+            Shaders.Add(new Shader("Ward anizotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
             WardProperty ward = new WardProperty();
             ward.Activate();
             ward.ChangeLight(Lights[ActiveLightIndex]);
-            ShadersProperties.Add("Ward", ward);
+            ShadersProperties.Add("Ward anizotropic", ward);
+
+            // Ward
+            Shaders.Add(new Shader("Ward isotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard2.glsl"))));
+            Ward2Property ward2 = new Ward2Property();
+            ward2.Activate();
+            ward2.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ward isotropic", ward2);
+
 
             // Ward
             Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));

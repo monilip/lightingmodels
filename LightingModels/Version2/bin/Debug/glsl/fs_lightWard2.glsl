@@ -15,8 +15,7 @@ uniform vec3 lightPos;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 
-uniform float alphaX;
-uniform float alphaY;
+uniform float m;
 
 uniform bool isTexture;
 
@@ -28,9 +27,9 @@ void main()
 	// Ward
 	// I = (Pd + Spec) * NdotL;
 
-	// Spec = Ps * 1 / ( 4 * PI * alphaX * alphaY * sqrt(NdotL * NdotV)) * exp(Beta) 
+	// Spec = Ps * 1 / ( 4 * PI * m * m * sqrt(NdotL * NdotV)) * exp(Beta) 
 
-	// Beta = - pow( tan( acos( HdotN ) ), 2 ) * (pow( HdotT/alphaX, 2) + pow (HdotB/alphaY, 2))/ 
+	// Beta = -pow( tan( acos( HdotN ) ), 2 ) / (m * m)
 
 	// HdotT = max(dot(H,T),0.0)
 	// HdotB = max(dot(H,B),0.0)
@@ -38,7 +37,7 @@ void main()
 
 	// T = normalize(cross(N,epsilon));
 	// B = normalize(cross(N,T));
-	// epsilon = Vector3(0.0,0.0,-1.0);	
+	// epsilon = Vector3(0.0,0.0,-1.0);
 
 	// Pd = diffuseColor * Kd
 	// Ps = specColor * Ks
@@ -76,9 +75,9 @@ void main()
 	float HdotB = dot(H,B);
 	float HdotN = dot(H,N);
 
-	float Beta = - pow( tan( HdotN ), 2 )  * ((HdotT/alphaX * HdotT/alphaX + HdotB/alphaY * HdotB/alphaY));
-	 
-	vec3 Spec = Ps * 1.0f / max(0.2,((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))) * exp(Beta);
+	float Beta = -pow( tan( acos( HdotN ) ), 2 ) / (m * m);
+	
+	vec3 Spec = Ps * 1.0f / max(0.1,((4.0f * PI * m * m) * sqrt(NdotL * NdotV))) * exp(Beta);
 
 
 	Pd *= Kd;

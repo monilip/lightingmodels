@@ -26,9 +26,8 @@ uniform bool isTexture;
 void main() 
 {
 	// Lambert
-	// I = ambientColor + diffuse * diffuseColor + specular*specularColor;
+	// I = ambientColor + diffuse * diffuseColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
-	// specular = cos(B)^n, B -> angle between reflected light direction and vector to viewer
 
 	// ancillary variables
 	vec3 N = normalize(f_normal);

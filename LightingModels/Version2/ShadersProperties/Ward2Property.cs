@@ -9,12 +9,12 @@ using OpenGL;
 // Class for all Cook-Torrence lighting properties
 namespace Version2
 {
-    class WardProperty : ShadersProperty
+    class Ward2Property : ShadersProperty
     {
         //
         public void Activate()
         {
-            ShaderName = "Ward anizotropic";
+            ShaderName = "Ward isotropic";
 
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
@@ -23,8 +23,7 @@ namespace Version2
             Vector3Properties.Add("Kd", Vector3.Zero);
             Vector3Properties.Add("Ks", Vector3.Zero);
 
-            FloatProperties.Add("alphaX", 0.1f);
-            FloatProperties.Add("alphaY", 0.2f);
+            FloatProperties.Add("m", 0.2f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
@@ -33,8 +32,7 @@ namespace Version2
                 Tuple.Create("Kd", ShadersProperty.Type.VECTOR3,"Kd"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
                 Tuple.Create("Ks", ShadersProperty.Type.VECTOR3,"Ks"),
-                Tuple.Create("Alpha X", ShadersProperty.Type.FLOAT,"alphaX"),
-                Tuple.Create("Alpha Y", ShadersProperty.Type.FLOAT,"alphaY"),
+                Tuple.Create("m", ShadersProperty.Type.FLOAT,"m"),
             };
         }
 

@@ -28,8 +28,6 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\mon
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\monkey.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballPlain.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\ballPlain.obj
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.mtl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\smoothMonkey.obj
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightWard.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightWard.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightBlinnPhong.glsl
@@ -40,3 +38,4 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_li
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightCookTorrance.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightAshikhminShirley.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightAshikhminShirley.glsl
+C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightWard2.glsl

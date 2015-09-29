@@ -95,7 +95,7 @@ void main()
 	}
 	else
 	{
-		Dif = diffuseColor * Kd;
+		Dif = diffuseColor;
 
 		Dif += vec3(f_color);
 	}	

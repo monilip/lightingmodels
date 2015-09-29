@@ -26,7 +26,7 @@ uniform bool isTexture;
 void main() 
 {
 	// Lambert
-	// I = ambientColor + diffuse * diffuseColor + specular*specularColor;
+	// I = ambientColor + diffuse * diffuseColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
 
 	// ancillary variables
