@@ -238,11 +238,11 @@ namespace Version2
 
 
             //// Ashikhmin-Shirley
-            //Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));
-            //AshikhminShirleyProperty ashikhminShirley = new AshikhminShirleyProperty();
-            //ashikhminShirley.Activate();
-            //ashikhminShirley.ChangeLight(Lights[ActiveLightIndex]);
-            //ShadersProperties.Add("Ashikhmin-Shirley", ashikhminShirley);
+            Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));
+            AshikhminShirleyProperty ashikhminShirley = new AshikhminShirleyProperty();
+            ashikhminShirley.Activate();
+            ashikhminShirley.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ashikhmin-Shirley", ashikhminShirley);
 
             #endregion
 

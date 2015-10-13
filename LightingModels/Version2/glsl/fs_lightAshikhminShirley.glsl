@@ -73,7 +73,7 @@ void main()
 	float PD_NdotL = 1.0 - pow(1.0 - (0.5 * NdotL), 5.0);
 	float PD_NdotV = 1.0 - pow(1.0 - (0.5 * NdotV), 5.0);  
   
-	vec3 Diffuse =  (28.0 ) / (23.0 * PI) * (1.0 - Rs) * PD_NdotL * PD_NdotV;
+	vec3 Diffuse =  (28.0 * Rd) / (23.0 * PI) * (1.0 - Rs) * PD_NdotL * PD_NdotV;
 	Diffuse *= lighter; 
   
 	float PS_denominator = 8.0 * PI * HdotL * max(NdotL, NdotV);

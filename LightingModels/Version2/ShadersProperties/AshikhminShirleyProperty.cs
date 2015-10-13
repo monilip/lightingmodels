@@ -23,7 +23,7 @@ namespace Version2
 
             FloatProperties.Add("Nu", 35.0f);
             FloatProperties.Add("Nv", 50.0f);
-            FloatProperties.Add("lighter", 2.0f);
+            FloatProperties.Add("lighter", 5.0f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
