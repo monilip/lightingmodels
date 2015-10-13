@@ -20,6 +20,8 @@ namespace Version2
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
+            Vector3Properties.Add("Kd", Vector3.Zero);
+            Vector3Properties.Add("Ks", Vector3.Zero);
 
             FloatProperties.Add("alphaX", 0.1f);
             FloatProperties.Add("alphaY", 0.2f);
@@ -28,7 +30,9 @@ namespace Version2
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
+                Tuple.Create("Kd", ShadersProperty.Type.VECTOR3,"Kd"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
+                Tuple.Create("Ks", ShadersProperty.Type.VECTOR3,"Ks"),
                 Tuple.Create("Alpha X", ShadersProperty.Type.FLOAT,"alphaX"),
                 Tuple.Create("Alpha Y", ShadersProperty.Type.FLOAT,"alphaY"),
             };

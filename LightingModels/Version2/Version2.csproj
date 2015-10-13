@@ -73,7 +73,6 @@
     <Compile Include="Scene\ShaderProgram.cs" />
     <Compile Include="ShadersProperties\CookTorranceProperty.cs" />
     <Compile Include="ShadersProperties\AshikhminShirleyProperty.cs" />
-    <Compile Include="ShadersProperties\StraussProperty.cs" />
     <Compile Include="ShadersProperties\Ward2Property.cs" />
     <Compile Include="ShadersProperties\LambertProperty.cs" />
     <Compile Include="ShadersProperties\WardProperty.cs" />
@@ -93,15 +92,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="glsl\Copy of fs_lightStrauss.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="glsl\fs_lightStrauss.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="glsl\vs_lightStrauss.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="glsl\fs_lightWard2.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

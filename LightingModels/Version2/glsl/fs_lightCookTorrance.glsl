@@ -20,6 +20,10 @@ uniform float m;
 
 uniform bool isTexture;
 
+uniform vec3 Ka;
+uniform vec3 Kd;
+uniform vec3 Ks;
+
 void main() 
 {
 	// Cook-Torrance
@@ -96,6 +100,6 @@ void main()
 		Dif += vec3(f_color);
 	}	
 	
-	vec3 lighting = max(0.0, NdotL) * (specularColor * RS + Dif);
+	vec3 lighting = max(0.0, NdotL) * (specularColor * Ks * RS + Dif * Kd);
 	outputColor = vec4(lighting,1.0);
 }

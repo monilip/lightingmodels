@@ -19,6 +19,9 @@ uniform float m;
 
 uniform bool isTexture;
 
+uniform vec3 Kd;
+uniform vec3 Ks;
+
 void main() 
 {
 	// Ward
@@ -64,7 +67,7 @@ void main()
 		Pd += vec3(f_color);
 	}
 
-	vec3 Ps = specularColor;
+	vec3 Ps = specularColor * Ks;
 	vec3 epsilon = vec3(0.0f,0.0f,-1.0f); 
 	vec3 T = normalize(cross(N,epsilon));
 	vec3 B = normalize(cross(N,T));
@@ -76,6 +79,8 @@ void main()
 	
 	vec3 Spec = Ps * 1.0f / max(0.1,((4.0f * PI * m * m) * sqrt(NdotL * NdotV))) * exp(Beta);
 
+
+	Pd *= Kd;
 	vec3 lighting = NdotL * (Pd + Spec);//, 0.0, 1.0);
 	outputColor = vec4(lighting,1.0);
 }

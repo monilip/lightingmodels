@@ -20,6 +20,9 @@ uniform float alphaY;
 
 uniform bool isTexture;
 
+uniform vec3 Kd;
+uniform vec3 Ks;
+
 void main() 
 {
 	// Ward
@@ -37,8 +40,8 @@ void main()
 	// B = normalize(cross(N,T));
 	// epsilon = Vector3(0.0,0.0,-1.0);	
 
-	// Pd = diffuseColor;
-	// Ps = specColor;
+	// Pd = diffuseColor * Kd
+	// Ps = specColor * Ks
 	
 	// ancillary variables
 	vec3 N = normalize(f_normal);
@@ -65,7 +68,7 @@ void main()
 		Pd += vec3(f_color);
 	}
 
-	vec3 Ps = specularColor;
+	vec3 Ps = specularColor * Ks;
 	vec3 epsilon = vec3(0.0f,0.0f,-1.0f); 
 	vec3 T = normalize(cross(N,epsilon));
 	vec3 B = normalize(cross(N,T));
@@ -73,10 +76,12 @@ void main()
 	float HdotB = dot(H,B);
 	float HdotN = dot(H,N);
 
-	float Beta = - pow( tan( acos(HdotN )), 2 )  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
-	vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV)) * exp(Beta);
+	float Beta = - pow( tan( HdotN ), 2 )  * ((HdotT/alphaX * HdotT/alphaX + HdotB/alphaY * HdotB/alphaY));
+	 
+	vec3 Spec = Ps * 1.0f / max(0.2,((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))) * exp(Beta);
 
-	vec3 lighting = NdotL * (Pd + Spec);
+
+	Pd *= Kd;
+	vec3 lighting = NdotL * (Pd + Spec);//, 0.0, 1.0);
 	outputColor = vec4(lighting,1.0);
 }
-

@@ -1,5 +1,5 @@
 ﻿#version 330
-#define PI 3.14159
+#define PI 3.14159265358
 precision mediump float;
 
 in vec3 f_normal;
@@ -17,9 +17,12 @@ uniform vec3 specularColor;
 
 uniform float Nu;
 uniform float Nv;
-
+uniform vec3 Rs; //color (spectrum or RGB) that specifies the specular reflectance at normal incidence???
 uniform float lighter; // PD is too dark, need's to be lighter
 uniform bool isTexture;
+
+uniform vec3 Kd;
+uniform vec3 Ks;
 
 void main() 
 {
@@ -43,8 +46,8 @@ void main()
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);	
 	vec3 H = normalize(L + V);
-	float NdotL = dot(N,L); 
-	float NdotV = dot(N,V);
+	float NdotL = clamp(dot(N,L),0.0,1.0); 
+	float NdotV = clamp(dot(N,V),0.0,1.0);
 
 	vec3 epsilon = vec3(1.0,0.0,0.0); 
 	vec3 T = normalize(cross(N,epsilon));
@@ -57,8 +60,7 @@ void main()
 
 	// uniform
 	vec3 Rd = diffuseColor;
-	vec3 Rs = specularColor;
-	
+
 	if (isTexture == true)
 	{
 		Rd.r +=texture2D(maintexture, f_texcoord).r;
@@ -70,22 +72,25 @@ void main()
 		Rd += vec3(f_color);
 	}
 
-	float PD_NdotL = 1.0 - pow(1.0 - (0.5 * NdotL), 5.0);
-	float PD_NdotV = 1.0 - pow(1.0 - (0.5 * NdotV), 5.0);  
+	float PD_NdotL = 1.0 - pow(1.0 - 0.5 * NdotL, 5);
+	float PD_NdotV = 1.0 - pow(1.0 - 0.5 * NdotV, 5);  
   
-	vec3 Diffuse =  (28.0 ) / (23.0 * PI) * (1.0 - Rs) * PD_NdotL * PD_NdotV;
-	Diffuse *= lighter; 
+	vec3 PD = (28.0 * Rd) / (23.0 * PI) * (vec3(1.0) - Rs)* PD_NdotL * PD_NdotV;
+	PD *= lighter;
   
 	float PS_denominator = 8.0 * PI * HdotL * max(NdotL, NdotV);
 	float PS_exp = (Nu * HdotT * HdotT + Nv * HdotB * HdotB) / (1.0 - HdotN * HdotN); 
 	float PS_sqrt = sqrt((Nu + 1.0) * (Nv + 1.0));
 	float PS_numerator = PS_sqrt  * pow(HdotN, PS_exp);
 
-	float Fresnel = (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL);
-	Fresnel *= float(1.0 - Rs);
+	float Fresnel = (1.0-HdotV) * (1.0-HdotV) * (1.0-HdotV) * (1.0-HdotV) * (1.0-HdotV);
+	Fresnel *= float(vec3(1.0) - Rs);
 	Fresnel += Rs;
-	vec3 Specular = Rs * (PS_numerator / PS_denominator ) * Fresnel;	
+	vec3 PS = specularColor * (PS_numerator / PS_denominator ) ;//* Fresnel;	
 
+	PD *= Kd;
+	PS *= Ks;
 
-	outputColor = vec4(Specular + Diffuse,1.0);
+	outputColor = vec4(PS + PD,1.0);
+	//outputColor = vec4(vec3(1),1.0);
 }
