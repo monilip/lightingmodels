@@ -97,29 +97,29 @@ namespace Version2
         {
             if (Objects[ActiveObjectIndex].Material != null)
             {
-                //if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"] != null)
-                //{
-                //    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").x == 0 &&
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").y == 0 &
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").z == 0) || checkIfNew == false)
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ka", Objects[ActiveObjectIndex].Material.Ka);
-                //}
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ka"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ka").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ka", Objects[ActiveObjectIndex].Material.Ka);
+                }
 
-                //if (Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"] != null)
-                //{
-                //    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").x == 0 &&
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").y == 0 &
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").z == 0) || checkIfNew == false)
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Kd", Objects[ActiveObjectIndex].Material.Kd);
-                //}
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Kd"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Kd").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Kd", Objects[ActiveObjectIndex].Material.Kd);
+                }
 
-                //if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"] != null)
-                //{
-                //    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").x == 0 &&
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").y == 0 &
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").z == 0) || checkIfNew == false)
-                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ks", Objects[ActiveObjectIndex].Material.Ks);
-                //}
+                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ks"] != null)
+                {
+                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").x == 0 &&
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").y == 0 &
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetVector3Property("Ks").z == 0) || checkIfNew == false)
+                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ks", Objects[ActiveObjectIndex].Material.Ks);
+                }
 
                 if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
                 {
@@ -168,14 +168,14 @@ namespace Version2
             ligthWhite.Position = new Vector3(5.0f, 5.0f, 1.0f);
             ligthWhite.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
             ligthWhite.Diffuse = new Vector3(0.2f, 0.3f, 0.2f);
-            ligthWhite.Specular = new Vector3(0.7f, 0.7f, 0.7f);
+            ligthWhite.Specular = new Vector3(1.0f, 1.0f, 1.0f);
             Lights.Add(ligthWhite);
 
             Light ligthRed = new Light("ligthRed");
             ligthRed.Position = new Vector3(5.0f, 10.0f, 1.0f);
             ligthRed.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
             ligthRed.Diffuse = new Vector3(0.3f, 0.1f, 0.1f);
-            ligthRed.Specular = new Vector3(0.7f, 0.7f, 0.7f); 
+            ligthRed.Specular = new Vector3(1.0f, 0.1f, 0.1f);
             Lights.Add(ligthRed);
 
             // Shaders
@@ -215,19 +215,12 @@ namespace Version2
             cookTorrence.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Cook-Torrance", cookTorrence);
 
-            //Strauss
-            Shaders.Add(new Shader("Strauss", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightStrauss.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightStrauss.glsl"))));
-            StraussProperty strauss = new StraussProperty();
-            strauss.Activate();
-            strauss.ChangeLight(Lights[ActiveLightIndex]);
-            ShadersProperties.Add("Strauss", strauss);
-
             // Ward
-            //Shaders.Add(new Shader("Ward anizotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
-            //WardProperty ward = new WardProperty();
-            //ward.Activate();
-            //ward.ChangeLight(Lights[ActiveLightIndex]);
-            //ShadersProperties.Add("Ward anizotropic", ward);
+            Shaders.Add(new Shader("Ward anizotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
+            WardProperty ward = new WardProperty();
+            ward.Activate();
+            ward.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ward anizotropic", ward);
 
             // Ward
             Shaders.Add(new Shader("Ward isotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard2.glsl"))));
@@ -237,12 +230,12 @@ namespace Version2
             ShadersProperties.Add("Ward isotropic", ward2);
 
 
-            //// Ashikhmin-Shirley
-            //Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));
-            //AshikhminShirleyProperty ashikhminShirley = new AshikhminShirleyProperty();
-            //ashikhminShirley.Activate();
-            //ashikhminShirley.ChangeLight(Lights[ActiveLightIndex]);
-            //ShadersProperties.Add("Ashikhmin-Shirley", ashikhminShirley);
+            // Ward
+            Shaders.Add(new Shader("Ashikhmin-Shirley", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightAshikhminShirley.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightAshikhminShirley.glsl"))));
+            AshikhminShirleyProperty ashikhminShirley = new AshikhminShirleyProperty();
+            ashikhminShirley.Activate();
+            ashikhminShirley.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ashikhmin-Shirley", ashikhminShirley);
 
             #endregion
 

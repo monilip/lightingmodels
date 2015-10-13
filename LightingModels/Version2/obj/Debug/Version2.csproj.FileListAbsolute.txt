@@ -39,6 +39,3 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_li
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightAshikhminShirley.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightAshikhminShirley.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightWard2.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightStrauss.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightStrauss.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\Copy of fs_lightStrauss.glsl

@@ -19,11 +19,19 @@ namespace Version2
             // default light properties
             Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
+            Vector3Properties.Add("ambientColor", new Vector3(1.0f, 1.0f, 1.0f));
+            Vector3Properties.Add("Kd", Vector3.Zero);
+            Vector3Properties.Add("Ka", Vector3.Zero);
+
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
-                Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),       
-                Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),                
+                Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
+                Tuple.Create("Ambient color", ShadersProperty.Type.VECTOR3,"ambientColor"),
+                Tuple.Create("Ka", ShadersProperty.Type.VECTOR3,"Ka"),
+                Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
+                Tuple.Create("Kd", ShadersProperty.Type.VECTOR3,"Kd"),
+                
             };
         }
 
