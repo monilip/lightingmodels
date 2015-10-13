@@ -16,9 +16,6 @@ uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 
-uniform vec3 Ka;
-uniform vec3 Kd;
-uniform vec3 Ks;
 uniform float Ns;
 
 uniform bool isTexture;
@@ -61,9 +58,9 @@ void main()
 		Dif.b +=f_color.b;
 	}
 
-	Amb = Amb * Ka;
-	Dif = diffuse*Dif * Kd;
-	Spec = specular*Spec * Ks;
+	Amb = Amb;
+	Dif = diffuse*Dif;
+	Spec = specular*Spec ;;
 
 	outputColor = vec4(Amb + Dif + Spec, 1.0f);
 }

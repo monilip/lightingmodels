@@ -17,9 +17,6 @@ uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 
-uniform vec3 Ka;
-uniform vec3 Kd;
-uniform vec3 Ks;
 uniform float Ns;
 
 uniform bool isTexture;
@@ -35,7 +32,6 @@ void main()
 
 	float lambert = max(dot(N,L), 0.0);
 
-	vec3 Amb = ambientColor;	
 	vec3 Dif = diffuseColor;
 
 	// texture or color
@@ -52,7 +48,6 @@ void main()
 		Dif.b +=f_color.b;
 	}
 	
-	Amb = Amb * Ka;
-	Dif = Dif * lambert * Kd;
-	outputColor = vec4(Amb + Dif, 1.0f);
+	Dif = Dif * lambert;
+	outputColor = vec4(Dif, 1.0f);
 }
