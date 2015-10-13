@@ -30,8 +30,8 @@ namespace Version2
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
                 Tuple.Create("Diffuse color", ShadersProperty.Type.VECTOR3,"diffuseColor"),
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
-                Tuple.Create("AshikhminAnisotropy X", ShadersProperty.Type.FLOAT,"Nu"),
-                Tuple.Create("AshikhminAnisotropy Y", ShadersProperty.Type.FLOAT,"Nv"),
+                Tuple.Create("Nu", ShadersProperty.Type.FLOAT,"Nu"),
+                Tuple.Create("Nv", ShadersProperty.Type.FLOAT,"Nv"),
                 Tuple.Create("Make it lighter", ShadersProperty.Type.FLOAT,"lighter"),
             };
         }

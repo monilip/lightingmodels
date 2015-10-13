@@ -174,7 +174,7 @@ namespace Version2
             Light ligthRed = new Light("ligthRed");
             ligthRed.Position = new Vector3(5.0f, 10.0f, 1.0f);
             ligthRed.Ambient = new Vector3(0.1f, 0.1f, 0.1f);
-            ligthRed.Diffuse = new Vector3(0.3f, 0.1f, 0.1f);
+            ligthRed.Diffuse = new Vector3(0.7f, 0.1f, 0.1f);
             ligthRed.Specular = new Vector3(0.7f, 0.7f, 0.7f); 
             Lights.Add(ligthRed);
 

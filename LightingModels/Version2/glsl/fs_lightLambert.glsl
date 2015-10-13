@@ -11,19 +11,15 @@ out vec4 outputColor;
 
 uniform sampler2D maintexture;
 
-uniform float n;
 uniform vec3 lightPos;
-uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
-uniform vec3 specularColor;
-
-uniform float Ns;
 
 uniform bool isTexture;
+
 void main() 
 {
 	// Lambert
-	// I = ambientColor + diffuse * diffuseColor;
+	// I = diffuse * diffuseColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
 
 	// ancillary variables

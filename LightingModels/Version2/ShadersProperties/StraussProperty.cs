@@ -27,11 +27,11 @@ namespace Version2
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
-                Tuple.Create("c", ShadersProperty.Type.VECTOR3,"diffuseColor"),
+                Tuple.Create("color of surface", ShadersProperty.Type.VECTOR3,"diffuseColor"),
              //   Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
-                Tuple.Create("m", ShadersProperty.Type.FLOAT,"m"),
-                Tuple.Create("s", ShadersProperty.Type.FLOAT,"s"),
-                Tuple.Create("t", ShadersProperty.Type.FLOAT,"t"),
+                Tuple.Create("metalicity", ShadersProperty.Type.FLOAT,"m"),
+                Tuple.Create("smoothness", ShadersProperty.Type.FLOAT,"s"),
+                Tuple.Create("transparency", ShadersProperty.Type.FLOAT,"t"),
             };
         }
 

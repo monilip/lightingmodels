@@ -93,9 +93,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="glsl\Copy of fs_lightStrauss.glsl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="glsl\fs_lightStrauss.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
