@@ -223,11 +223,11 @@ namespace Version2
             ShadersProperties.Add("Strauss", strauss);
 
             // Ward
-            //Shaders.Add(new Shader("Ward anizotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
-            //WardProperty ward = new WardProperty();
-            //ward.Activate();
-            //ward.ChangeLight(Lights[ActiveLightIndex]);
-            //ShadersProperties.Add("Ward anizotropic", ward);
+            Shaders.Add(new Shader("Ward anizotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard.glsl"))));
+            WardProperty ward = new WardProperty();
+            ward.Activate();
+            ward.ChangeLight(Lights[ActiveLightIndex]);
+            ShadersProperties.Add("Ward anizotropic", ward);
 
             // Ward
             Shaders.Add(new Shader("Ward isotropic", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightWard.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightWard2.glsl"))));
@@ -271,12 +271,12 @@ namespace Version2
             ballWithEarth.UpdateVolume += UpdateVolume;
             Objects.Add(ballWithEarth);
 
-            ObjVolume cubeWIthSquares = new ObjVolume();
-            cubeWIthSquares.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
-            cubeWIthSquares.Name = "Cube with aquares";
-            cubeWIthSquares.Rotation = new Vector3(0.3f, 0.3f, 0f);
-            cubeWIthSquares.UpdateVolume += UpdateVolume;
-            Objects.Add(cubeWIthSquares);
+            //ObjVolume cubeWIthSquares = new ObjVolume();
+            //cubeWIthSquares.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "cubeWithSquares.obj");
+            //cubeWIthSquares.Name = "Cube with squares";
+            //cubeWIthSquares.Rotation = new Vector3(0.3f, 0.3f, 0f);
+            //cubeWIthSquares.UpdateVolume += UpdateVolume;
+            //Objects.Add(cubeWIthSquares);
 
             ObjVolume monkey = new ObjVolume();
             monkey.LoadFromFileFromBlenderObj(Useful.GetModelsPath() + "monkey.obj");

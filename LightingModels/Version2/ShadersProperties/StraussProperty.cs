@@ -17,21 +17,22 @@ namespace Version2
             ShaderName = "Strauss";
 
             // default light properties
-            Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));
-            Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
-           // Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
+            Vector3Properties.Add("lightPos",new Vector3(1.0f,1.0f,1.0f));           
 
-            FloatProperties.Add("m", 0.1f);
-            FloatProperties.Add("s", 0.1f);
-            FloatProperties.Add("t", 0.3f);
+            Vector3Properties.Add("surfColor", new Vector3(0.2f,0.3f,0.2f));            
+
+            FloatProperties.Add("m", 0.3f);
+            FloatProperties.Add("s", 0.3f);
+            FloatProperties.Add("t", 0.1f);         
+
+
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {
                 Tuple.Create("Position of light", ShadersProperty.Type.VECTOR3, "lightPos"),
-                Tuple.Create("color of surface", ShadersProperty.Type.VECTOR3,"diffuseColor"),
-             //   Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
-                Tuple.Create("metalicity", ShadersProperty.Type.FLOAT,"m"),
-                Tuple.Create("smoothness", ShadersProperty.Type.FLOAT,"s"),
-                Tuple.Create("transparency", ShadersProperty.Type.FLOAT,"t"),
+                Tuple.Create("Color of surface", ShadersProperty.Type.VECTOR3,"surfColor"),
+                Tuple.Create("Metalicity", ShadersProperty.Type.FLOAT,"m"),
+                Tuple.Create("Smoothness", ShadersProperty.Type.FLOAT,"s"),
+                Tuple.Create("Transparency", ShadersProperty.Type.FLOAT,"t"),
             };
         }
 
@@ -42,15 +43,9 @@ namespace Version2
 
             // delete if light exist
             if (Vector3Properties.ContainsKey("lightPos"))
-                Vector3Properties.Remove("lightPos");
-            if (Vector3Properties.ContainsKey("diffuseColor"))
-                Vector3Properties.Remove("diffuseColor");
-          //  if (Vector3Properties.ContainsKey("specularColor"))
-          //      Vector3Properties.Remove("specularColor");
+                Vector3Properties.Remove("lightPos"); 
 
             Vector3Properties.Add("lightPos", light.Position);
-            Vector3Properties.Add("diffuseColor", light.Diffuse);
-        //    Vector3Properties.Add("specularColor", light.Specular);
         }
 
         

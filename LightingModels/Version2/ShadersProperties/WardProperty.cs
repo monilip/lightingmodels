@@ -22,7 +22,7 @@ namespace Version2
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
 
             FloatProperties.Add("alphaX", 0.1f);
-            FloatProperties.Add("alphaY", 0.2f);
+            FloatProperties.Add("alphaY", 0.1f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {

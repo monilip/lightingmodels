@@ -22,8 +22,8 @@ namespace Version2
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
 
             FloatProperties.Add("Nu", 35.0f);
-            FloatProperties.Add("Nv", 50.0f);
-            FloatProperties.Add("lighter", 5.0f);
+            FloatProperties.Add("Nv", 35.0f);
+            FloatProperties.Add("lighter", 10.0f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {

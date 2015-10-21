@@ -66,15 +66,18 @@ void main()
 	}
 
 	vec3 Ps = specularColor;
-	vec3 epsilon = vec3(0.0f,0.0f,-1.0f); 
+	vec3 epsilon = vec3(1.0f,0.0f,0.0f); 
 	vec3 T = normalize(cross(N,epsilon));
 	vec3 B = normalize(cross(N,T));
 	float HdotT = dot(H,T);
 	float HdotB = dot(H,B);
 	float HdotN = dot(H,N);
 
-	float Beta = - pow( tan( acos(HdotN )), 2 )  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
-	vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV)) * exp(Beta);
+	//float Beta = - pow( tan( acos(HdotN )), 2 )  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
+	//vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))  * exp(Beta);
+
+	float Beta = - 2  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
+	vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))  * exp(Beta/(1 + NdotH));
 
 	vec3 lighting = NdotL * (Pd + Spec);
 	outputColor = vec4(lighting,1.0);

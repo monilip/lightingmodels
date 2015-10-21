@@ -18,6 +18,7 @@ uniform vec3 specularColor;
 uniform float m;
 uniform float s;
 uniform float t;
+uniform vec3 surfColor;
 
 uniform bool isTexture;
 
@@ -58,11 +59,11 @@ void main()
 	float fNdotL = fresnel(NdotL);
 	float s_cubed = s * s * s;
 
-	// Evaluate the diffuse term
-	float d = (1.0 - m * m);
+	// Diffuse
+	float d = (1.0 - m * s);
 	float Rd = (1.0 - s_cubed) * (1.0 - t);
 
-	vec3 c = diffuseColor;
+	vec3 c = surfColor;
 	if (isTexture == true)
 	{
 		c.r +=texture2D(maintexture, f_texcoord).r;
@@ -71,33 +72,27 @@ void main()
 	}
 	else
 	{
-		c += vec3(f_color);
+		c.r +=f_color.r;
+		c.g +=f_color.g;
+		c.b +=f_color.b;
 	}
 	
-	vec3 diffuse = NdotL * d * Rd *c;
+	vec3 diffuse = NdotL * Rd * d * c;
 
-	// Compute the inputs into the specular term
-	float r = (1.0 - s) - Rd;
+	// Specular
+	float r = (1.0 - t) - Rd;
 
 	float j = fNdotL * shadow(NdotL) * shadow(NdotV);
 
-	// 'k' is used to provide small off-specular
-	// peak for very rough surfaces. Can be changed
-	// to suit desired results...
 	const float k = 0.1;
 	float reflect = min(1.0, r + j * (r + k));
 
 	vec3 C1 = vec3(1.0, 1.0, 1.0);
 	vec3 Cs = C1 + m * (1.0 - fNdotL) * (c - C1);
 
-	// Evaluate the specular term
-	vec3 specular = Cs * reflect;
-	specular *= pow(-HdotV, 3.0 / (1.0 - s));
+	vec3 specular = vec3(1) * pow(-HdotV, 3.0 / (1.0 - s)); 
+	specular *= reflect * Cs;
 
-	// Composite the final result, ensuring
-	// the values are >= 0.0 yields better results. Some
-	// combinations of inputs generate negative values which
-	// looks wrong when rendered...
 	diffuse = max(vec3(0.0), diffuse);
 	specular = max(vec3(0.0), specular);
 
