@@ -23,6 +23,7 @@ namespace Version2
 
             FloatProperties.Add("Nu", 35.0f);
             FloatProperties.Add("Nv", 35.0f);
+            FloatProperties.Add("F0", 0.7f);
             FloatProperties.Add("lighter", 10.0f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
@@ -32,6 +33,7 @@ namespace Version2
                 Tuple.Create("Specular color", ShadersProperty.Type.VECTOR3,"specularColor"),
                 Tuple.Create("Nu", ShadersProperty.Type.FLOAT,"Nu"),
                 Tuple.Create("Nv", ShadersProperty.Type.FLOAT,"Nv"),
+                Tuple.Create("Fresnel Value", ShadersProperty.Type.FLOAT,"F0"),
                 Tuple.Create("Make it lighter", ShadersProperty.Type.FLOAT,"lighter"),
             };
         }

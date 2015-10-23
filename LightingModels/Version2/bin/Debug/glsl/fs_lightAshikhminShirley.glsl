@@ -1,4 +1,4 @@
-﻿#version 330
+#version 330
 #define PI 3.14159
 precision mediump float;
 
@@ -17,6 +17,8 @@ uniform vec3 specularColor;
 
 uniform float Nu;
 uniform float Nv;
+
+uniform float F0;
 
 uniform float lighter; // diffuse is too dark, it needs to be lighter
 uniform bool isTexture;
@@ -81,8 +83,8 @@ void main()
 	float PS_numerator = PS_sqrt  * pow(HdotN, PS_exp);
 
 	float Fresnel = (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL);
-	Fresnel *= float(1.0 - Rs);
-	Fresnel += Rs;
+	Fresnel *= (1.0 - F0);
+	Fresnel +=  F0;
 
 	vec3 Specular = Rs * (PS_numerator / PS_denominator ) * Fresnel;	
 
