@@ -49,7 +49,6 @@ void main()
 
 	// RS_denominator = PI * cos(C) * cos(A)
 	
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);	
@@ -97,5 +96,6 @@ void main()
 	}	
 	
 	vec3 lighting = max(0.0, NdotL) * (specularColor * RS + Dif);
+
 	outputColor = vec4(lighting,1.0);
 }

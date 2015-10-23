@@ -39,7 +39,6 @@ void main()
 	// Pd = diffuseColor * Kd
 	// Ps = specColor * Ks
 	
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);	
@@ -76,6 +75,7 @@ void main()
 	
 	vec3 Spec = Ps * 1.0f / max(0.1,((4.0f * PI * m * m) * sqrt(NdotL * NdotV))) * exp(Beta);
 
-	vec3 lighting = NdotL * (Pd + Spec);//, 0.0, 1.0);
+	vec3 lighting = NdotL * (Pd + Spec);
+
 	outputColor = vec4(lighting,1.0);
 }

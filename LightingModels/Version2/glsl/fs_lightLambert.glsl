@@ -22,7 +22,6 @@ void main()
 	// I = diffuse * diffuseColor;
 	// diffuse = cos(A), A -> angle between light direction and normal
 
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 
@@ -45,5 +44,6 @@ void main()
 	}
 	
 	Dif = Dif * lambert;
+
 	outputColor = vec4(Dif, 1.0f);
 }

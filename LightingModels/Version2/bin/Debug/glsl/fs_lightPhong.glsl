@@ -11,7 +11,6 @@ out vec4 outputColor;
 
 uniform sampler2D maintexture;
 
-//uniform float n;
 uniform vec3 lightPos;
 uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
@@ -27,7 +26,6 @@ void main()
 	// diffuse = cos(A), A -> angle between light direction and normal
 	// specular = cos(B)^n, B -> angle between reflected light direction and vector to viewer
 
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 R = -reflect(L, N);
@@ -59,9 +57,9 @@ void main()
 		Dif.b +=f_color.b;
 	}
 	
-	Amb = Amb ;//* Ka;
-	Dif = Dif * diffuse ;//* Kd;
-	Spec = Spec * specular;// * Ks;
+	Amb = Amb ;
+	Dif = Dif * diffuse ;
+	Spec = Spec * specular;
 
 	outputColor = vec4(Amb + Dif + Spec, 1.0f);
 }

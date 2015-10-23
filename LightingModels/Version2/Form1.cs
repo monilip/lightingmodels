@@ -25,9 +25,10 @@ namespace Version2
         //
         private Stopwatch stopWatch = null;
         private bool measureTimeOfRenderFrame = false;
-        private int measureTimeFrames = 5;
-        private int measureTimeFrameNumber = 0;
+        private int measureTimeTries = 10; 
+        private int measureTimeObjects = 1;
         private double measuredTime = 0;
+        private float measureTimeTriesAverage = 0;
         private bool isSceneInited = false;
         public Form1()
         {
@@ -121,11 +122,11 @@ namespace Version2
                 //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetVector3Property("Ks", Objects[ActiveObjectIndex].Material.Ks);
                 //}
 
-                if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
-                {
-                    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetFloatProperty("Ns") == 0) || checkIfNew == false)
-                        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetFloatProperty("Ns", Objects[ActiveObjectIndex].Material.Ns);
-                }
+                //if (Shaders[ActiveShaderIndex].GetShaderProgram()["Ns"] != null)
+                //{
+                //    if ((ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].GetFloatProperty("Ns") == 0) || checkIfNew == false)
+                //        ShadersProperties[Shaders[ActiveShaderIndex].GetShaderName()].SetFloatProperty("Ns", Objects[ActiveObjectIndex].Material.Ns);
+                //}
 
             }
         }
@@ -205,6 +206,7 @@ namespace Version2
             Shaders.Add(new Shader("Blinn-Phong", new ShaderProgram(System.IO.File.ReadAllText(@"glsl/vs_lightBlinnPhong.glsl"), System.IO.File.ReadAllText(@"glsl/fs_lightBlinnPhong.glsl"))));
             PhongProperty blinnPhong = new PhongProperty();
             blinnPhong.Activate("Blinn-Phong");
+            blinnPhong.FloatProperties["Ns"] = 50.0f;
             blinnPhong.ChangeLight(Lights[ActiveLightIndex]);
             ShadersProperties.Add("Blinn-Phong", blinnPhong);
 
@@ -332,80 +334,107 @@ namespace Version2
             if (isSceneInited == false)
                 return;
 
+
+            int shadersTests = 1;
             if (measureTimeOfRenderFrame == true)
-            { 
-                stopWatch = new Stopwatch();
-                stopWatch.Start();
-                measureTimeFrameNumber++;
-            }
-
-            // set up the viewport and clear the previous depth and color buffers
-            Gl.Viewport(0, 0, SceneWidth, SceneHeight);
-            Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Gl.ClearColor(0.2f, 0.2f, 0.2f, 1);
-            // make sure the shader program and texture are being used
-            Gl.UseProgram(Shaders[ActiveShaderIndex].GetShaderProgram());
-
-
-            Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
-            Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
-
-
-             //foreach (Volume volume in Objects)
+                shadersTests = Shaders.Count * measureTimeTries;
+            for (int t = 0; t < shadersTests; t++)
             {
+                // set up the viewport and clear the previous depth and color buffers
+                Gl.Viewport(0, 0, SceneWidth, SceneHeight);
+                Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                Gl.ClearColor(0.2f, 0.2f, 0.2f, 1);
+                // make sure the shader program and texture are being used
+                Gl.UseProgram(Shaders[ActiveShaderIndex].GetShaderProgram());
+
+                Shaders[ActiveShaderIndex].GetShaderProgram()["projectionMatrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)Width / Height, 0.1f, 1000f));
+                Shaders[ActiveShaderIndex].GetShaderProgram()["viewMatrix"].SetValue(Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, Vector3.Up));
+
                 Volume volume = Objects[ActiveObjectIndex];
-
-                // bind texture
-                if (volume.GetTexture() != null)
+                int objects = 1;
+                if (measureTimeOfRenderFrame == true)
+                    objects = measureTimeObjects;
+                for (int i = 0; i < objects; i++)
                 {
-                    Gl.BindTexture(volume.GetTexture());
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"] != null)
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(true);
+                    if (measureTimeOfRenderFrame == true)
+                    {
+                        if (stopWatch == null)
+                            stopWatch = new Stopwatch();
+                        stopWatch.Start();
+                    }
+
+                    // bind texture
+                    if (volume.GetTexture() != null)
+                    {
+                        Gl.BindTexture(volume.GetTexture());
+                        if (Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"] != null)
+                            Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(true);
+                    }
+                    else
+                    {
+                        if (Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"] != null)
+                            Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(false);
+                    }
+
+                    // set uniform
+                    Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(volume.CalculateModelMatrix());
+
+                    // set shaders parameters
+                    Gl.BindBufferToShaderAttribute(volume.ColorsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vColor");
+                    Gl.BindBufferToShaderAttribute(volume.VertexsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vPosition");
+                    if (volume.UVsVBO != null)
+                        Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
+                    Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
+
+                    // update material parameters
+                    UpdateObjectMaterialParameters();
+
+                    if (measureTimeOfRenderFrame == false)
+                    {
+                        // update shaders properies
+                        UpdateShadersPropertiesForms();
+                    }
+
+                    //  add data from ShadersProperties      
+                    AddDataFromShadersProperties();
+
+
+                    Gl.BindBuffer(volume.TrianglesVBO);
+
+                    // draw volume
+                    Gl.DrawElements(BeginMode.Triangles, volume.TrianglesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
                 }
-                else
+
+                simpleOpenGlControl1.SwapBuffers();
+
+                if (measureTimeOfRenderFrame == true)
                 {
-                    if (Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"] != null)
-                        Shaders[ActiveShaderIndex].GetShaderProgram()["isTexture"].SetValue(false);
+                    TimeSpan ts = stopWatch.Elapsed;
+                    stopWatch.Reset();
+                    measuredTime = ts.TotalMilliseconds;
+                    measureTimeTriesAverage += (float)measuredTime;
+                    if (Math.Floor((double)(t+1) / measureTimeTries) == (ActiveShaderIndex+1))
+                    {
+                        // count average
+                        measureTimeTriesAverage /= measureTimeTries;
+                        if (Useful.Averages == null)
+                            Useful.Averages = new Dictionary<string, float>();
+
+                        Useful.Averages.Add(Shaders[ActiveShaderIndex].GetShaderName(), measureTimeTriesAverage);
+                        Useful.Log("Average rendering time with "+ measureTimeObjects +" objects for " + Shaders[ActiveShaderIndex].GetShaderName() + " is " + measureTimeTriesAverage + " ms");
+                        measureTimeTriesAverage = 0;
+                        ActiveShaderIndex++;
+                       
+                    }               
+                    measuredTime = 0;
                 }
-
-                // set uniform
-                Shaders[ActiveShaderIndex].GetShaderProgram()["modelMatrix"].SetValue(volume.CalculateModelMatrix());
-
-                // set shaders parameters
-                Gl.BindBufferToShaderAttribute(volume.ColorsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vColor");
-                Gl.BindBufferToShaderAttribute(volume.VertexsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vPosition");
-                if (volume.UVsVBO != null)
-                    Gl.BindBufferToShaderAttribute(volume.UVsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "texcoord");
-                Gl.BindBufferToShaderAttribute(volume.NormalsVBO, Shaders[ActiveShaderIndex].GetShaderProgram(), "vNormal");
-
-                // update material parameters
-                UpdateObjectMaterialParameters();
-
-                // update shaders properies
-                UpdateShadersPropertiesForms();
-
-                //  add data from ShadersProperties      
-                AddDataFromShadersProperties();
-
-                Gl.BindBuffer(volume.TrianglesVBO);
-
-                // draw volume
-                Gl.DrawElements(BeginMode.Triangles, volume.TrianglesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             }
-
-            simpleOpenGlControl1.SwapBuffers();
 
             if (measureTimeOfRenderFrame == true)
             {
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                measuredTime = ts.TotalMilliseconds;
-                if (measureTimeFrameNumber > measureTimeFrames)
-                {
-                    Useful.Log("Time of scene render: " + (measuredTime / measureTimeFrames));
-                    measureTimeOfRenderFrame = false;
-                    measureTimeFrameNumber = 0;
-                }
+                measureTimeOfRenderFrame = false;
+                ActiveShaderIndex = 0;
             }
 
         }
@@ -468,8 +497,36 @@ namespace Version2
             if (e.KeyCode == Keys.T)
             {
                 measureTimeOfRenderFrame = true;
-                measureTimeFrameNumber = 0;
                 measuredTime = 0;
+                ActiveShaderIndex = 0;
+                if (Useful.Averages != null)
+                    Useful.Averages.Clear();
+                OnRenderFrame();
+            }
+
+            if (e.KeyCode == Keys.D1)
+            {
+                measureTimeObjects = 100;
+            }
+
+            if (e.KeyCode == Keys.D2)
+            {
+                measureTimeObjects = 250;
+            }
+
+            if (e.KeyCode == Keys.D3)
+            {
+                measureTimeObjects = 500;
+            }
+
+            if (e.KeyCode == Keys.D4)
+            {
+                measureTimeObjects = 1000;
+            }
+
+            if (e.KeyCode == Keys.D0)
+            {
+                measureTimeObjects = 1;
             }
         }
 
@@ -748,6 +805,7 @@ namespace Version2
         private void renderScene_Click(object sender, EventArgs e)
         {
             OnRenderFrame();
+         //   measureTimeOfRenderFrame = true;
         }
 
         # endregion

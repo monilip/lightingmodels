@@ -10,6 +10,8 @@ namespace Version2
 {
     public class Useful
     {
+        public static Dictionary<string,float> Averages;
+
         // 
         public static Vector3 Normalize(Vector3 normal)
         {

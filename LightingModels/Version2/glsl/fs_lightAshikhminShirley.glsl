@@ -18,7 +18,7 @@ uniform vec3 specularColor;
 uniform float Nu;
 uniform float Nv;
 
-uniform float lighter; // PD is too dark, need's to be lighter
+uniform float lighter; // diffuse is too dark, it needs to be lighter
 uniform bool isTexture;
 
 void main() 
@@ -38,7 +38,6 @@ void main()
 
 	// Ps_denominator = 8.0 * PI  * HdotL * max(NdotL, NdotV)
 	
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);	
@@ -49,13 +48,13 @@ void main()
 	vec3 epsilon = vec3(1.0,0.0,0.0); 
 	vec3 T = normalize(cross(N,epsilon));
 	vec3 B = normalize(cross(N,T));
+
 	float HdotT = dot(H,T);
 	float HdotB = dot(H,B);
 	float HdotN = dot(H,N);
 	float HdotL = dot(H,L);
 	float HdotV = dot(H,V);
 
-	// uniform
 	vec3 Rd = diffuseColor;
 	vec3 Rs = specularColor;
 	
@@ -84,8 +83,8 @@ void main()
 	float Fresnel = (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL) * (1.0-HdotL);
 	Fresnel *= float(1.0 - Rs);
 	Fresnel += Rs;
-	vec3 Specular = Rs * (PS_numerator / PS_denominator ) * Fresnel;	
 
+	vec3 Specular = Rs * (PS_numerator / PS_denominator ) * Fresnel;	
 
 	outputColor = vec4(Specular + Diffuse,1.0);
 }

@@ -40,7 +40,6 @@ void main()
 	// Pd = diffuseColor;
 	// Ps = specColor;
 	
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);	
@@ -73,13 +72,11 @@ void main()
 	float HdotB = dot(H,B);
 	float HdotN = dot(H,N);
 
-	//float Beta = - pow( tan( acos(HdotN )), 2 )  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
-	//vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))  * exp(Beta);
-
-	float Beta = - 2  * (pow(HdotT/alphaX,2) + pow(HdotB/alphaY,2));
+	float Beta = - 2  * (pow(HdotT/alphaY,2) + pow(HdotB/alphaX,2));
 	vec3 Spec = Ps * 1.0f /((4.0f * PI * alphaX * alphaY) * sqrt(NdotL * NdotV))  * exp(Beta/(1 + NdotH));
 
 	vec3 lighting = NdotL * (Pd + Spec);
+
 	outputColor = vec4(lighting,1.0);
 }
 

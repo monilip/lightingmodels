@@ -26,7 +26,6 @@ void main()
 	// diffuse = cos(A), A -> angle between light direction and normal
 	// specular = cos(B)^n, B -> angle between half vector and normal
 
-	// ancillary variables
 	vec3 N = normalize(f_normal);
 	vec3 L = normalize(lightPos - f_vertPos);
 	vec3 V = normalize(-f_vertPos);

@@ -43,19 +43,17 @@ float shadow(float x) {
 
 	return num / denom;
 }
+
 void main() 
 {
+	vec3 N = normalize(f_normal);
+	vec3 L = normalize(lightPos - f_vertPos);
+	vec3 V = normalize(-f_vertPos);	
+	vec3 H = reflect(L, N);
 
-
-	vec3 n = normalize(f_normal);
-	vec3 l = normalize(lightPos - f_vertPos);
-	vec3 v = normalize(-f_vertPos);	
-	vec3 h = reflect(l, n);
-
-	// Declare any aliases:
-	float NdotL = dot(n, l);
-	float NdotV = dot(n, v);
-	float HdotV = dot(h, v);
+	float NdotL = dot(N, L);
+	float NdotV = dot(N, V);
+	float HdotV = dot(H, V);
 	float fNdotL = fresnel(NdotL);
 	float s_cubed = s * s * s;
 
@@ -97,6 +95,5 @@ void main()
 	specular = max(vec3(0.0), specular);
 
 	outputColor = vec4((diffuse+specular),1.0);
-	//outputColor = vec4(1.0);
 }
 

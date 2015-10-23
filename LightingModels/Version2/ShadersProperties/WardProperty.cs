@@ -21,8 +21,8 @@ namespace Version2
             Vector3Properties.Add("diffuseColor", new Vector3(1.0f, 1.0f, 1.0f));
             Vector3Properties.Add("specularColor", new Vector3(1.0f, 1.0f, 1.0f));
 
-            FloatProperties.Add("alphaX", 0.1f);
-            FloatProperties.Add("alphaY", 0.1f);
+            FloatProperties.Add("alphaX", 0.3f);
+            FloatProperties.Add("alphaY", 0.3f);
 
             PropertiesList = new List<Tuple<string, ShadersProperty.Type, string>>()
             {

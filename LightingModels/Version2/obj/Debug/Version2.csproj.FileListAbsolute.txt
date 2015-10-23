@@ -10,10 +10,8 @@ C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\obj\Debug\Version2.p
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\obj\Debug\Version2.Form1.resources
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_lightPhong.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\fs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_lightPhong.glsl
-C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\glsl\vs_text.glsl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\texture1.png
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cubeWithSquares.mtl
 C:\Users\Monilip\Desktop\magisterka\LightingModels\Version2\bin\Debug\models\cubeWithSquares.obj

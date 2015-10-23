@@ -22,7 +22,7 @@ namespace Version2
             Vector3Properties.Add("surfColor", new Vector3(0.2f,0.3f,0.2f));            
 
             FloatProperties.Add("m", 0.3f);
-            FloatProperties.Add("s", 0.3f);
+            FloatProperties.Add("s", 0.7f);
             FloatProperties.Add("t", 0.1f);         
 
 
